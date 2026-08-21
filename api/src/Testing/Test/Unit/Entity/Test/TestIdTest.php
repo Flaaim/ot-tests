@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Testing\Test\Unit\Entity;
+namespace App\Testing\Test\Unit\Entity\Test;
 
 use App\Testing\Entity\Test\TestId;
 use InvalidArgumentException;
