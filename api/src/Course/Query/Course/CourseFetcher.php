@@ -159,4 +159,39 @@ final class CourseFetcher implements CourseFetcherInterface
 
         return $questions;
     }
+
+    public function getQuestions(array $questionIds): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $result = $qb->select('q.id, q.text, q.question_img, q.answers, q.form')
+            ->from('questions', 'q')
+            ->where($qb->expr()->in('q.id', ':questionIds'))
+            ->setParameter('questionIds', $questionIds, ArrayParameterType::STRING)
+            ->executeQuery();
+
+        $questions = $result->fetchAllAssociative();
+
+        if (empty($questions)) {
+            return [];
+        }
+        $data = [];
+        foreach ($questions as $question) {
+            $answers = json_decode($question['answers'], true, 512, JSON_THROW_ON_ERROR);
+
+            $safeAnswers = array_map(static function (array $answer) {
+                unset($answer['isCorrect']);
+                return $answer;
+            }, $answers);
+
+            $data[] = [
+                'id' => $question['id'],
+                'text' => $question['text'],
+                'question_img' => $question['question_img'],
+                'answers' => $safeAnswers,
+                'form' => $question['form'],
+            ];
+        }
+
+        return $data;
+    }
 }

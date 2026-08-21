@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Testing\Query\Attempt\GetQuestions;
+namespace App\Course\Query\Course\GetQuestions;
 
-use App\Testing\Query\Attempt\AttemptFetcherInterface;
+use App\Course\Query\Course\CourseFetcherInterface;
 use DomainException;
 
 final class QueryHandler
 {
     public function __construct(
-        private readonly AttemptFetcherInterface $fetcher,
+        private readonly CourseFetcherInterface $fetcher,
     ) {}
 
-    public function handler(Query $query): array
+    public function handle(Query $query): array
     {
-        $rows = $this->fetcher->getQuestions($query->id);
+        $rows = $this->fetcher->getQuestions($query->questionIds);
 
         if (empty($rows)) {
             throw new DomainException('No questions found.');

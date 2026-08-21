@@ -6,5 +6,5 @@ namespace App\Testing\Query\Attempt;
 
 interface AttemptFetcherInterface
 {
-    public function getQuestions(string $attemptId): array;
+    public function getQuestionIds(string $attemptId): array;
 }

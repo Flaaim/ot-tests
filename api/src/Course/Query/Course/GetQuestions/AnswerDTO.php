@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Testing\Query\Attempt\GetQuestions;
+namespace App\Course\Query\Course\GetQuestions;
 
 final class AnswerDTO
 {

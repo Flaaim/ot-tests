@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Course\Api;
+namespace App\Course\Api\Course\GetQuestionIds;
 
 use App\Course\Query\Course\GetQuestionsIds\Query;
 use App\Course\Query\Course\GetQuestionsIds\QueryHandler;
 
-final class CourseApi
+final class QueryHandlerApi
 {
     /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(

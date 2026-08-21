@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Testing\Command\Test\Add;
 
-use App\Course\Api\CourseApi;
+use App\Course\Api\Course\GetQuestionIds\QueryHandlerApi;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Testing\Entity\Test\Settings;
 use App\Testing\Entity\Test\Test;
@@ -18,7 +18,7 @@ final class Handler
 {
     /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
-        private readonly CourseApi $courseApi,
+        private readonly QueryHandlerApi $courseApi,
         private readonly SlugGeneratorByCipher $slugGenerator,
         private readonly TestRepository $tests,
         private readonly Flusher $flusher

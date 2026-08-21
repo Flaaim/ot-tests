@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Testing\Command\Test\Update;
 
-use App\Course\Api\CourseApi;
+use App\Course\Api\Course\GetQuestionIds\QueryHandlerApi;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Entity\Test\TestRepository;
@@ -13,7 +13,7 @@ final class Handler
 {
     /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
-        private readonly CourseApi $courseApi,
+        private readonly QueryHandlerApi $courseApi,
         private readonly TestRepository $tests,
         private readonly Flusher $flusher
     ) {}
