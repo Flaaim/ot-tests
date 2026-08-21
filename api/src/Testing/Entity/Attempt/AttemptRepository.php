@@ -6,6 +6,7 @@ namespace App\Testing\Entity\Attempt;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use DomainException;
 
 final class AttemptRepository
 {
@@ -21,5 +22,15 @@ final class AttemptRepository
     public function add(Attempt $attempt): void
     {
         $this->em->persist($attempt);
+    }
+
+    public function get(AttemptId $id): Attempt
+    {
+        $attempt = $this->repo->find($id);
+        if (null === $attempt) {
+            throw new DomainException('Attempt not found.');
+        }
+        /** @var Attempt $attempt */
+        return $attempt;
     }
 }
