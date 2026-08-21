@@ -6,7 +6,7 @@ namespace App\Testing\Entity\Attempt;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
-
+/** @psalm-suppress UnusedClass */
 final class AttemptIdType extends StringType
 {
     public const string NAME = 'attempt_id';

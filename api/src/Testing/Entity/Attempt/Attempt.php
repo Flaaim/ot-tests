@@ -85,7 +85,7 @@ final class Attempt implements AggregateRoot
         return $this->mistakes;
     }
 
-    public function getFinishedAt(): DateTimeImmutable
+    public function getFinishedAt(): ?DateTimeImmutable
     {
         return $this->finishedAt;
     }
