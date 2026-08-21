@@ -6,6 +6,7 @@ namespace App\Testing\Entity\Attempt;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
+
 /** @psalm-suppress UnusedClass */
 final class StatusType extends StringType
 {

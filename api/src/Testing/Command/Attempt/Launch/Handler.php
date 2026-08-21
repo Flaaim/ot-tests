@@ -35,7 +35,7 @@ final class Handler
         }
 
         $attempt = new Attempt(
-            AttemptId::generate(),
+            new AttemptId($command->id),
             $test->getId()->getValue(),
             $command->userId,
             Status::inProgress(),

@@ -60,6 +60,15 @@ final class RequestActionTest extends WebTestCase
         );
 
         self::assertEquals(201, $this->client->getResponse()->getStatusCode());
+
+        self::assertJson($body = $this->client->getResponse()->getContent());
+
+        $data = Json::decode($body);
+
+        self::assertArrayHasKey('id', $data);
+        self::assertArrayHasKey('status', $data);
+        self::assertArrayHasKey('ticketNumber', $data);
+        self::assertArrayHasKey('questions', $data);
     }
 
     public function testNotFound(): void
