@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Testing\Attempt;
+namespace Tests\Functional\Testing\Attempt\Launch;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -60,15 +60,6 @@ final class RequestActionTest extends WebTestCase
         );
 
         self::assertEquals(201, $this->client->getResponse()->getStatusCode());
-
-        self::assertJson($body = $this->client->getResponse()->getContent());
-
-        $data = Json::decode($body);
-
-        self::assertArrayHasKey('id', $data);
-        self::assertArrayHasKey('status', $data);
-        self::assertArrayHasKey('ticketNumber', $data);
-        self::assertArrayHasKey('questions', $data);
     }
 
     public function testNotFound(): void

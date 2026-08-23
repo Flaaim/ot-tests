@@ -13,11 +13,11 @@ final class AttemptFetcher implements AttemptFetcherInterface
         private readonly Connection $connection
     ) {}
 
-    public function getQuestionIds(string $attemptId): array
+    public function getOneById(string $attemptId): array
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $attempt = $qb->select('a.question_ids')
+        $attempt = $qb->select('a.id, a.status, a.ticket_number, a.question_ids')
             ->from('attempts', 'a')
             ->where($qb->expr()->eq('a.id', ':id'))
             ->setParameter('id', $attemptId)
@@ -34,6 +34,11 @@ final class AttemptFetcher implements AttemptFetcherInterface
             return [];
         }
 
-        return $questionIds;
+        return [
+            'id' => $attempt['id'],
+            'status' => $attempt['status'],
+            'ticket_number' => $attempt['ticket_number'],
+            'question_ids' => $questionIds,
+        ];
     }
 }

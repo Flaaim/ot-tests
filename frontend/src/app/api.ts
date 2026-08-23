@@ -78,4 +78,7 @@ export const API = {
     updateSettings: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update-settings`,
     update: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update`,
   },
+  attempt: {
+    launch: () => BASE_URL + `/v1/testing/attempts`,
+  },
 };

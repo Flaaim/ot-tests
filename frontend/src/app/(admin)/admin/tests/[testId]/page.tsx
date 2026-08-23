@@ -27,6 +27,8 @@ import UpdateTestDialog from "@/components/Admin/Test/UpdateTestDialog";
 import { ShowDetailQuestionDialog } from "@/components/Admin/Test/ShowDetailQuestionDialog";
 import { fetchCourseQuestionsByIdsAction } from "@/actions/course";
 import { Question } from "@/interfaces/task.interface";
+import { Button } from "@/components/ui/button";
+import AttemptBasedOnTicket from "@/components/Admin/Test/AttemptBasedOnTicket";
 
 interface TestOverviewPageProps {
   params: Promise<{ testId: string }>;
@@ -142,6 +144,9 @@ export default async function TestOverviewPage({ params }: TestOverviewPageProps
                           </div>
                         </AccordionTrigger>
                         <AccordionContent>
+                          <div className="flex justify-end mb-4">
+                            <AttemptBasedOnTicket testId={test.id} ticketNumber={ticket.number} />
+                          </div>
                           <Table>
                             <TableHeader>
                               <TableRow>

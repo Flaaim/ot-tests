@@ -7,8 +7,6 @@ namespace App\Http\Action\V1\Testing\Attempt\Launch;
 use App\Infrastructure\Http\Validator\Validator;
 use App\Testing\Command\Attempt\Launch\Command;
 use App\Testing\Command\Attempt\Launch\Handler;
-use App\Testing\Query\Attempt\GetQuestionsIds\Query;
-use App\Testing\Query\Attempt\GetQuestionsIds\QueryHandler as QuestionsHandler;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,8 +20,7 @@ final class RequestAction
     public function __construct(
         private readonly Handler $handler,
         private readonly Validator $validator,
-        private readonly Security $security,
-        private readonly QuestionsHandler $questionsHandler,
+        private readonly Security $security
     ) {}
 
     #[Route('/v1/testing/attempts', name: 'testing.attempt.launch', methods: ['POST'])]
@@ -48,13 +45,6 @@ final class RequestAction
 
         $this->handler->handle($command);
 
-        $questions = $this->questionsHandler->handler(new Query($attemptId));
-
-        return new JsonResponse([
-            'id' => $attemptId,
-            'status' => 'in_progress',
-            'ticketNumber' => $command->ticketNumber,
-            'questions' => $questions,
-        ], Response::HTTP_CREATED);
+        return new JsonResponse(null, Response::HTTP_CREATED);
     }
 }
