@@ -12,6 +12,7 @@ use App\Testing\Entity\Attempt\Status;
 use App\Testing\Entity\Test\Settings;
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Test\Builder\TestBuilder;
+use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -28,7 +29,6 @@ final class RequestFixture extends AbstractFixture implements DependentFixtureIn
 
     public const string USER_EMAIL = 'user@mail.ru';
     public const string USER_PASSWORD = 'user';
-
 
     public function load(ObjectManager $manager): void
     {
@@ -56,7 +56,7 @@ final class RequestFixture extends AbstractFixture implements DependentFixtureIn
             self::TEST_ID,
             $user->getId()->getValue(),
             Status::inProgress(),
-            new \DateTimeImmutable(),
+            new DateTimeImmutable(),
             self::TICKET_NUMBER,
             CourseGetRequestFixture::QUESTION_IDS
         );

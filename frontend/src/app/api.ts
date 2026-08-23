@@ -80,5 +80,6 @@ export const API = {
   },
   attempt: {
     launch: () => BASE_URL + `/v1/testing/attempts`,
+    get: (id: string) => BASE_URL + `/v1/testing/attempts/${id}`,
   },
 };

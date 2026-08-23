@@ -27,7 +27,7 @@ export default function AttemptBasedOnTicket({ testId, ticketNumber }: AttemptBa
       return;
     }
 
-    router.push(`/admin/testing/attempts/${result.data.id}`);
+    router.push(`/admin/attempts/${result.data.id}`);
   };
 
   return (

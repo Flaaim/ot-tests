@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Action\V1\Testing\Attempt\Get;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Testing\Entity\Attempt\Attempt;
 use App\Testing\Query\Attempt\Get\Query;
-
 use App\Testing\Query\Attempt\Get\QueryHandler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;

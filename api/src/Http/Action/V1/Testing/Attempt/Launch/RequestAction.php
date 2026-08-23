@@ -45,6 +45,6 @@ final class RequestAction
 
         $this->handler->handle($command);
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        return new JsonResponse(['id' => $attemptId], Response::HTTP_CREATED);
     }
 }

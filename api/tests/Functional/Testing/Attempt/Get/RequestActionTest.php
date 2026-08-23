@@ -11,6 +11,10 @@ use Tests\Functional\FixturesLoader;
 use Tests\Functional\Json;
 use Tests\Functional\OAuthTokenTrait;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class RequestActionTest extends WebTestCase
 {
     use OAuthTokenTrait;
@@ -46,7 +50,8 @@ final class RequestActionTest extends WebTestCase
     public function testSuccess(): void
     {
         $this->client->jsonRequest(
-            'GET', '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID,
+            'GET',
+            '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID,
             [],
             $this->authHeaders($this->userToken)
         );
@@ -66,7 +71,8 @@ final class RequestActionTest extends WebTestCase
     public function testNotFound(): void
     {
         $this->client->jsonRequest(
-            'GET', '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID_NOT_FOUND,
+            'GET',
+            '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID_NOT_FOUND,
             [],
             $this->authHeaders($this->userToken)
         );
