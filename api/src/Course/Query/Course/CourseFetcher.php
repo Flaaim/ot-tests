@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Course\Query\Course;
 
+use App\Course\Entity\Course\QuestionForm;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -183,11 +184,47 @@ final class CourseFetcher implements CourseFetcherInterface
                 return $answer;
             }, $answers);
 
+            if (QuestionForm::MATCHING === $question['form']) {
+                $leftColumn = [];
+                $rightColumn = [];
+
+                foreach ($answers as $answer) {
+                    $answerParts = explode('-', $answer['text'], 2);
+
+                    if (\count($answerParts) < 2) {
+                        continue;
+                    }
+
+                    $leftColumn[] = [
+                        'id' => $answer['id'],
+                        'text' => trim($answerParts[0]),
+                    ];
+
+                    $rightColumn[] = [
+                        'id' => $answer['id'],
+                        'text' => trim($answerParts[1]),
+                    ];
+                }
+                shuffle($leftColumn);
+                shuffle($rightColumn);
+
+                $finalAnswers = [
+                    'left' => $leftColumn,
+                    'right' => $rightColumn,
+                ];
+            } elseif (QuestionForm::SEQUENCE === $question['form']) {
+                shuffle($safeAnswers);
+                $finalAnswers = $safeAnswers;
+            } else {
+                shuffle($safeAnswers);
+                $finalAnswers = $safeAnswers;
+            }
+
             $data[] = [
                 'id' => $question['id'],
                 'text' => $question['text'],
                 'question_img' => $question['question_img'],
-                'answers' => $safeAnswers,
+                'answers' => $finalAnswers,
                 'form' => $question['form'],
             ];
         }
