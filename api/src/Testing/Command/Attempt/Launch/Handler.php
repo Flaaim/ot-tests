@@ -28,7 +28,8 @@ final class Handler
         $test = $this->tests->get(new TestId($command->testId));
 
         $tickets = $test->getTickets();
-        $ticket = $tickets[$command->ticketNumber] ?? null;
+        $index = $command->ticketNumber - 1;
+        $ticket = $tickets[$index] ?? null;
 
         if (null === $ticket) {
             throw new DomainException('Invalid ticket number.');
