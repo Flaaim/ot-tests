@@ -102,9 +102,14 @@ final class Attempt implements AggregateRoot
         return $this->answers;
     }
 
+    public function isInProgress(): bool
+    {
+        return Status::STATUS_IN_PROGRESS === $this->status->getValue();
+    }
+
     public function submitAnswer(Answer $answer): void
     {
-        if ($this->status !== Status::inProgress()) {
+        if (!$this->isInProgress()) {
             throw new DomainException('Cannot submit answers for a completed attempt.');
         }
 

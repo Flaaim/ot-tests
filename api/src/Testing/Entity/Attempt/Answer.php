@@ -11,11 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'answers')]
 final class Answer
 {
+    /** @psalm-suppress PropertyNotSetInConstructor */
     #[ORM\ManyToOne(targetEntity: Attempt::class, inversedBy: 'answers')]
     #[ORM\JoinColumn(name: 'attempt_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Attempt $attempt;
 
     public function __construct(
+        #[ORM\Id]
+        #[ORM\Column(type: 'attempt_answer_id', unique: true)]
         private AnswerId $id,
         #[ORM\Column(type: 'string')]
         private string $questionId,

@@ -194,4 +194,26 @@ final class CourseFetcher implements CourseFetcherInterface
 
         return $data;
     }
+
+    public function getQuestionAnswers(string $questionId): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $result = $qb->select('q.form, q.answers')
+            ->from('questions', 'q')
+            ->where($qb->expr()->eq('q.id', ':questionId'))
+            ->setParameter('questionId', $questionId)
+            ->executeQuery();
+
+        $row = $result->fetchAssociative();
+
+        if (false === $row) {
+            return [];
+        }
+
+        return [
+            'form' => $row['form'],
+            'answers' => json_decode($row['answers'], true, 512, JSON_THROW_ON_ERROR),
+        ];
+    }
 }

@@ -38,21 +38,25 @@ final class Status
         return new self(self::STATUS_IN_PROGRESS);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function passed(): self
     {
         return new self(self::STATUS_PASSED);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function failed(): self
     {
         return new self(self::STATUS_FAILED);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function timeout(): self
     {
         return new self(self::STATUS_TIMEOUT);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function cancelled(): self
     {
         return new self(self::STATUS_CANCELLED);

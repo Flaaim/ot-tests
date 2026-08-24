@@ -28,6 +28,7 @@ doctrine:
 
             attempt_id: App\Testing\Entity\Attempt\AttemptIdType
             attempt_status: App\Testing\Entity\Attempt\StatusType
+            attempt_answer_id: App\Testing\Entity\Attempt\AnswerIdType
 
     orm:
         validate_xml_mapping: true
