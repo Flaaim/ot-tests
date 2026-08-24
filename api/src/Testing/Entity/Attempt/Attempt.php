@@ -7,14 +7,19 @@ namespace App\Testing\Entity\Attempt;
 use App\SharedDomain\AggregateRoot;
 use App\SharedDomain\Event\EventTrait;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'attempts')]
 final class Attempt implements AggregateRoot
 {
     use EventTrait;
+    #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'attempt', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $answers;
 
     public function __construct(
         #[ORM\Id]
@@ -38,7 +43,9 @@ final class Attempt implements AggregateRoot
         private int $mistakes = 0,
         #[ORM\Column(type: 'datetime_immutable', nullable: true)]
         private ?DateTimeImmutable $finishedAt = null,
-    ) {}
+    ) {
+        $this->answers = new ArrayCollection();
+    }
 
     public function getId(): AttemptId
     {
@@ -88,5 +95,26 @@ final class Attempt implements AggregateRoot
     public function getFinishedAt(): ?DateTimeImmutable
     {
         return $this->finishedAt;
+    }
+
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    public function submitAnswer(Answer $answer): void
+    {
+        if ($this->status !== Status::inProgress()) {
+            throw new DomainException('Cannot submit answers for a completed attempt.');
+        }
+
+        $answer->appendAttempt($this);
+        $this->answers->add($answer);
+
+        if ($answer->isCorrect()) {
+            ++$this->score;
+        } else {
+            ++$this->mistakes;
+        }
     }
 }
