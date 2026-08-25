@@ -1,6 +1,6 @@
 import { fetchAttemptAction } from "@/actions/attempt";
 import { AttemptInterface } from "@/interfaces/attempt.interface";
-import TestRunnerClient from "@/components/Testing/TestRunnerClient";
+import TestRunnerClient from "@/components/Testing/Attempt/TestRunnerClient";
 
 interface AttemptOverviewPageProps {
   params: Promise<{ attemptId: string }>;

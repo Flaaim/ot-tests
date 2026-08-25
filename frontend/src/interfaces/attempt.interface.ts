@@ -10,7 +10,7 @@ export interface LaunchAttemptPayload {
   ticketNumber: number;
 }
 
-interface Question {
+export interface Question {
   id: string;
   text: string;
   questionImg: string;

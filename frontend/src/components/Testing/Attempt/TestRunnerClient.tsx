@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { PUBLIC_ASSETS_URL } from "@/app/api";
 import { Button } from "@/components/ui/button";
 import { submitAnswerAction } from "@/actions/attempt";
+import { SingleChoiceQuestion } from "@/components/Testing/Attempt/SingleChoiceQuestion";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
@@ -17,6 +18,7 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
 
   const questions = attempt.questions || [];
   const currentQuestion = questions[currentQuestionIndex];
+  const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
 
   if (!currentQuestion) {
     return <div className="p-8 text-center text-muted-foreground">Вопросы не найдены.</div>;
@@ -29,7 +31,7 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
     const payload: SubmitAnswerPayload = {
       id: attempt.id,
       questionId: currentQuestion.id,
-      selectedAnswersIds: [],
+      selectedAnswersIds: currentAnswers,
     };
     await submitAnswerAction(payload);
 
@@ -37,12 +39,32 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
 
     if (!isLastQuestion) {
       setCurrentQuestionIndex((prev) => prev + 1);
+      setCurrentAnswers([]);
     } else {
       // Здесь будет логика завершения теста
       alert("Тест завершен!");
     }
   };
-
+  const renderQuestionForm = () => {
+    switch (currentQuestion.form) {
+      case "single_choice":
+        return (
+          <SingleChoiceQuestion
+            question={currentQuestion}
+            selectedAnswerId={currentAnswers[0] || ""}
+            onAnswerChange={(id) => setCurrentAnswers([id])}
+          />
+        );
+      case "multiple_choice":
+        return <div>Здесь будет MultipleChoiceQuestion</div>;
+      case "sequence":
+        return <div>Здесь будет SequenceQuestion</div>;
+      case "matching":
+        return <div>Здесь будет MatchingQuestion</div>;
+      default:
+        return <div className="text-destructive">Неизвестный тип вопроса</div>;
+    }
+  };
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
@@ -63,15 +85,7 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
             </div>
           )}
         </CardHeader>
-        <CardContent>
-          {/*
-            Здесь мы будем рендерить разные компоненты в зависимости от currentQuestion.form
-            Например: SingleChoice, MultipleChoice, Sequence, Matching
-          */}
-          <div className="p-4 bg-muted/50 rounded-lg text-sm text-muted-foreground border border-dashed">
-            Здесь будут варианты ответов для формы: <strong>{currentQuestion.form}</strong>
-          </div>
-        </CardContent>
+        <CardContent>{renderQuestionForm()}</CardContent>
 
         <CardFooter className="flex justify-end pt-6 border-t">
           <Button onClick={handleNext} disabled={isSubmitting}>
