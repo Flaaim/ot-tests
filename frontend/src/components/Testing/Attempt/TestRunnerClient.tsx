@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { submitAnswerAction } from "@/actions/attempt";
 import { SingleChoiceQuestion } from "@/components/Testing/Attempt/SingleChoiceQuestion";
 import { MultipleChoiceQuestion } from "@/components/Testing/Attempt/MultipleChoiceQuestion";
+import {SequenceQuestion} from "@/components/Testing/Attempt/SequenceQuestion";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
@@ -65,7 +66,14 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
           />
         );
       case "sequence":
-        return <div>Здесь будет SequenceQuestion</div>;
+        return (
+          <SequenceQuestion
+            question={currentQuestion}
+            selectedAnswersIds={currentAnswers}
+            onAnswerChange={setCurrentAnswers}
+          />
+        );
+
       case "matching":
         return <div>Здесь будет MatchingQuestion</div>;
       default:
