@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Testing\Command\Attempt\Launch;
 
+use App\Course\Api\Course\GetQuestions\QueryHandlerApi;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Testing\Entity\Attempt\Attempt;
 use App\Testing\Entity\Attempt\AttemptId;
@@ -20,6 +21,7 @@ final class Handler
     public function __construct(
         private readonly TestRepository $tests,
         private readonly AttemptRepository $attempts,
+        private readonly QueryHandlerApi $queryHandler,
         private readonly Flusher $flusher,
     ) {}
 
@@ -35,6 +37,12 @@ final class Handler
             throw new DomainException('Invalid ticket number.');
         }
 
+        $questionsSnapshot = $this->queryHandler->getQuestions($ticket->questionIds);
+
+        if (empty($questionsSnapshot)) {
+            throw new DomainException('No questions found in course.');
+        }
+
         $attempt = new Attempt(
             new AttemptId($command->id),
             $test->getId()->getValue(),
@@ -42,7 +50,7 @@ final class Handler
             Status::inProgress(),
             new DateTimeImmutable(),
             $ticket->number,
-            $ticket->questionIds
+            $questionsSnapshot
         );
 
         $this->attempts->add($attempt);

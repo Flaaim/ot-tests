@@ -58,10 +58,10 @@ final class AnswersParser
 
             return array_map(function (array $row) use ($host) {
                 $row['answerImg'] = $this->sanitizer->extractImgFromAnswerText($row['Text'], $host);
+                $text = (string)$row['Text'];
+                $rawText = preg_replace('/<\/div>\s*-\s*<div>/ui', '</div>|||<div>', $text);
 
-                $rawText = preg_replace('/<\/div>\s*-\s*<div>/ui', '</div>|||<div>', $row['Text']);
-
-                $row['Text'] = $this->sanitizer->cleanTextContent($rawText ?? $row['Text']);
+                $row['Text'] = $this->sanitizer->cleanTextContent($rawText ?? $text);
                 return AnswerDTO::fromArray($row);
             }, $rows);
         }

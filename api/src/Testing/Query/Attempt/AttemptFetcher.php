@@ -17,28 +17,42 @@ final class AttemptFetcher implements AttemptFetcherInterface
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $attempt = $qb->select('a.id, a.status, a.ticket_number, a.question_ids')
+        $attempt = $qb->select('a.id, a.status, a.ticket_number, a.questions_snapshot')
             ->from('attempts', 'a')
             ->where($qb->expr()->eq('a.id', ':id'))
             ->setParameter('id', $attemptId)
             ->executeQuery()
             ->fetchAssociative();
 
-        if (false === $attempt || empty($attempt['question_ids'])) {
+        if (false === $attempt || empty($attempt['questions_snapshot'])) {
             return [];
         }
 
-        $questionIds = json_decode($attempt['question_ids'], true, 512, JSON_THROW_ON_ERROR);
+        $questionsSnapshot = json_decode($attempt['questions_snapshot'], true, 512, JSON_THROW_ON_ERROR);
 
-        if (empty($questionIds)) {
+        if (empty($questionsSnapshot)) {
             return [];
         }
+
+        foreach ($questionsSnapshot as &$question) {
+            if (isset($question['form']) && 'matching' === $question['form']) {
+                continue;
+            }
+
+            $safeAnswers = array_map(static function (array $answer) {
+                unset($answer['isCorrect']);
+                return $answer;
+            }, $question['answers']);
+
+            $question['answers'] = $safeAnswers;
+        }
+        unset($question);
 
         return [
             'id' => $attempt['id'],
             'status' => $attempt['status'],
             'ticket_number' => $attempt['ticket_number'],
-            'question_ids' => $questionIds,
+            'questions_snapshot' => $questionsSnapshot,
         ];
     }
 }

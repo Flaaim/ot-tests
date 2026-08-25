@@ -179,11 +179,6 @@ final class CourseFetcher implements CourseFetcherInterface
         foreach ($questions as $question) {
             $answers = json_decode($question['answers'], true, 512, JSON_THROW_ON_ERROR);
 
-            $safeAnswers = array_map(static function (array $answer) {
-                unset($answer['isCorrect']);
-                return $answer;
-            }, $answers);
-
             if (QuestionForm::MATCHING === $question['form']) {
                 $leftColumn = [];
                 $rightColumn = [];
@@ -215,11 +210,11 @@ final class CourseFetcher implements CourseFetcherInterface
                     'right' => $rightColumn,
                 ];
             } elseif (QuestionForm::SEQUENCE === $question['form']) {
-                shuffle($safeAnswers);
-                $finalAnswers = $safeAnswers;
+                shuffle($answers);
+                $finalAnswers = $answers;
             } else {
-                shuffle($safeAnswers);
-                $finalAnswers = $safeAnswers;
+                shuffle($answers);
+                $finalAnswers = $answers;
             }
 
             $data[] = [

@@ -33,11 +33,11 @@ final class AnswerChecker
             $selectedCorrectAnswers = 0;
 
             foreach ($answerData['answers'] as $answer) {
-                if (true === $answer['is_correct']) {
+                if (true === $answer['isCorrect']) {
                     ++$totalCorrectAnswers;
                 }
 
-                if (\in_array($answer['id'], $selectedAnswerIds, true) && true === $answer['is_correct']) {
+                if (\in_array($answer['id'], $selectedAnswerIds, true) && true === $answer['isCorrect']) {
                     ++$selectedCorrectAnswers;
                 }
             }

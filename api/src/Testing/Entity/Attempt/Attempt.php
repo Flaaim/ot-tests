@@ -36,7 +36,7 @@ final class Attempt implements AggregateRoot
         #[ORM\Column(type: 'integer', nullable: true)]
         private ?int $ticketNumber,
         #[ORM\Column(type: Types::JSON, options: ['jsonb' => true])]
-        private array $questionIds,
+        private array $questionsSnapshot,
         #[ORM\Column(type: 'integer')]
         private int $score = 0,
         #[ORM\Column(type: 'integer')]
@@ -77,9 +77,9 @@ final class Attempt implements AggregateRoot
         return $this->ticketNumber;
     }
 
-    public function getQuestionIds(): array
+    public function getQuestionSnapshot(): array
     {
-        return $this->questionIds;
+        return $this->questionsSnapshot;
     }
 
     public function getScore(): int

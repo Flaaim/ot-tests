@@ -121,15 +121,15 @@ final class AnswerCheckerTest extends TestCase
             'answers' => [
                 [
                     'id' => 'bbc14085f1e34ca93ccbbbd5ee9b5a01',
-                    'is_correct' => true,
+                    'isCorrect' => true,
                 ],
                 [
                     'id' => '5a81b5f1089cee2b44809bfda245da59',
-                    'is_correct' => false,
+                    'isCorrect' => false,
                 ],
                 [
                     'id' => 'a320df35029816f426dde35848e588bb',
-                    'is_correct' => false,
+                    'isCorrect' => false,
                 ],
             ],
         ];
@@ -142,15 +142,15 @@ final class AnswerCheckerTest extends TestCase
             'answers' => [
                 [
                     'id' => 'bbc14085f1e34ca93ccbbbd5ee9b5a01',
-                    'is_correct' => true,
+                    'isCorrect' => true,
                 ],
                 [
                     'id' => '5a81b5f1089cee2b44809bfda245da59',
-                    'is_correct' => true,
+                    'isCorrect' => true,
                 ],
                 [
                     'id' => 'a320df35029816f426dde35848e588bb',
-                    'is_correct' => false,
+                    'isCorrect' => false,
                 ],
             ],
         ];
@@ -163,15 +163,15 @@ final class AnswerCheckerTest extends TestCase
             'answers' => [
                 [
                     'id' => 'bbc14085f1e34ca93ccbbbd5ee9b5a01',
-                    'is_correct' => true,
+                    'isCorrect' => true,
                 ],
                 [
                     'id' => '5a81b5f1089cee2b44809bfda245da59',
-                    'is_correct' => true,
+                    'isCorrect' => true,
                 ],
                 [
                     'id' => 'a320df35029816f426dde35848e588bb',
-                    'is_correct' => true,
+                    'isCorrect' => true,
                 ],
             ],
         ];
