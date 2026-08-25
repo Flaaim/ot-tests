@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { submitAnswerAction } from "@/actions/attempt";
 import { SingleChoiceQuestion } from "@/components/Testing/Attempt/SingleChoiceQuestion";
 import { MultipleChoiceQuestion } from "@/components/Testing/Attempt/MultipleChoiceQuestion";
-import {SequenceQuestion} from "@/components/Testing/Attempt/SequenceQuestion";
+import { SequenceQuestion } from "@/components/Testing/Attempt/SequenceQuestion";
+import { MatchingQuestion } from "@/components/Testing/Attempt/MatchingQuestion";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
@@ -75,7 +76,13 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
         );
 
       case "matching":
-        return <div>Здесь будет MatchingQuestion</div>;
+        return (
+          <MatchingQuestion
+            question={currentQuestion}
+            selectedAnswersIds={currentAnswers}
+            onAnswerChange={setCurrentAnswers}
+          />
+        );
       default:
         return <div className="text-destructive">Неизвестный тип вопроса</div>;
     }

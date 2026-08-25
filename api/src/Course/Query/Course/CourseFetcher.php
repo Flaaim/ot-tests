@@ -205,7 +205,6 @@ final class CourseFetcher implements CourseFetcherInterface
                         'text' => trim($answerParts[1]),
                     ];
                 }
-                shuffle($leftColumn);
                 shuffle($rightColumn);
 
                 $finalAnswers = [

@@ -16,16 +16,11 @@ final class QuestionDTO
 
     public static function fromArray(array $data): self
     {
-        $answers = array_map(
-            static fn (array $answer) => AnswerDTO::fromArray($answer),
-            $data['answers'] ?? []
-        );
-
         return new self(
             id: $data['id'],
             text: $data['text'],
             questionImg: $data['question_img'] ?? '',
-            answers: $answers,
+            answers: $data['answers'] ?? [],
             form: $data['form'],
         );
     }

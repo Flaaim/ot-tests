@@ -27,14 +27,9 @@ interface SequenceQuestionProps {
 
 // Компонент одного перетаскиваемого элемента
 function SortableItem({ id, text }: { id: string; text: string }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -59,18 +54,16 @@ function SortableItem({ id, text }: { id: string; text: string }) {
       >
         <GripVertical className="h-5 w-5" />
       </div>
-      <span className="text-sm font-medium leading-normal select-none">
-        {text}
-      </span>
+      <span className="text-sm font-medium leading-normal select-none">{text}</span>
     </div>
   );
 }
 
 export function SequenceQuestion({
-                                   question,
-                                   selectedAnswersIds,
-                                   onAnswerChange,
-                                 }: SequenceQuestionProps) {
+  question,
+  selectedAnswersIds,
+  onAnswerChange,
+}: SequenceQuestionProps) {
   // Инициализируем порядок ответов изначальным массивом с бэкенда,
   // если пользователь еще ничего не двигал (массив пуст)
   useEffect(() => {
@@ -89,9 +82,7 @@ export function SequenceQuestion({
 
   // Текущий порядок элементов для отображения
   const currentOrderIds =
-    selectedAnswersIds.length > 0
-      ? selectedAnswersIds
-      : question.answers.map((a) => a.id);
+    selectedAnswersIds.length > 0 ? selectedAnswersIds : question.answers.map((a) => a.id);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -107,15 +98,8 @@ export function SequenceQuestion({
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={currentOrderIds}
-        strategy={verticalListSortingStrategy}
-      >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={currentOrderIds} strategy={verticalListSortingStrategy}>
         <div className="space-y-3">
           {currentOrderIds.map((id) => {
             // Находим текст ответа по его ID
