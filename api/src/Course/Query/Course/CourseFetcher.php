@@ -189,7 +189,9 @@ final class CourseFetcher implements CourseFetcherInterface
                 $rightColumn = [];
 
                 foreach ($answers as $answer) {
-                    $answerParts = explode('-', $answer['text'], 2);
+                    $text = (string)($answer['text'] ?? '');
+
+                    $answerParts = explode('|||', $text, 2);
 
                     if (\count($answerParts) < 2) {
                         continue;
@@ -198,6 +200,7 @@ final class CourseFetcher implements CourseFetcherInterface
                     $leftColumn[] = [
                         'id' => $answer['id'],
                         'text' => trim($answerParts[0]),
+                        'image' => $answer['answerImg'] ?? null,
                     ];
 
                     $rightColumn[] = [
