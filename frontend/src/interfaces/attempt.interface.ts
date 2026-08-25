@@ -23,3 +23,9 @@ interface Answer {
   text: string;
   answerImg: string;
 }
+
+export interface SubmitAnswerPayload {
+  id: string;
+  questionId: string;
+  selectedAnswersIds: string[];
+}

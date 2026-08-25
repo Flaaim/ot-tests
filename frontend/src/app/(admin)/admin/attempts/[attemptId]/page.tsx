@@ -1,5 +1,6 @@
 import { fetchAttemptAction } from "@/actions/attempt";
 import { AttemptInterface } from "@/interfaces/attempt.interface";
+import TestRunnerClient from "@/components/Testing/TestRunnerClient";
 
 interface AttemptOverviewPageProps {
   params: Promise<{ attemptId: string }>;
@@ -14,5 +15,9 @@ export default async function AttemptOverviewPage({ params }: AttemptOverviewPag
 
   const attempt: AttemptInterface = result.data;
 
-  console.log(attempt);
+  return (
+    <div className="container mx-auto py-8">
+      <TestRunnerClient attempt={attempt} />
+    </div>
+  );
 }

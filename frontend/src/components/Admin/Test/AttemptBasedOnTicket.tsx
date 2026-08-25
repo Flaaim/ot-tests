@@ -21,13 +21,13 @@ export default function AttemptBasedOnTicket({ testId, ticketNumber }: AttemptBa
 
     const result = await launchAttemptAction({ testId, ticketNumber });
 
-    if (!result.ok) {
+    if (!result.ok || !result.data) {
       toast.error(result.error ?? "Не удалось запустить тест.");
       setLoading(false);
       return;
     }
 
-    router.push(`/admin/attempts/${result.data.id}`);
+    router.push(`/admin/attempts/${result.data}`);
   };
 
   return (
