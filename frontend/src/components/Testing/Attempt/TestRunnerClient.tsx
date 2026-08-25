@@ -7,6 +7,7 @@ import { PUBLIC_ASSETS_URL } from "@/app/api";
 import { Button } from "@/components/ui/button";
 import { submitAnswerAction } from "@/actions/attempt";
 import { SingleChoiceQuestion } from "@/components/Testing/Attempt/SingleChoiceQuestion";
+import { MultipleChoiceQuestion } from "@/components/Testing/Attempt/MultipleChoiceQuestion";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
@@ -56,7 +57,13 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
           />
         );
       case "multiple_choice":
-        return <div>Здесь будет MultipleChoiceQuestion</div>;
+        return (
+          <MultipleChoiceQuestion
+            question={currentQuestion}
+            selectedAnswersIds={currentAnswers}
+            onAnswerChange={setCurrentAnswers}
+          />
+        );
       case "sequence":
         return <div>Здесь будет SequenceQuestion</div>;
       case "matching":
