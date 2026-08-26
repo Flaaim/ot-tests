@@ -6,6 +6,7 @@ namespace App\Testing\Entity\Attempt;
 
 use App\SharedDomain\AggregateRoot;
 use App\SharedDomain\Event\EventTrait;
+use App\Testing\Entity\Attempt\DTO\QuestionDTO;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -79,6 +80,12 @@ final class Attempt implements AggregateRoot
 
     public function getQuestionSnapshot(): array
     {
+        if (isset($this->questionsSnapshot[0]) && \is_array($this->questionsSnapshot[0])) {
+            $this->questionsSnapshot = array_map(
+                static fn (array $questionData) => QuestionDTO::fromArray($questionData),
+                $this->questionsSnapshot
+            );
+        }
         return $this->questionsSnapshot;
     }
 
@@ -107,13 +114,29 @@ final class Attempt implements AggregateRoot
         return Status::STATUS_IN_PROGRESS === $this->status->getValue();
     }
 
-    public function submitAnswer(Answer $answer): void
+    public function submitAnswer(string $questionId, array $selectedAnswersIds): void
     {
         if (!$this->isInProgress()) {
             throw new DomainException('Cannot submit answers for a completed attempt.');
         }
 
+        $question = $this->findQuestionInSnapshot($questionId);
+
+        if (empty($question)) {
+            throw new DomainException('Question not found in this attempt.');
+        }
+
+        $isCorrect = $this->validateAnswer($question, $selectedAnswersIds);
+
+        $answer = new Answer(
+            AnswerId::generate(),
+            $questionId,
+            $selectedAnswersIds,
+            $isCorrect
+        );
+
         $answer->appendAttempt($this);
+
         $this->answers->add($answer);
 
         if ($answer->isCorrect()) {
@@ -121,5 +144,58 @@ final class Attempt implements AggregateRoot
         } else {
             ++$this->mistakes;
         }
+    }
+
+    private function findQuestionInSnapshot(string $questionId): ?QuestionDTO
+    {
+        return array_find($this->getQuestionSnapshot(), static fn ($snapshot) => $snapshot->id === $questionId);
+    }
+
+    private function validateAnswer(QuestionDTO $question, array $selectedIds): bool
+    {
+        if (empty($selectedIds)) {
+            return false;
+        }
+
+        $selectedAnswerIds = array_values($selectedIds);
+
+        if (QuestionForm::SINGLE_CHOICE->value === $question->form) {
+            if (\count($selectedAnswerIds) > 1) {
+                return false;
+            }
+            foreach ($question->answers as $answer) {
+                if ($answer['id'] === $selectedAnswerIds[0] && true === $answer['isCorrect']) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (QuestionForm::MULTIPLE_CHOICE->value === $question->form) {
+            $totalCorrectAnswers = 0;
+            $selectedCorrectAnswers = 0;
+
+            foreach ($question->answers as $answer) {
+                if (true === $answer['isCorrect']) {
+                    ++$totalCorrectAnswers;
+                }
+
+                if (\in_array($answer['id'], $selectedAnswerIds, true) && true === $answer['isCorrect']) {
+                    ++$selectedCorrectAnswers;
+                }
+            }
+
+            return $selectedCorrectAnswers === $totalCorrectAnswers && \count($selectedAnswerIds) === $totalCorrectAnswers;
+        }
+
+        if (QuestionForm::SEQUENCE->value === $question->form) {
+            return array_column($question->answers, 'id') === $selectedAnswerIds;
+        }
+
+        if (QuestionForm::MATCHING->value === $question->form) {
+            $rightColumn = $question->answers['right'] ?? [];
+            return array_column($rightColumn, 'id') === $selectedAnswerIds;
+        }
+
+        return true;
     }
 }

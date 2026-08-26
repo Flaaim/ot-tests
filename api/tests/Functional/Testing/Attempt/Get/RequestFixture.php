@@ -14,11 +14,9 @@ use App\Testing\Entity\Test\TestId;
 use App\Testing\Test\Builder\TestBuilder;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Tests\Functional\Admin\Course\Course\Get\RequestFixture as CourseGetRequestFixture;
 
-final class RequestFixture extends AbstractFixture implements DependentFixtureInterface
+final class RequestFixture extends AbstractFixture
 {
     public const string TEST_ID = '5c77e4dc-f1a2-4e6d-b1cd-9a7bdfa548ce';
     public const string TEST_NAME = 'Первая помощь';
@@ -29,6 +27,7 @@ final class RequestFixture extends AbstractFixture implements DependentFixtureIn
 
     public const string USER_EMAIL = 'user@mail.ru';
     public const string USER_PASSWORD = 'user';
+    public const string COURSE_ID = '63879491-6883-4e88-8be2-295d3d260346';
 
     public function load(ObjectManager $manager): void
     {
@@ -45,8 +44,8 @@ final class RequestFixture extends AbstractFixture implements DependentFixtureIn
             ->withCipher(self::TEST_CIPHER)
             ->withDescription(self::TEST_NAME)
             ->withSettings(new Settings(5, 2, 1))
-            ->withCourseIds([CourseGetRequestFixture::COURSE_ID])
-            ->withQuestionIds(CourseGetRequestFixture::QUESTION_IDS)
+            ->withCourseIds([self::COURSE_ID])
+            ->withQuestionIds(['90be077454a14f3d965c4b07645e3769', '6724ac7652bc47d6913ab8ca11b2ea36'])
             ->active()
             ->build();
         $manager->persist($test);
@@ -58,17 +57,57 @@ final class RequestFixture extends AbstractFixture implements DependentFixtureIn
             Status::inProgress(),
             new DateTimeImmutable(),
             self::TICKET_NUMBER,
-            CourseGetRequestFixture::QUESTION_IDS
+            $this->getQuestionsSnapshot()
         );
         $manager->persist($attempt);
 
         $manager->flush();
     }
 
-    public function getDependencies(): array
+
+    private function getQuestionsSnapshot(): array
     {
         return [
-            CourseGetRequestFixture::class,
+            [
+                'id' => '90be077454a14f3d965c4b07645e3769',
+                'text' => 'Что необходимо сделать после восстановления самостоятельного дыхания у пострадавшего с отсутствующим сознанием?',
+                'question_img' => '',
+                'answers' => [
+                    [
+                        'id' => '5a81b5f1089cee2b44809bfda245da59',
+                        'text' => 'Продолжить выполнять сердечно-легочную реанимацию до появления сознания у пострадавшего',
+                        'isCorrect' => false,
+                        'answerImg' => '',
+                    ],
+                    [
+                        'id' => 'a320df35029816f426dde35848e588bb',
+                        'text' => 'Дать пострадавшему понюхать нашатырный спирт',
+                        'isCorrect' => true,
+                        'answerImg' => '',
+                    ]
+                ],
+                'form' => 'single_choice',
+            ],
+            [
+                'id' => '6724ac7652bc47d6913ab8ca11b2ea36',
+                'text' => 'На какое время допускается снять кровоостанавливающий жгут, если максимальное время его наложения истекло, а пострадавшего не транспортировали в медицинскую организацию?',
+                'question_img' => '',
+                'answers' => [
+                    [
+                        'id' => '310eb8b5ef4dc79b46e3f968819d0896',
+                        'text' => 'На 15 минут',
+                        'isCorrect' => false,
+                        'answerImg' => '',
+                    ],
+                    [
+                        'id' => '66bc39ee7187f574dfb8699f74e55863',
+                        'text' => 'Снимать жгут не рекомендуется',
+                        'isCorrect' => true,
+                        'answerImg' => '',
+                    ]
+                ],
+                'form' => 'single_choice',
+            ]
         ];
     }
 }

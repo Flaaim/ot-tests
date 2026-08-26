@@ -55,4 +55,6 @@ final class AttemptFetcher implements AttemptFetcherInterface
             'questions_snapshot' => $questionsSnapshot,
         ];
     }
+
+    public function getAttemptResult(string $attemptId): array {}
 }
