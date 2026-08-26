@@ -13,6 +13,7 @@ final class Command
         #[Assert\Uuid]
         public readonly string $attemptId,
         #[Assert\NotBlank]
+        #[Assert\Uuid]
         public readonly string $questionId,
         #[Assert\Count(min: 1)]
         public readonly array $selectedAnswersIds

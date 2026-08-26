@@ -110,8 +110,11 @@ final class RequestActionTest extends WebTestCase
         $questions = $course->getQuestions();
 
         self::assertCount(2, $questions);
-        self::assertEquals('f99050cc-e8a8-4e3b-ae49-bd8734adbc03', $questions[0]->getId());
-        self::assertEquals('a11050cc-e8a8-4e3b-ae49-bd8734adbc99', $questions[1]->getId());
+        self::assertObjectHasProperty('id', $questions[0]);
+        self::assertObjectHasProperty('text', $questions[0]);
+        self::assertObjectHasProperty('answers', $questions[0]);
+        self::assertObjectHasProperty('questionImg', $questions[0]);
+        self::assertObjectHasProperty('form', $questions[0]);
     }
 
     public function testEmpty(): void

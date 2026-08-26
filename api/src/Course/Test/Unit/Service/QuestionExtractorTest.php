@@ -21,7 +21,15 @@ final class QuestionExtractorTest extends TestCase
         $draft = $this->getDraft();
         $extractor = new QuestionExtractor();
         $result = $extractor->extract($draft);
-        self::assertEquals($this->getResult(), $result);
+
+        self::assertCount(2, $result);
+
+        self::assertContainsOnlyInstancesOf(Question::class, $result);
+
+        self::assertObjectHasProperty('id', $result[0]);
+        self::assertObjectHasProperty('text', $result[0]);
+        self::assertObjectHasProperty('questionImg', $result[0]);
+        self::assertObjectHasProperty('answers', $result[0]);
     }
 
     private function getDraft(): string

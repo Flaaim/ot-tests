@@ -6,6 +6,7 @@ namespace App\Course\Entity\Course;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'questions')]
@@ -40,7 +41,7 @@ final class Question
         $form = self::detectForm($data['text'], $answers);
 
         return new self(
-            id: $data['id'],
+            id: Uuid::uuid4()->toString(),
             text: $data['text'],
             questionImg: $data['questionImg'],
             answers: $answers,

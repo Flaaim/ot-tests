@@ -44,7 +44,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'POST',
-            '/v1/testing/attempts/' . RequestFixture::TEST_ID. '/sumbit'
+            '/v1/testing/attempts/' . RequestFixture::TEST_ID . '/sumbit'
         );
     }
 
@@ -54,14 +54,13 @@ final class RequestActionTest extends WebTestCase
             'POST',
             '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID . '/submit',
             [
-                'questionId' => '90be077454a14f3d965c4b07645e3769',
+                'questionId' => '23ca06c6-6d2d-45d6-ae89-0526afdff6f4',
                 'selectedAnswersIds' => ['93ff5fdd3e7eeb5cc38696beac126968'],
             ],
             $this->authHeaders($this->userToken)
         );
 
         self::assertEquals(201, $this->client->getResponse()->getStatusCode());
-
     }
 
     public function testNotFound(): void
@@ -70,7 +69,7 @@ final class RequestActionTest extends WebTestCase
             'POST',
             '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID_NOT_FOUND . '/submit',
             [
-                'questionId' => '90be077454a14f3d965c4b07645e3769',
+                'questionId' => '23ca06c6-6d2d-45d6-ae89-0526afdff6f4',
                 'selectedAnswersIds' => ['93ff5fdd3e7eeb5cc38696beac126968'],
             ],
             $this->authHeaders($this->userToken)
@@ -86,6 +85,7 @@ final class RequestActionTest extends WebTestCase
             'message' => 'Attempt not found.',
         ], $data);
     }
+
     public function testEmpty(): void
     {
         $this->client->jsonRequest(
@@ -106,6 +106,7 @@ final class RequestActionTest extends WebTestCase
             'selectedAnswersIds' => 'This collection should contain 1 element or more.',
         ]], $data);
     }
+
     public function testInvalid(): void
     {
         $this->client->jsonRequest(
@@ -118,14 +119,14 @@ final class RequestActionTest extends WebTestCase
             $this->authHeaders($this->userToken)
         );
 
-        self::assertEquals(409, $this->client->getResponse()->getStatusCode());
+        self::assertEquals(422, $this->client->getResponse()->getStatusCode());
 
         self::assertJson($body = $this->client->getResponse()->getContent());
 
         $data = Json::decode($body);
 
         self::assertEquals(['errors' => [
-            'questionId' => 'This ',
+            'questionId' => 'This is not a valid UUID.',
         ]], $data);
     }
 }

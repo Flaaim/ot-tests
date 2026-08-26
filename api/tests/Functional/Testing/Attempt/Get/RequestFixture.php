@@ -45,7 +45,7 @@ final class RequestFixture extends AbstractFixture
             ->withDescription(self::TEST_NAME)
             ->withSettings(new Settings(5, 2, 1))
             ->withCourseIds([self::COURSE_ID])
-            ->withQuestionIds(['90be077454a14f3d965c4b07645e3769', '6724ac7652bc47d6913ab8ca11b2ea36'])
+            ->withQuestionIds(['23ca06c6-6d2d-45d6-ae89-0526afdff6f4', '16b1df62-5ad0-4707-ab1c-746affd6670f'])
             ->active()
             ->build();
         $manager->persist($test);
@@ -64,12 +64,11 @@ final class RequestFixture extends AbstractFixture
         $manager->flush();
     }
 
-
     private function getQuestionsSnapshot(): array
     {
         return [
             [
-                'id' => '90be077454a14f3d965c4b07645e3769',
+                'id' => '23ca06c6-6d2d-45d6-ae89-0526afdff6f4',
                 'text' => 'Что необходимо сделать после восстановления самостоятельного дыхания у пострадавшего с отсутствующим сознанием?',
                 'question_img' => '',
                 'answers' => [
@@ -84,12 +83,12 @@ final class RequestFixture extends AbstractFixture
                         'text' => 'Дать пострадавшему понюхать нашатырный спирт',
                         'isCorrect' => true,
                         'answerImg' => '',
-                    ]
+                    ],
                 ],
                 'form' => 'single_choice',
             ],
             [
-                'id' => '6724ac7652bc47d6913ab8ca11b2ea36',
+                'id' => '16b1df62-5ad0-4707-ab1c-746affd6670f',
                 'text' => 'На какое время допускается снять кровоостанавливающий жгут, если максимальное время его наложения истекло, а пострадавшего не транспортировали в медицинскую организацию?',
                 'question_img' => '',
                 'answers' => [
@@ -104,10 +103,10 @@ final class RequestFixture extends AbstractFixture
                         'text' => 'Снимать жгут не рекомендуется',
                         'isCorrect' => true,
                         'answerImg' => '',
-                    ]
+                    ],
                 ],
                 'form' => 'single_choice',
-            ]
+            ],
         ];
     }
 }
