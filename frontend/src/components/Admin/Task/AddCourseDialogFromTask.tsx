@@ -32,7 +32,7 @@ interface AddCourseDialogProps {
 
 type AddCourseFormData = z.infer<typeof schema>;
 
-export default function AddCourseDialog({ draft }: AddCourseDialogProps) {
+export default function AddCourseDialogFromTask({ draft }: AddCourseDialogProps) {
   const [open, setOpen] = useState<boolean>(false);
 
   const router = useRouter();
