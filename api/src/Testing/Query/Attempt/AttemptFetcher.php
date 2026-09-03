@@ -56,5 +56,68 @@ final class AttemptFetcher implements AttemptFetcherInterface
         ];
     }
 
-    public function getAttemptResult(string $attemptId): array {}
+    public function getAttemptResult(string $attemptId, string $userId): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $attempt = $qb->select('a.id, a.status, a.questions_snapshot, a.score, a.mistakes, a.started_at, a.finished_at, a.finished_at, a.ticket_number, t.name, t.cipher, t.allowed_mistakes, u.email')
+            ->from('attempts', 'a')
+            ->leftJoin('a', 'tests', 't', 'a.test_id = t.id')
+            ->leftJoin('a', 'users', 'u', 'a.user_id = u.id')
+            ->andWhere($qb->expr()->eq('a.id', ':id'))
+            ->andWhere($qb->expr()->eq('u.id', ':userId'))
+            ->setParameter('id', $attemptId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if (false === $attempt || empty($attempt['questions_snapshot'])) {
+            return [];
+        }
+        $questionsSnapshot = json_decode($attempt['questions_snapshot'], true, 512, JSON_THROW_ON_ERROR);
+
+        if (empty($questionsSnapshot)) {
+            return [];
+        }
+
+        $answersQb = $this->connection->createQueryBuilder();
+        $answersRows = $answersQb->select('question_id, selected_answers_ids, is_correct')
+            ->from('answers')
+            ->where($answersQb->expr()->eq('attempt_id', ':attemptId'))
+            ->setParameter('attemptId', $attemptId)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $userAnswersByQuestionId = [];
+        foreach ($answersRows as $ans) {
+            $userAnswersByQuestionId[$ans['question_id']] = [
+                'selected_ids' => json_decode($ans['selected_answers_ids'], true, 512, JSON_THROW_ON_ERROR),
+                'is_correct' => (bool)$ans['is_correct'],
+            ];
+        }
+
+        foreach ($questionsSnapshot as &$question) {
+            $qId = $question['id'];
+            $question['user_result'] = $userAnswersByQuestionId[$qId] ?? null;
+        }
+
+        unset($question);
+
+        return [
+            'id' => $attempt['id'],
+            'status' => $attempt['status'],
+            'score' => $attempt['score'],
+            'mistakes' => $attempt['mistakes'],
+            'started_at' => $attempt['started_at'],
+            'finished_at' => $attempt['finished_at'],
+            'ticket_number' => $attempt['ticket_number'],
+            'email' => $attempt['email'],
+            'test' => [
+                'name' => $attempt['name'],
+                'cipher' => $attempt['cipher'],
+                'allowed_mistakes' => $attempt['allowed_mistakes'],
+            ],
+            'questions_snapshot' => $questionsSnapshot,
+        ];
+    }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Testing\Attempt\Get;
+namespace Tests\Functional\Testing\Attempt\GetResult;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tests\Functional\FixturesLoader;
 use Tests\Functional\Json;
 use Tests\Functional\OAuthTokenTrait;
+use Tests\Functional\Testing\Attempt\Get\RequestFixture;
 
 /**
  * @internal
@@ -42,17 +43,16 @@ final class RequestActionTest extends WebTestCase
 
     public function testUnauthenticatedReturns401(): void
     {
-        $this->client->jsonRequest('GET', '/v1/testing/attempts/' . RequestFixture::TEST_ID);
+        $this->client->jsonRequest('GET', '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID . '/result');
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
 
     public function testSuccess(): void
     {
-        $this->client->catchExceptions(false);
         $this->client->jsonRequest(
             'GET',
-            '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID,
+            '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID . '/result',
             [],
             $this->authHeaders($this->userToken)
         );
@@ -65,15 +65,21 @@ final class RequestActionTest extends WebTestCase
 
         self::assertArrayHasKey('id', $data);
         self::assertArrayHasKey('status', $data);
+        self::assertArrayHasKey('score', $data);
+        self::assertArrayHasKey('mistakes', $data);
         self::assertArrayHasKey('ticketNumber', $data);
+        self::assertArrayHasKey('startedAt', $data);
+        self::assertArrayHasKey('finishedAt', $data);
+        self::assertArrayHasKey('test', $data);
         self::assertArrayHasKey('questions', $data);
+        self::assertArrayHasKey('email', $data);
     }
 
     public function testNotFound(): void
     {
         $this->client->jsonRequest(
             'GET',
-            '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID_NOT_FOUND,
+            '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID_NOT_FOUND . '/result',
             [],
             $this->authHeaders($this->userToken)
         );
@@ -84,6 +90,8 @@ final class RequestActionTest extends WebTestCase
 
         $data = Json::decode($body);
 
-        self::assertEquals(['message' => 'No attempt found.'], $data);
+        self::assertEquals([
+            'message' => 'Attempt result not found.',
+        ], $data);
     }
 }
