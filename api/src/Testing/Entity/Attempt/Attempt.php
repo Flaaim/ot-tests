@@ -146,6 +146,19 @@ final class Attempt implements AggregateRoot
         }
     }
 
+    public function finish(int $allowedMistakes): void
+    {
+        if (!$this->isInProgress()) {
+            throw new DomainException('Attempt is already finished.');
+        }
+        $this->finishedAt = new DateTimeImmutable();
+        if ($this->mistakes > $allowedMistakes) {
+            $this->status = Status::failed();
+        } else {
+            $this->status = Status::passed();
+        }
+    }
+
     private function findQuestionInSnapshot(string $questionId): ?QuestionDTO
     {
         return array_find($this->getQuestionSnapshot(), static fn ($snapshot) => $snapshot->id === $questionId);

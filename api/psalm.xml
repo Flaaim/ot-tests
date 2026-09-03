@@ -44,6 +44,7 @@
                 <directory name="src/Parser/Query" />
                 <directory name="src/Course/Query" />
                 <directory name="src/Testing/Query" />
+                <directory name="src/Testing/Entity/Attempt" />
                 <directory name="src/Parser/Entity" />
                 <directory name="src/OAuth" />
                 <directory name="src/Infrastructure" />
@@ -59,6 +60,7 @@
                 <directory name="src/Parser/Query" />
                 <directory name="src/Course/Query" />
                 <directory name="src/Testing/Query" />
+                <directory name="src/Testing/Entity/Attempt/DTO" />
             </errorLevel>
         </PossiblyUnusedProperty>
 
