@@ -38,9 +38,7 @@ final class Question
     {
         $answers = array_map(static fn (array $answerData) => Answer::fromArray($answerData), $data['answers']);
 
-
         $form = self::detectForm($data['text'], $answers);
-
 
         return new self(
             id: Uuid::uuid4()->toString(),

@@ -10,6 +10,7 @@ import { SingleChoiceQuestion } from "@/components/Testing/Attempt/SingleChoiceQ
 import { MultipleChoiceQuestion } from "@/components/Testing/Attempt/MultipleChoiceQuestion";
 import { SequenceQuestion } from "@/components/Testing/Attempt/SequenceQuestion";
 import { MatchingQuestion } from "@/components/Testing/Attempt/MatchingQuestion";
+import { useRouter } from "next/navigation";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
@@ -22,6 +23,8 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
   const questions = attempt.questions || [];
   const currentQuestion = questions[currentQuestionIndex];
   const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
+
+  const router = useRouter();
 
   if (!currentQuestion) {
     return <div className="p-8 text-center text-muted-foreground">Вопросы не найдены.</div>;
@@ -44,8 +47,8 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setCurrentAnswers([]);
     } else {
-      // Здесь будет логика завершения теста
-      alert("Тест завершен!");
+      router.push(`${payload.id}/result`);
+      return;
     }
   };
   const renderQuestionForm = () => {

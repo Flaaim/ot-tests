@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/interfaces/response.interface";
 import {
   AttemptInterface,
+  AttemptResultData,
   LaunchAttemptPayload,
   SubmitAnswerPayload,
 } from "@/interfaces/attempt.interface";
@@ -67,6 +68,25 @@ export async function submitAnswerAction(payload: SubmitAnswerPayload): Promise<
     return handleApiResponse<void>(response);
   } catch (error) {
     console.error("submitAnswerAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function fetchAttemptResultAction(
+  attemptId: string
+): Promise<ApiResponse<AttemptResultData>> {
+  try {
+    const response = await apiFetch(API.attempt.getResult(attemptId), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    return handleApiResponse<AttemptResultData>(response);
+  } catch (error) {
+    console.error("fetchAttemptResultAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

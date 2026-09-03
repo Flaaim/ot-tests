@@ -107,7 +107,9 @@ export default function TaskForm({ task }: TaskFormProps) {
               <p className="text-muted-foreground font-medium">Создана</p>
               <p>{formattedDate}</p>
             </div>
-            <div>{rawJsonString !== "" ? <AddCourseDialogFromTask draft={rawJsonString} /> : ""}</div>
+            <div>
+              {rawJsonString !== "" ? <AddCourseDialogFromTask draft={rawJsonString} /> : ""}
+            </div>
           </div>
 
           {task.failed_reason && (

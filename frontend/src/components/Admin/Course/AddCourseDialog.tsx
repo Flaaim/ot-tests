@@ -1,27 +1,26 @@
 "use client";
 
-
-import React, {useState} from "react";
-import {useRouter} from "next/navigation";
-import {Button} from "@/components/ui/button";
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {z} from "zod";
-import {addCourseAction} from "@/actions/course";
-import {toast} from "sonner";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { addCourseAction } from "@/actions/course";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
-  DialogDescription, DialogFooter,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import {Upload} from "lucide-react";
-import {Field, FieldError, FieldGroup, FieldLabel} from "@/components/ui/field";
-import {Textarea} from "@/components/ui/textarea";
-import {Input} from "@/components/ui/input";
-
+import { Upload } from "lucide-react";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 
 const AnswerSchema = z.object({
   id: z.string().uuid().or(z.string()),
@@ -77,7 +76,7 @@ export default function AddCourseDialog() {
     defaultValues: {
       name: "",
       cipher: "",
-      rawJson: ""
+      rawJson: "",
     },
   });
 
