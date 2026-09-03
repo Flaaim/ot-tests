@@ -67,14 +67,13 @@ export default function AddCourseDialogFromTask({ draft }: AddCourseDialogProps)
   const submitButton = (
     <Button
       type="submit"
-      form="add-course-form"
+      form="add-course-from-taks-form"
       disabled={form.formState.isSubmitting}
       className="w-full cursor-pointer py-2"
     >
       {form.formState.isSubmitting ? "Загрузка..." : "Добавить курс"}
     </Button>
   );
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button />}>
@@ -86,7 +85,7 @@ export default function AddCourseDialogFromTask({ draft }: AddCourseDialogProps)
           <DialogDescription>Добавление нового курса.</DialogDescription>
         </DialogHeader>
         <form
-          id="add-course-form"
+          id="add-course-from-taks-form"
           onSubmit={(e) => {
             void form.handleSubmit(onSubmit)(e);
           }}

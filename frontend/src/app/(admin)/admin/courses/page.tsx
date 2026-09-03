@@ -15,7 +15,7 @@ import CourseSearch from "@/components/Admin/Course/CourseSearch";
 import Link from "next/link";
 import CourseStatusBadge from "@/components/Admin/Course/Status/CourseStatusBadge";
 import RemoveCourseDialog from "@/components/Admin/Course/RemoveCourseDialog";
-import AddCourseDialogFromTask from "@/components/Admin/Task/AddCourseDialogFromTask";
+import AddCourseDialog from "@/components/Admin/Course/AddCourseDialog";
 
 interface AdminCoursesPageProps {
   searchParams: Promise<{ page?: string; perPage?: string; q?: string }>;
@@ -55,7 +55,7 @@ export default async function AdminCoursesPage({ searchParams }: AdminCoursesPag
       <AdminBreadcrumbs items={[{ title: "Курсы" }]} />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Курсы</h1>
-        <AddCourseDialogFromTask draft='' />
+        <AddCourseDialog />
       </div>
       <CourseSearch />
       <div className="rounded-md border bg-white">

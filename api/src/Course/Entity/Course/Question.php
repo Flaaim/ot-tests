@@ -38,14 +38,16 @@ final class Question
     {
         $answers = array_map(static fn (array $answerData) => Answer::fromArray($answerData), $data['answers']);
 
+
         $form = self::detectForm($data['text'], $answers);
+
 
         return new self(
             id: Uuid::uuid4()->toString(),
             text: $data['text'],
             questionImg: $data['questionImg'],
             answers: $answers,
-            form: $form
+            form: new QuestionForm($data['form']),
         );
     }
 
