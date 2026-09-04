@@ -203,17 +203,14 @@ final class CourseFetcher implements CourseFetcherInterface
                         'text' => trim($answerParts[1]),
                     ];
                 }
-                shuffle($rightColumn);
 
                 $finalAnswers = [
                     'left' => $leftColumn,
                     'right' => $rightColumn,
                 ];
             } elseif (QuestionForm::SEQUENCE === $question['form']) {
-                shuffle($answers);
                 $finalAnswers = $answers;
             } else {
-                shuffle($answers);
                 $finalAnswers = $answers;
             }
 

@@ -62,7 +62,7 @@ export default function AddCourseDialog() {
     const result = await addCourseAction({
       name: values.name,
       cipher: values.cipher,
-      draft: JSON.parse(values.rawJson),
+      draft: values.rawJson,
     });
 
     if (!result.ok) {

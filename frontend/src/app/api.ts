@@ -83,5 +83,6 @@ export const API = {
     get: (id: string) => BASE_URL + `/v1/testing/attempts/${id}`,
     submitAnswer: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/submit`,
     getResult: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/result`,
+    finish: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/finish`,
   },
 };

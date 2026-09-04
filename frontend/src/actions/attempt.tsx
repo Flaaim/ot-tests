@@ -90,3 +90,20 @@ export async function fetchAttemptResultAction(
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }
+
+export async function finishAttemptAction(attemptId: string): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.attempt.finish(attemptId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    return handleApiResponse<void>(response);
+  } catch (error) {
+    console.error("finishAttemptAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}

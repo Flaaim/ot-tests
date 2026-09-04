@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { PUBLIC_ASSETS_URL } from "@/app/api";
 import { Button } from "@/components/ui/button";
-import { submitAnswerAction } from "@/actions/attempt";
+import { finishAttemptAction, submitAnswerAction } from "@/actions/attempt";
 import { SingleChoiceQuestion } from "@/components/Testing/Attempt/SingleChoiceQuestion";
 import { MultipleChoiceQuestion } from "@/components/Testing/Attempt/MultipleChoiceQuestion";
 import { SequenceQuestion } from "@/components/Testing/Attempt/SequenceQuestion";
@@ -47,6 +47,7 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setCurrentAnswers([]);
     } else {
+      finishAttemptAction(payload.id);
       router.push(`${payload.id}/result`);
       return;
     }

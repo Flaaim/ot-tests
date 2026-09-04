@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Testing\Query\Attempt;
 
+use App\Testing\Entity\Attempt\QuestionForm;
 use Doctrine\DBAL\Connection;
 
 /** @psalm-suppress UnusedClass */
@@ -35,7 +36,8 @@ final class AttemptFetcher implements AttemptFetcherInterface
         }
 
         foreach ($questionsSnapshot as &$question) {
-            if (isset($question['form']) && 'matching' === $question['form']) {
+            if (isset($question['form']) && QuestionForm::MATCHING->value === $question['form']) {
+                shuffle($question['answers']['right']);
                 continue;
             }
 
@@ -44,6 +46,7 @@ final class AttemptFetcher implements AttemptFetcherInterface
                 return $answer;
             }, $question['answers']);
 
+            shuffle($safeAnswers);
             $question['answers'] = $safeAnswers;
         }
         unset($question);
