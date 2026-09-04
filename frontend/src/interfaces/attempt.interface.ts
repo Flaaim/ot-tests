@@ -34,12 +34,23 @@ export interface UserResultDTO {
   selectedIds: string[];
   isCorrect: boolean;
 }
+export interface AnswerItemDTO {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  answerImg: string;
+}
+
+export interface MatchingAnswersDTO {
+  left: AnswerItemDTO[];
+  right: AnswerItemDTO[];
+}
 
 export interface ResultQuestionDTO {
   id: string;
   text: string;
   questionImg: string | null;
-  answers: any; // Массив для choice/sequence, объект { left, right } для matching
+  answers: AnswerItemDTO[] | MatchingAnswersDTO;
   form: "single_choice" | "multiple_choice" | "sequence" | "matching";
   userResult: UserResultDTO | null;
 }

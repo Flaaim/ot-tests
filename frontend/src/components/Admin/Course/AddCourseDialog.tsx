@@ -22,45 +22,23 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
-const AnswerSchema = z.object({
-  id: z.string().uuid().or(z.string()),
-  text: z.string(),
-  isCorrect: z.boolean(),
-  answerImg: z.string().or(z.literal("")),
-});
-
-const QuestionSchema = z.object({
-  id: z.string().uuid().or(z.string()),
-  number: z.number().int().positive(), // целое положительное число
-  text: z.string(),
-  questionImg: z.string().url().or(z.literal("")), // валидный URL или пустая строка
-  answers: z.array(AnswerSchema), // массив ответов
-  form: z.enum(["single_choice", "multiple_choice", "sequence", "matching"]),
-});
-
-export const QuestionsArraySchema = z.array(QuestionSchema);
-
-export type Question = z.infer<typeof QuestionSchema>;
-export type Answer = z.infer<typeof AnswerSchema>;
-
 const schema = z.object({
   name: z.string(),
   cipher: z.string(),
   rawJson: z
     .string()
     .min(1, "Поле не может быть пустым")
-    .transform((str, ctx) => {
-      try {
-        return JSON.parse(str);
-      } catch {
-        ctx.addIssue({
-          code: "custom",
-          message: "Некорректный формат JSON (синтаксическая ошибка)",
-        });
-        return z.NEVER;
-      }
-    })
-    .pipe(QuestionsArraySchema),
+    .refine(
+      (val) => {
+        try {
+          JSON.parse(val);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { message: "Некорректный формат JSON" }
+    ),
 });
 
 type AddCourseFormData = z.infer<typeof schema>;
@@ -81,12 +59,10 @@ export default function AddCourseDialog() {
   });
 
   async function onSubmit(values: AddCourseFormData) {
-    const jsonString = JSON.stringify(values.rawJson);
-
     const result = await addCourseAction({
       name: values.name,
       cipher: values.cipher,
-      draft: jsonString,
+      draft: JSON.parse(values.rawJson),
     });
 
     if (!result.ok) {

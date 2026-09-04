@@ -1,6 +1,10 @@
 "use client";
 
-import { ResultQuestionDTO } from "@/interfaces/attempt.interface";
+import {
+  AnswerItemDTO,
+  MatchingAnswersDTO,
+  ResultQuestionDTO,
+} from "@/interfaces/attempt.interface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PUBLIC_ASSETS_URL } from "@/app/api";
@@ -16,9 +20,10 @@ export function ResultQuestionCard({ question, index }: ResultQuestionCardProps)
   const isSkipped = !question.userResult;
 
   const renderChoices = () => {
+    const options = question.answers as AnswerItemDTO[];
     return (
       <div className="space-y-3">
-        {question.answers.map((option: any) => {
+        {options.map((option) => {
           const isSelected = question.userResult?.selectedIds.includes(option.id);
           const isActuallyCorrect = option.isCorrect;
 
@@ -51,7 +56,7 @@ export function ResultQuestionCard({ question, index }: ResultQuestionCardProps)
   };
 
   const renderSequence = () => {
-    const correctOrder = question.answers;
+    const correctOrder = question.answers as AnswerItemDTO[];
     const userOrderIds = question.userResult?.selectedIds || [];
 
     return (
@@ -61,7 +66,7 @@ export function ResultQuestionCard({ question, index }: ResultQuestionCardProps)
             <span className="text-sm font-semibold text-red-600 mb-2 block">Ваш ответ:</span>
             <div className="space-y-2 opacity-70">
               {userOrderIds.map((id, i) => {
-                const answer = correctOrder.find((a: any) => a.id === id);
+                const answer = correctOrder.find((a) => a.id === id);
                 return (
                   <div
                     key={id}
@@ -80,7 +85,7 @@ export function ResultQuestionCard({ question, index }: ResultQuestionCardProps)
             Правильная последовательность:
           </span>
           <div className="space-y-2">
-            {correctOrder.map((answer: any, i: number) => (
+            {correctOrder.map((answer, i) => (
               <div
                 key={answer.id}
                 className="flex gap-3 p-3 rounded-md bg-green-50 text-green-900 border border-green-200 text-sm font-medium"
@@ -95,16 +100,17 @@ export function ResultQuestionCard({ question, index }: ResultQuestionCardProps)
   };
 
   const renderMatching = () => {
-    const leftItems = question.answers.left || [];
-    const correctRightItems = question.answers.right || [];
+    const matchingAnswers = question.answers as MatchingAnswersDTO;
+    const leftItems = matchingAnswers.left || [];
+    const correctRightItems = matchingAnswers.right || [];
     const userRightIds = question.userResult?.selectedIds || [];
 
     return (
       <div className="space-y-3">
-        {leftItems.map((leftItem: any, i: number) => {
+        {leftItems.map((leftItem, i) => {
           const correctRight = correctRightItems[i];
           const userRightId = userRightIds[i];
-          const userRight = correctRightItems.find((r: any) => r.id === userRightId);
+          const userRight = correctRightItems.find((r) => r.id === userRightId);
 
           const isRowCorrect = correctRight.id === userRightId;
 
@@ -116,10 +122,10 @@ export function ResultQuestionCard({ question, index }: ResultQuestionCardProps)
               <div className="flex-1 space-y-2">
                 <span className="text-sm text-muted-foreground block">Понятие:</span>
                 <span className="text-sm font-medium">{leftItem.text}</span>
-                {leftItem.image && (
+                {leftItem.answerImg && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={`${PUBLIC_ASSETS_URL}${process.env.NEXT_PUBLIC_QUESTION_IMAGES}${leftItem.image}`}
+                    src={`${PUBLIC_ASSETS_URL}${process.env.NEXT_PUBLIC_QUESTION_IMAGES}${leftItem.answerImg}`}
                     alt=""
                     className="max-h-24 rounded border bg-white"
                   />

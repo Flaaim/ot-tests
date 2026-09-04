@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Question } from "@/interfaces/attempt.interface";
+import { useEffect, useState, useMemo } from "react";
+import { MatchingAnswersDTO } from "@/interfaces/attempt.interface";
 import { GripVertical } from "lucide-react";
 import {
   DndContext,
@@ -22,6 +22,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { PUBLIC_ASSETS_URL } from "@/app/api";
+import { Question } from "@/interfaces/attempt.interface";
 
 interface MatchingQuestionProps {
   question: Question;
@@ -36,7 +37,7 @@ function RightItemCard({
   isOverlay = false,
 }: {
   text: string;
-  dragHandleProps?: any;
+  dragHandleProps?: Record<string, unknown>;
   isOverlay?: boolean;
 }) {
   return (
@@ -83,15 +84,16 @@ export function MatchingQuestion({
   selectedAnswersIds,
   onAnswerChange,
 }: MatchingQuestionProps) {
-  const leftItems = (question.answers as any).left || [];
-  const rightItems = (question.answers as any).right || [];
+  const matchingAnswers = question.answers as unknown as MatchingAnswersDTO;
+  const leftItems = useMemo(() => matchingAnswers.left || [], [matchingAnswers.left]);
+  const rightItems = useMemo(() => matchingAnswers.right || [], [matchingAnswers.right]);
 
   // 3. Стейт для отслеживания того, какой элемент сейчас в воздухе
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     if (selectedAnswersIds.length === 0 && rightItems.length > 0) {
-      onAnswerChange(rightItems.map((item: any) => item.id));
+      onAnswerChange(rightItems.map((item) => item.id));
     }
   }, [rightItems, selectedAnswersIds.length, onAnswerChange]);
 
@@ -101,7 +103,7 @@ export function MatchingQuestion({
   );
 
   const currentOrderIds =
-    selectedAnswersIds.length > 0 ? selectedAnswersIds : rightItems.map((item: any) => item.id);
+    selectedAnswersIds.length > 0 ? selectedAnswersIds : rightItems.map((item) => item.id);
 
   // --- Обработчики событий Drag-and-Drop ---
   const handleDragStart = (event: DragStartEvent) => {
@@ -116,7 +118,7 @@ export function MatchingQuestion({
       const oldIndex = currentOrderIds.indexOf(active.id as string);
       const newIndex = currentOrderIds.indexOf(over.id as string);
 
-      const newOrder = arrayMove(currentOrderIds, oldIndex, newIndex);
+      const newOrder = arrayMove(currentOrderIds, oldIndex, newIndex) as string[];
       onAnswerChange(newOrder);
     }
   };
@@ -126,7 +128,7 @@ export function MatchingQuestion({
   };
 
   // Ищем текст активного элемента, чтобы показать его в Overlay
-  const activeItem = activeId ? rightItems.find((a: any) => a.id === activeId) : null;
+  const activeItem = activeId ? rightItems.find((a) => a.id === activeId) : null;
   // Настраиваем красивую анимацию "примагничивания" элемента на место
   const dropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({ styles: { active: { opacity: "0.4" } } }),
@@ -142,9 +144,9 @@ export function MatchingQuestion({
         onDragCancel={handleDragCancel}
       >
         <SortableContext items={currentOrderIds} strategy={verticalListSortingStrategy}>
-          {leftItems.map((leftItem: any, index: number) => {
+          {leftItems.map((leftItem, index) => {
             const rightId = currentOrderIds[index];
-            const rightItem = rightItems.find((a: any) => a.id === rightId);
+            const rightItem = rightItems.find((a) => a.id === rightId);
 
             if (!rightItem) return null;
 
@@ -156,10 +158,10 @@ export function MatchingQuestion({
                     {leftItem.text && (
                       <span className="text-sm font-medium leading-normal">{leftItem.text}</span>
                     )}
-                    {leftItem.image && (
+                    {leftItem.answerImg && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={`${PUBLIC_ASSETS_URL}${process.env.NEXT_PUBLIC_QUESTION_IMAGES}${leftItem.image}`}
+                        src={`${PUBLIC_ASSETS_URL}${process.env.NEXT_PUBLIC_QUESTION_IMAGES}${leftItem.answerImg}`}
                         alt="Иллюстрация"
                         className="max-h-32 object-contain rounded-md border bg-white"
                       />
