@@ -8,6 +8,7 @@ use App\Testing\Entity\Attempt\Attempt;
 use App\Testing\Entity\Attempt\AttemptId;
 use App\Testing\Entity\Attempt\Status;
 use DateTimeImmutable;
+use DomainException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -90,7 +91,7 @@ final class AttemptTest extends TestCase
             1
         );
 
-        self::expectException(\DomainException::class);
+        self::expectException(DomainException::class);
         self::expectExceptionMessage('Attempt is already finished.');
         $attempt->finish(2);
     }
