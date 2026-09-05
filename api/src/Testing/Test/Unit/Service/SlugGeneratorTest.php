@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Testing\Test\Unit\Service;
 
-use App\Testing\Service\SlugGeneratorByCipher;
+use App\Testing\Service\SlugGenerator\SlugGeneratorByCipher;
 use DomainException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

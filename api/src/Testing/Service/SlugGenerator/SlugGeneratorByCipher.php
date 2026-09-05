@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Testing\Service;
+namespace App\Testing\Service\SlugGenerator;
 
 use DomainException;
 use Symfony\Component\String\Slugger\AsciiSlugger;

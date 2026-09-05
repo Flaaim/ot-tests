@@ -8,7 +8,7 @@ use App\Testing\Entity\Test\Settings;
 use App\Testing\Entity\Test\Test;
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Event\TestRemoved;
-use App\Testing\Service\SlugGeneratorByCipher;
+use App\Testing\Service\SlugGenerator\SlugGeneratorByCipher;
 use App\Testing\Test\Builder\TestBuilder;
 use DateTimeImmutable;
 use DomainException;
