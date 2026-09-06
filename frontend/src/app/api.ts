@@ -86,6 +86,7 @@ export const API = {
     finish: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/finish`,
   },
   category: {
+    add: () => BASE_URL + `/v1/admin/testing/categories`,
     getAll: () => BASE_URL + `/v1/testing/categories`,
   },
 };
