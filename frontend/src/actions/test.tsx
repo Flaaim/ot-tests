@@ -44,6 +44,7 @@ export async function addTestAction(payload: AddTestPayload): Promise<ApiRespons
         Accept: "application/json",
       },
       body: JSON.stringify({
+        categoryId: payload.categoryId,
         name: payload.name,
         cipher: payload.cipher,
         description: payload.description,

@@ -32,9 +32,11 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { addTestAction } from "@/actions/test";
+import { CategoryDTO } from "@/interfaces/category.interface";
 
 const schema = z
   .object({
+    categoryId: z.string().uuid("Некорректный формат UUID"),
     name: z.string().trim().min(1, "Имя обязательно для заполнения"),
     cipher: z.string().trim().min(1, "Шифр обязателен для заполнения"),
     description: z.string().trim().min(1, "Описание обязательно для заполнения"),
@@ -53,14 +55,43 @@ const schema = z
   });
 
 type AddTestFormData = z.infer<typeof schema>;
+interface AddTestDialogProps {
+  categories: CategoryDTO[];
+}
 
-export default function AddTestDialog() {
+function flattenCategories(
+  categories: CategoryDTO[],
+  level = 0
+): { id: string; name: string; isLeaf: boolean }[] {
+  let result: { id: string; name: string; isLeaf: boolean }[] = [];
+
+  for (const cat of categories) {
+    const hasChildren = cat.children && cat.children.length > 0;
+    const prefix = level > 0 ? "— ".repeat(level) : "";
+
+    result.push({
+      id: cat.id,
+      name: `${prefix}${cat.name}`,
+      isLeaf: !hasChildren, // Если нет детей, значит это конечная категория (лист)
+    });
+
+    if (hasChildren) {
+      result = result.concat(flattenCategories(cat.children || [], level + 1));
+    }
+  }
+
+  return result;
+}
+
+export default function AddTestDialog({ categories = [] }: AddTestDialogProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [courses, setCourses] = useState<CourseSelectOption[]>([]);
   const isCoursesLoaded = courses.length > 0;
   const router = useRouter();
+
+  const flatCategories = flattenCategories(categories);
 
   useEffect(() => {
     if (open) {
@@ -84,6 +115,7 @@ export default function AddTestDialog() {
 
   async function onSubmit(values: AddTestFormData) {
     const result = await addTestAction({
+      categoryId: values.categoryId,
       name: values.name,
       cipher: values.cipher,
       description: values.description,
@@ -108,6 +140,7 @@ export default function AddTestDialog() {
     mode: "onSubmit",
     resolver: zodResolver(schema),
     defaultValues: {
+      categoryId: "",
       name: "",
       cipher: "",
       description: "",
@@ -146,6 +179,37 @@ export default function AddTestDialog() {
           method="POST"
           className="grid gap-4 py-4"
         >
+          <FieldGroup>
+            <Controller
+              name="categoryId"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="categoryId">Категория</FieldLabel>
+                  <select
+                    {...field}
+                    id="categoryId"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="" disabled>
+                      -- Выберите конечную категорию --
+                    </option>
+                    {flatCategories.map((cat) => (
+                      <option
+                        key={cat.id}
+                        value={cat.id}
+                        disabled={!cat.isLeaf} // ❗️ Отключаем выбор, если есть дочерние элементы
+                        className={!cat.isLeaf ? "font-bold text-muted-foreground bg-muted/20" : ""}
+                      >
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+          </FieldGroup>
           <FieldGroup>
             <Controller
               name="name"

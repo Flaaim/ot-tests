@@ -15,6 +15,7 @@ import { TestItem } from "@/interfaces/test.interface";
 import AddTestDialog from "@/components/Admin/Test/AddTestDialog";
 import TestStatusControl from "@/components/Admin/Test/Status/TestStatusControl";
 import RemoveTestDialog from "@/components/Admin/Test/RemoveTestDialog";
+import { fetchCategoryTreeAction } from "@/actions/category";
 
 interface AdminTestsPageProps {
   searchParams: Promise<{ page?: string; perPage?: string; q?: string }>;
@@ -26,6 +27,9 @@ export default async function AdminTestsPage({ searchParams }: AdminTestsPagePro
   const search = String((await searchParams).q || "");
 
   const result = await fetchTestsPaginatedAction(currentPage, perPage, search);
+
+  const categoriesResult = await fetchCategoryTreeAction();
+  const categoriesTree = categoriesResult.ok && categoriesResult.data ? categoriesResult.data : [];
 
   if (!result.ok || !result.data) {
     return (
@@ -54,7 +58,7 @@ export default async function AdminTestsPage({ searchParams }: AdminTestsPagePro
       <AdminBreadcrumbs items={[{ title: "Тесты" }]} />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Тесты</h1>
-        <AddTestDialog />
+        <AddTestDialog categories={categoriesTree} />
       </div>
       <div className="rounded-md border bg-white">
         <Table>

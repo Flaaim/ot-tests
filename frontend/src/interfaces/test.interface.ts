@@ -15,6 +15,7 @@ export interface TestItem {
 }
 
 export interface AddTestPayload {
+  categoryId: string;
   name: string;
   cipher: string;
   description: string;
