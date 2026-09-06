@@ -6,6 +6,7 @@ namespace App\Testing\Test\Unit\Entity\Category;
 
 use App\Testing\Entity\Category\Category;
 use App\Testing\Entity\Category\CategoryId;
+use DomainException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,5 +44,42 @@ final class CategoryTest extends TestCase
 
         self::assertEquals('newName', $cat->getName());
         self::assertEquals('newSlug', $cat->getSlug());
+    }
+
+    public function testMove(): void
+    {
+        $cat = new Category(
+            CategoryId::generate(),
+            'name',
+            'description',
+            'name',
+        );
+
+        $parentCat = new Category(
+            CategoryId::generate(),
+            'parent',
+            'parent',
+            'parent',
+        );
+
+        $id = $parentCat->getId()->getValue();
+        $cat->move($id);
+
+        self::assertNotNull($cat->getParentId());
+    }
+
+    public function testParentItself(): void
+    {
+        $cat = new Category(
+            CategoryId::generate(),
+            'name',
+            'description',
+            'name',
+        );
+        $id = $cat->getId()->getValue();
+
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Category cannot be a parent of itself.');
+        $cat->move($id);
     }
 }

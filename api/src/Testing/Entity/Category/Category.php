@@ -7,6 +7,7 @@ namespace App\Testing\Entity\Category;
 use App\SharedDomain\AggregateRoot;
 use App\SharedDomain\Event\EventTrait;
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'test_categories')]
@@ -57,5 +58,13 @@ final class Category implements AggregateRoot
     {
         $this->name = $name;
         $this->slug = $slug;
+    }
+
+    public function move(?string $parentId): void
+    {
+        if ($this->id->getValue() === $parentId) {
+            throw new DomainException('Category cannot be a parent of itself.');
+        }
+        $this->parentId = $parentId;
     }
 }
