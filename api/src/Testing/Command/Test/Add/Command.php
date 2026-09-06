@@ -10,6 +10,9 @@ final class Command
 {
     public function __construct(
         #[Assert\NotBlank]
+        #[Assert\Uuid]
+        public readonly string $categoryId,
+        #[Assert\NotBlank]
         public readonly string $name,
         #[Assert\NotBlank]
         public readonly string $cipher,

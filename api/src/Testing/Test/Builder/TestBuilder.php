@@ -13,6 +13,7 @@ use DomainException;
 final class TestBuilder
 {
     private TestId $id;
+    private string $categoryId;
     private string $name;
     private string $description;
     private string $cipher;
@@ -26,6 +27,7 @@ final class TestBuilder
     public function __construct(
     ) {
         $this->id = new TestId('6ed7c3cb-b8ea-4615-8cfe-67b389a2d193');
+        $this->categoryId = 'fc8aa71e-b847-4851-849c-7015a230c29c';
         $this->name = 'Первая помощь';
         $this->cipher = 'ОТ 201.18';
         $this->description = 'Test description';
@@ -125,6 +127,7 @@ final class TestBuilder
 
         $test = new Test(
             $this->id,
+            $this->categoryId,
             $this->name,
             $this->cipher,
             $this->description,

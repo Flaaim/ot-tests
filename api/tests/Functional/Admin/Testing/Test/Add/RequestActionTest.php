@@ -87,6 +87,7 @@ final class RequestActionTest extends WebTestCase
             'POST',
             '/v1/admin/testing/tests',
             [
+                'categoryId' => 'fc8aa71e-b847-4851-849c-7015a230c29c',
                 'name' => RequestFixture::TEST_NAME,
                 'cipher' => RequestFixture::TEST_CIPHER,
                 'description' => 'Description',
@@ -117,6 +118,7 @@ final class RequestActionTest extends WebTestCase
             'POST',
             '/v1/admin/testing/tests',
             [
+                'categoryId' => 'fc8aa71e-b847-4851-849c-7015a230c29c',
                 'name' => RequestFixture::TEST_ACTIVE_NAME,
                 'cipher' => RequestFixture::TEST_CIPHER_ACTIVE,
                 'description' => 'Description',
@@ -142,6 +144,7 @@ final class RequestActionTest extends WebTestCase
             'POST',
             '/v1/admin/testing/tests',
             [
+                'categoryId' => 'fc8aa71e-b847-4851-849c-7015a230c29c',
                 'name' => RequestFixture::TEST_NAME,
                 'cipher' => RequestFixture::TEST_CIPHER,
                 'description' => 'Description',
@@ -176,6 +179,7 @@ final class RequestActionTest extends WebTestCase
         $data = Json::decode($body);
 
         self::assertEquals(['errors' => [
+            'categoryId' => 'This value should not be blank.',
             'name' => 'This value should not be blank.',
             'cipher' => 'This value should not be blank.',
             'description' => 'This value should not be blank.',
@@ -192,6 +196,7 @@ final class RequestActionTest extends WebTestCase
             'POST',
             '/v1/admin/testing/tests',
             [
+                'categoryId' => 'fc8aa71e-b847-4851-849c-7015a230c29c',
                 'name' => RequestFixture::TEST_NAME,
                 'cipher' => RequestFixture::TEST_CIPHER,
                 'description' => 'Description',

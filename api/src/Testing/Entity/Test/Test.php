@@ -34,6 +34,8 @@ final class Test implements AggregateRoot
         #[ORM\Id]
         #[ORM\Column(type: 'test_id', unique: true)]
         private TestId $id,
+        #[ORM\Column(type: 'string')]
+        private string $categoryId,
         #[ORM\Column(type: 'string', length: 255)]
         private string $name,
         #[ORM\Column(type: 'string', length: 255)]
@@ -61,6 +63,11 @@ final class Test implements AggregateRoot
     public function getId(): TestId
     {
         return $this->id;
+    }
+
+    public function getCategoryId(): string
+    {
+        return $this->categoryId;
     }
 
     /** @psalm-suppress PossiblyUnusedMethod */

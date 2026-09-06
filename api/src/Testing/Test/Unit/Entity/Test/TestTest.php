@@ -24,6 +24,7 @@ final class TestTest extends TestCase
     {
         $test = new Test(
             $id = TestId::generate(),
+            $categoryId = 'fc8aa71e-b847-4851-849c-7015a230c29c',
             $name = 'Test name',
             $cipher = 'ОТ 201.18',
             $description = 'Test Description',

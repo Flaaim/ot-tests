@@ -50,6 +50,7 @@ final class Handler
 
         $test = new Test(
             TestId::generate(),
+            $command->categoryId,
             $command->name,
             $command->cipher,
             $command->description,

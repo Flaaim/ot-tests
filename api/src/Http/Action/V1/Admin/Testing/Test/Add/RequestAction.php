@@ -26,6 +26,7 @@ final class RequestAction
         $body = $request->toArray();
 
         $command = new Command(
+            categoryId: $body['categoryId'] ?? '',
             name: $body['name'] ?? '',
             cipher: $body['cipher'] ?? '',
             description: $body['description'] ?? '',
