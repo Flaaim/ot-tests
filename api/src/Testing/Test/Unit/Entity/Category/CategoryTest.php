@@ -29,4 +29,19 @@ final class CategoryTest extends TestCase
         self::assertEquals($slug, $parentCat->getSlug());
         self::assertNull($parentCat->getParentId());
     }
+
+    public function testRename(): void
+    {
+        $cat = new Category(
+            CategoryId::generate(),
+            'name',
+            'description',
+            'name',
+        );
+
+        $cat->rename('newName', 'newSlug');
+
+        self::assertEquals('newName', $cat->getName());
+        self::assertEquals('newSlug', $cat->getSlug());
+    }
 }

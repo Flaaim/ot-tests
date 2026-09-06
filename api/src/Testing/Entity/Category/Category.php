@@ -52,4 +52,10 @@ final class Category implements AggregateRoot
     {
         return $this->parentId;
     }
+
+    public function rename(string $name, string $slug): void
+    {
+        $this->name = $name;
+        $this->slug = $slug;
+    }
 }
