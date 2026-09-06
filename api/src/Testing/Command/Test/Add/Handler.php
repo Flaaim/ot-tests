@@ -10,7 +10,7 @@ use App\Testing\Entity\Test\Settings;
 use App\Testing\Entity\Test\Test;
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Entity\Test\TestRepository;
-use App\Testing\Service\SlugGeneratorByCipher;
+use App\Testing\Service\SlugGenerator\SlugGeneratorByCipher;
 use DateTimeImmutable;
 use DomainException;
 

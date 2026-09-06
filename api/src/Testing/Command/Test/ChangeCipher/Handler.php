@@ -7,7 +7,7 @@ namespace App\Testing\Command\Test\ChangeCipher;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Entity\Test\TestRepository;
-use App\Testing\Service\SlugGeneratorInterface;
+use App\Testing\Service\SlugGenerator\SlugGeneratorByCipher;
 use DomainException;
 
 final class Handler
@@ -15,7 +15,7 @@ final class Handler
     /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         private readonly TestRepository $tests,
-        private readonly SlugGeneratorInterface $slugGenerator,
+        private readonly SlugGeneratorByCipher $slugGenerator,
         private readonly Flusher $flusher
     ) {}
 

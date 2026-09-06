@@ -30,6 +30,8 @@ doctrine:
             attempt_status: App\Testing\Entity\Attempt\StatusType
             attempt_answer_id: App\Testing\Entity\Attempt\AnswerIdType
 
+            category_id: App\Testing\Entity\Category\CategoryIdType
+
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

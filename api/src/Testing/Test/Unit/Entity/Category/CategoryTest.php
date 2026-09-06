@@ -8,6 +8,10 @@ use App\Testing\Entity\Category\Category;
 use App\Testing\Entity\Category\CategoryId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class CategoryTest extends TestCase
 {
     public function testCreate(): void
