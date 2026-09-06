@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Admin\Testing\Test\ChangeCipher;
+namespace App\Http\Action\V1\Admin\Testing\Category\Rename;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Testing\Command\Test\ChangeCipher\Command;
-use App\Testing\Command\Test\ChangeCipher\Handler;
+use App\Testing\Command\Category\Rename\Command;
+use App\Testing\Command\Category\Rename\Handler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,15 +20,14 @@ final class RequestAction
         private readonly Validator $validator
     ) {}
 
-    #[Route('/v1/admin/testing/tests/{id}/change-cipher', name: 'admin.testing.test.change-cipher', methods: ['PUT'])]
+    #[Route('/v1/admin/testing/categories/{id}/rename', name: 'admin.testing.categories.rename', methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function __invoke(string $id, Request $request): Response
+    public function __invoke(Request $request, string $id): Response
     {
         $body = $request->toArray();
+        $name = $body['name'] ?? '';
 
-        $cipher = $body['cipher'] ?? '';
-
-        $command = new Command($id, $cipher);
+        $command = new Command($id, $name);
 
         $this->validator->validate($command);
 
