@@ -27,7 +27,7 @@ final class RequestAction
         $body = $request->toArray();
         $name = $body['name'] ?? '';
         $description = $body['description'] ?? '';
-        $parentId = $body['parent_id'] ?? null;
+        $parentId = $body['parentId'] ?? null;
 
         $command = new Command($name, $description, $parentId);
 
