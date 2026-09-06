@@ -2,6 +2,7 @@
 
 import {
   Brackets,
+  ChartBarStacked,
   ChevronRight,
   FileText,
   GraduationCap,
@@ -47,6 +48,7 @@ const items = [
   },
   { title: "Курсы", url: "/admin/courses", icon: GraduationCap },
   { title: "Тесты", url: "/admin/tests", icon: NotepadText },
+  { title: "Категории", url: "/admin/categories", icon: ChartBarStacked },
 ];
 
 interface AdminSidebarProps {
