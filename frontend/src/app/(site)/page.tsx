@@ -13,7 +13,7 @@ const getCategoryIcon = (slug: string) => {
 export default async function HomePage() {
   const result = await fetchCategoryTreeAction();
 
-  if (!result.ok || !result.data.length) {
+  if (!result.ok || !result.data) {
     return <div className="p-8 text-center">Сервис временно недоступен.</div>;
   }
 
@@ -23,7 +23,7 @@ export default async function HomePage() {
     <div className="max-w-6xl mx-auto py-16 px-4 space-y-12">
       <div className="text-center space-y-4">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-          Платформа тестирования
+          Платформа проверки знаний
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Выберите направление для подготовки и прохождения квалификационных тестов.

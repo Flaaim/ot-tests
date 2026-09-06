@@ -88,5 +88,6 @@ export const API = {
   category: {
     add: () => BASE_URL + `/v1/admin/testing/categories`,
     getAll: () => BASE_URL + `/v1/testing/categories`,
+    get: (id: string) => BASE_URL + `/v1/testing/categories/${id}`,
   },
 };

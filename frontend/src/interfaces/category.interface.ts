@@ -9,5 +9,13 @@ export interface CategoryDTO {
 export interface AddCategoryPayload {
   name: string;
   description: string;
-  parentId: string;
+  parentId: string | null;
+}
+
+export interface CategoryFull {
+  id: string;
+  name: string;
+  description: string;
+  slug: string;
+  parent_id: string | null;
 }

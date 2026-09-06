@@ -40,6 +40,7 @@ final class TestTest extends TestCase
         );
 
         self::assertEquals($id, $test->getId());
+        self::assertEquals($categoryId, $test->getCategoryId());
         self::assertEquals($name, $test->getName());
         self::assertEquals($cipher, $test->getCipher());
         self::assertEquals($description, $test->getDescription());

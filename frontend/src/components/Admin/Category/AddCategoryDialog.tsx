@@ -43,7 +43,7 @@ export default function AddCategoryDialog({ categories = [] }: AddCategoryDialog
     const result = await addCategoryAction({
       name: values.name,
       description: values.description,
-      parendId: values.paremdId || null,
+      parentId: values.parentId || null,
     });
 
     if (!result.ok) {

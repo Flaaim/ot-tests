@@ -3,6 +3,7 @@ import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
 import { AlertCircle, CornerDownRight, Folder } from "lucide-react";
 import AddCategoryDialog from "@/components/Admin/Category/AddCategoryDialog";
 import { CategoryDTO } from "@/interfaces/category.interface";
+import Link from "next/link";
 
 function flattenCategoriesForSelect(
   categories: CategoryDTO[],
@@ -92,7 +93,11 @@ function CategoryRow({ category, level }: { category: CategoryDTO; level: number
             <CornerDownRight className="h-4 w-4 text-muted-foreground" />
           )}
           <div>
-            <p className="font-medium">{category.name}</p>
+            <p className="font-medium">
+              <Link href={`/admin/categories/${category.id}`} className="hover:underline">
+                {category.name}
+              </Link>
+            </p>
             <p className="text-xs text-muted-foreground">/{category.slug}</p>
           </div>
         </div>
