@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Testing\Query\Category\GetAll;
 
 use App\Testing\Query\Category\CategoryFetcherInterface;
+use DomainException;
 
 final class QueryHandler
 {
@@ -15,6 +16,10 @@ final class QueryHandler
     public function handle(): array
     {
         $rows = $this->categories->getAll();
+
+        if (empty($rows)) {
+            throw new DomainException('No categories found');
+        }
 
         $categories = array_map(
             static fn (array $categoryData) => CategoryDTO::fromArray($categoryData),
