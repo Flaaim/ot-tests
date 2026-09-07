@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Rtn-tests.ru",
-  description: "Шаблон",
+  title: "Платформа тестов по охране труда",
+  description: "Подготовка и прохождение тестов по охране труда и смежных направлений",
 };
 
 export default function RootLayout({

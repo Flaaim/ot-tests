@@ -16,7 +16,7 @@ final class CategoryFetcher implements CategoryFetcherInterface
     public function getAll(): array
     {
         $qb = $this->connection->createQueryBuilder();
-        return $qb->select('id, name, slug, parent_id')
+        return $qb->select('id, name, description, slug, parent_id')
             ->from('test_categories')
             ->orderBy('name', 'ASC')
             ->executeQuery()

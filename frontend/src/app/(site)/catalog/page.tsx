@@ -2,22 +2,23 @@ import { fetchPublicCategoryTreeAction } from "@/actions/category";
 import { CategoryDTO } from "@/interfaces/category.interface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { ArrowRight, Flame, FolderOpen, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, ChevronRight, Flame, FolderOpen, ShieldCheck, Zap } from "lucide-react";
 
+// Тот же хелпер для иконок, что и на главной странице
 const getCategoryIcon = (slug: string) => {
-  if (slug.includes("pozharnaya")) return <Flame className="h-7 w-7 text-orange-500" />;
-  if (slug.includes("elektro")) return <Zap className="h-7 w-7 text-yellow-500" />;
-  if (slug.includes("ohrana-truda")) return <ShieldCheck className="h-7 w-7 text-blue-500" />;
-  return <FolderOpen className="h-7 w-7 text-primary" />;
+  if (slug.includes("pozharnaya")) return <Flame className="h-6 w-6 text-orange-500" />;
+  if (slug.includes("elektro")) return <Zap className="h-6 w-6 text-yellow-500" />;
+  if (slug.includes("ohrana-truda")) return <ShieldCheck className="h-6 w-6 text-blue-500" />;
+  return <FolderOpen className="h-6 w-6 text-primary" />;
 };
 
-export default async function HomePage() {
+export default async function CatalogPage() {
   const result = await fetchPublicCategoryTreeAction();
 
   if (!result.ok || !result.data) {
     return (
-      <div className="flex h-full w-full items-center justify-center rounded-lg border border-dashed p-8 text-center text-muted-foreground">
-        Сервис временно недоступен.
+      <div className="flex h-64 w-full items-center justify-center rounded-lg border border-dashed text-muted-foreground">
+        Не удалось загрузить каталог тестов.
       </div>
     );
   }
@@ -25,28 +26,34 @@ export default async function HomePage() {
   const tree: CategoryDTO[] = result.data;
 
   return (
-    <div className="space-y-12 pb-10">
-      {/* Hero секция */}
-      <section className="space-y-4">
-        <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
-          Платформа проверки знаний
-        </h1>
-        <p className="max-w-[700px] text-lg text-muted-foreground">
-          Выберите направление для подготовки и прохождения квалификационных тестов. Актуальная база
-          вопросов и мгновенный результат.
-        </p>
-      </section>
+    <div className="space-y-8 pb-10">
+      {/* Хлебные крошки и заголовок */}
+      <div className="space-y-4">
+        <nav className="flex items-center text-sm font-medium text-muted-foreground">
+          <Link href="/" className="hover:text-foreground transition-colors">
+            Главная
+          </Link>
+          <ChevronRight className="mx-2 h-4 w-4" />
+          <span className="text-foreground">Каталог</span>
+        </nav>
 
-      {/* Сетка главных категорий (2 колонки для ~1010px ширины) */}
-      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">Каталог направлений</h1>
+        <p className="text-lg text-muted-foreground">
+          Выберите интересующий вас раздел для просмотра доступных тестов.
+        </p>
+      </div>
+
+      {/* Сетка категорий (2 колонки отлично впишутся в ваш Grid 700px) */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {tree.map((category) => (
           <Card
             key={category.id}
-            className="relative flex flex-col transition-colors duration-200 hover:border-primary/50"
+            // Обязательно relative для корректной работы ссылки-оверлея
+            className="relative flex flex-col transition-all duration-200 hover:border-primary/50 hover:shadow-sm"
           >
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center gap-3 text-xl">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted/50 text-primary">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/50 transition-colors group-hover:bg-primary/10">
                   {getCategoryIcon(category.slug)}
                 </div>
                 <Link
@@ -83,18 +90,16 @@ export default async function HomePage() {
                   )}
                 </div>
               ) : (
-                <Link
-                  href={`/catalog/${category.slug}`}
-                  className="group mt-auto inline-flex w-fit items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-                >
-                  Перейти к тестам
-                  <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                <div className="mt-auto pt-4">
+                  <span className="text-sm italic text-muted-foreground">
+                    Перейти к списку тестов...
+                  </span>
+                </div>
               )}
             </CardContent>
           </Card>
         ))}
-      </section>
+      </div>
     </div>
   );
 }

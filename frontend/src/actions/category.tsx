@@ -28,6 +28,23 @@ export async function fetchCategoryTreeAction(): Promise<ApiResponse<CategoryDTO
   }
 }
 
+export async function fetchPublicCategoryTreeAction(): Promise<ApiResponse<CategoryDTO[]>> {
+  try {
+    const response = await apiFetch(API.category.getAll(), {
+      method: "GET",
+      next: { revalidate: 3600 },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return handleApiResponse<CategoryDTO[]>(response);
+  } catch (error) {
+    console.error("fetchCategoryTreeAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
 export async function fetchCategoryAction(categoryId: string): Promise<ApiResponse<CategoryFull>> {
   try {
     const response = await apiFetch(API.category.get(categoryId), {
@@ -112,7 +129,7 @@ export async function removeCategoryAction(id: string): Promise<ApiResponse<void
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-      }
+      },
     });
 
     return handleApiResponse<void>(response);
