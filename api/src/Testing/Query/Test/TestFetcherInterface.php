@@ -10,5 +10,7 @@ interface TestFetcherInterface
 
     public function getOneById(string $id): array;
 
-    public function getAllBySlug(string $slug): array;
+    public function getByCategory(string $categorySlug): array;
+
+    public function getBySlug(string $slug): array;
 }

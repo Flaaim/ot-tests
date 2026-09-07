@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Testing\Query\Test;
 
+use App\Testing\Entity\Test\Status;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -166,7 +167,7 @@ final class TestFetcher implements TestFetcherInterface
         return $test ?: [];
     }
 
-    public function getAllBySlug(string $slug): array
+    public function getByCategory(string $categorySlug): array
     {
         $qb = $this->connection->createQueryBuilder();
 
@@ -175,10 +176,72 @@ final class TestFetcher implements TestFetcherInterface
             ->innerJoin('t', 'test_categories', 'c', 't.category_id = c.id')
             ->where('c.slug = :slug')
             ->andWhere('t.status = :status')
-            ->setParameter('slug', $slug)
-            ->setParameter('status', 'active')
+            ->setParameter('slug', $categorySlug)
+            ->setParameter('status', Status::ACTIVE)
             ->orderBy('t.name', 'ASC')
             ->executeQuery()
             ->fetchAllAssociative();
+    }
+
+    public function getBySlug(string $slug): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $result = $qb->select(
+            '
+            t.id,
+            t.name,
+            t.cipher,
+            t.description,
+            t.status,
+            t.allowed_mistakes,
+            t.slug,
+            t.tickets,
+            t.created_at,
+            t.number_of_tickets,
+            t.number_questions_in_ticket,
+            c.name as category_name,
+            c.slug as category_slug',
+        )->from('tests', 't')
+            ->leftJoin('t', 'test_categories', 'c', 't.category_id = c.id')
+            ->where('t.slug = :slug')
+            ->andWhere('t.status = :status')
+            ->setParameter('slug', $slug)
+            ->setParameter('status', Status::ACTIVE)
+            ->executeQuery();
+
+        $row = $result->fetchAssociative();
+
+        $test = [];
+        if (false !== $row) {
+            $test = [
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'cipher' => $row['cipher'],
+                'description' => $row['description'],
+                'status' => $row['status'],
+                'slug' => $row['slug'],
+                'tickets' => $row['tickets'],
+                'createdAt' => $row['created_at'],
+                'settings' => [
+                    'allowedMistakes' => $row['allowed_mistakes'],
+                    'numberOfTickets' => $row['number_of_tickets'],
+                    'numberQuestionsInTicket' => $row['number_questions_in_ticket'],
+                ],
+                'category' => [
+                    'name' => $row['category_name'],
+                    'slug' => $row['category_slug'],
+                ],
+            ];
+            $tickets = json_decode($test['tickets'], true, JSON_THROW_ON_ERROR);
+            $ticketNumbers = array_map(static function ($ticket) {
+                unset($ticket['questionIds']);
+                return $ticket;
+            }, $tickets);
+
+            $test['tickets'] = $ticketNumbers;
+        }
+
+        return $test ?: [];
     }
 }

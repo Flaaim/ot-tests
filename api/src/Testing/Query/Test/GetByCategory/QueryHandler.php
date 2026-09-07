@@ -15,7 +15,7 @@ final class QueryHandler
 
     public function handle(Query $query): array
     {
-        $rows = $this->tests->getAllBySlug($query->slug);
+        $rows = $this->tests->getByCategory($query->slug);
         if (empty($rows)) {
             throw new DomainException('Tests by category slug not found.');
         }
