@@ -26,4 +26,5 @@ export interface CategoryFull {
   description: string;
   slug: string;
   parentId: string | null;
+  children: CategoryFull[] | [];
 }

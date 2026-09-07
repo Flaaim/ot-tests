@@ -4,6 +4,8 @@ import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import RenameCategoryDialog from "@/components/Admin/Category/RenameCategoryDialog";
 import MoveCategoryDialog from "@/components/Admin/Category/MoveCategoryDialog";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 interface CategoryOverviewPageProps {
   params: Promise<{ categoryId: string }>;
@@ -22,6 +24,7 @@ export default async function CourseOverviewPage({ params }: CategoryOverviewPag
 
   const categoriesResult = await fetchCategoryTreeAction();
   const categoriesTree = categoriesResult.ok && categoriesResult.data ? categoriesResult.data : [];
+  const hasChildren = category.children && category.children.length > 0;
 
   return (
     <div className="space-y-6">
@@ -50,6 +53,32 @@ export default async function CourseOverviewPage({ params }: CategoryOverviewPag
             </div>
           </CardContent>
         </Card>
+      </div>
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold tracking-tight">Дочерние категории:</h2>
+        {hasChildren && <Badge variant="secondary">Найдено: {category.children.length}</Badge>}
+      </div>
+      {!hasChildren ? (
+        <Card>
+          <CardContent className="p-8 text-center text-muted-foreground">
+            Дочерние категории отсутствуют...
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent>
+            <div className="space-y-4">
+              {category.children.map((cat: CategoryFull) => (
+                <p key={cat.id} className="text-muted-foreground font-medium">
+                  <Link href={`/admin/categories/${cat.id}`}> {cat.name}</Link>
+                </p>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold tracking-tight">Тесты:</h2>
       </div>
     </div>
   );

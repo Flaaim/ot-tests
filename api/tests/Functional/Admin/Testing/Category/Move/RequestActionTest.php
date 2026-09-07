@@ -118,7 +118,7 @@ final class RequestActionTest extends WebTestCase
             'PUT',
             '/v1/admin/testing/categories/' . RequestFixture::CATEGORY_ID . '/move',
             [
-                'parentId' => 'invalid'
+                'parentId' => 'invalid',
             ],
             $this->authHeaders($this->adminToken),
         );
