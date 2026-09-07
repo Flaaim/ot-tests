@@ -9,4 +9,6 @@ interface TestFetcherInterface
     public function getPaginated(int $page = 1, int $limit = 15, ?string $search = null): array;
 
     public function getOneById(string $id): array;
+
+    public function getAllBySlug(string $slug): array;
 }

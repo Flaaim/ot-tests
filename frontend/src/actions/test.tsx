@@ -7,6 +7,7 @@ import {
   PaginatedTests,
   RenameTestPayload,
   TestFull,
+  TestItem,
   UpdateSettingsTestPayload,
   UpdateTestPayload,
 } from "@/interfaces/test.interface";
@@ -199,6 +200,16 @@ export async function updateTestAction(payload: UpdateTestPayload): Promise<ApiR
     return handleApiResponse<void>(response);
   } catch (error) {
     console.error("updateTestAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function fetchPublicTestsByCategoryAction(
+  slug: string
+): Promise<ApiResponse<TestItem[]>> {
+  try {
+  } catch (error) {
+    console.error("fetchPublicTestsByCategoryAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

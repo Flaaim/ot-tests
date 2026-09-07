@@ -50,6 +50,7 @@ final class RequestActionTest extends WebTestCase
                 'name' => RequestFixture::CATEGORY_PARENT_NAME,
                 'slug' => 'roditel-skaa-kategoria',
                 'parentId' => null,
+                'description' => 'Category description',
                 'children' => [
                     [
                         'id' => RequestFixture::CATEGORY_ID,
@@ -57,6 +58,7 @@ final class RequestActionTest extends WebTestCase
                         'slug' => 'docernaa-kategoria',
                         'parentId' => RequestFixture::CATEGORY_PARENT_ID,
                         'children' => [],
+                        'description' => 'Category description',
                     ],
                 ],
             ],

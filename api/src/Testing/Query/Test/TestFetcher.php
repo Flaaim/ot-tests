@@ -165,4 +165,20 @@ final class TestFetcher implements TestFetcherInterface
 
         return $test ?: [];
     }
+
+    public function getAllBySlug(string $slug): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        return $qb->select('t.id, t.name, t.cipher, t.description, t.status, t.slug, t.created_at')
+            ->from('tests', 't')
+            ->innerJoin('t', 'test_categories', 'c', 't.category_id = c.id')
+            ->where('c.slug = :slug')
+            ->andWhere('t.status = :status')
+            ->setParameter('slug', $slug)
+            ->setParameter('status', 'active')
+            ->orderBy('t.name', 'ASC')
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
 }
