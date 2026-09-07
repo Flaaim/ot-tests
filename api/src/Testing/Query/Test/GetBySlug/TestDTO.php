@@ -17,8 +17,7 @@ final class TestDTO
         public string $slug,
         public string $createdAt,
         public string $status,
-        public array $settings,
-        public array $category
+        public array $settings
     ) {}
 
     public static function fromArray(array $data): self
@@ -33,7 +32,6 @@ final class TestDTO
             createdAt: new DateTimeImmutable($data['createdAt'])->format('Y-m-d'),
             status: $data['status'],
             settings: $data['settings'] ?? [],
-            category: $data['category'] ?? []
         );
     }
 }

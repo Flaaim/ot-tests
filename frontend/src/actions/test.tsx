@@ -7,7 +7,8 @@ import {
   PaginatedTests,
   RenameTestPayload,
   TestFull,
-  TestItem,
+  TestItemPublic,
+  TestPublicDTO,
   UpdateSettingsTestPayload,
   UpdateTestPayload,
 } from "@/interfaces/test.interface";
@@ -206,10 +207,37 @@ export async function updateTestAction(payload: UpdateTestPayload): Promise<ApiR
 
 export async function fetchPublicTestsByCategoryAction(
   slug: string
-): Promise<ApiResponse<TestItem[]>> {
+): Promise<ApiResponse<TestItemPublic[]>> {
   try {
+    const response = await apiFetch(API.test.getByCategory(slug), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    return handleApiResponse<TestItemPublic[]>(response);
   } catch (error) {
     console.error("fetchPublicTestsByCategoryAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function fetchPublicTestBySlugAction(
+  slug: string
+): Promise<ApiResponse<TestPublicDTO>> {
+  try {
+    const response = await apiFetch(API.test.getBySlug(slug), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return handleApiResponse<TestPublicDTO>(response);
+  } catch (error) {
+    console.error("fetchPublicTestBySlugAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

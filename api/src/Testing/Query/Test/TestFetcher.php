@@ -199,9 +199,7 @@ final class TestFetcher implements TestFetcherInterface
             t.tickets,
             t.created_at,
             t.number_of_tickets,
-            t.number_questions_in_ticket,
-            c.name as category_name,
-            c.slug as category_slug',
+            t.number_questions_in_ticket',
         )->from('tests', 't')
             ->leftJoin('t', 'test_categories', 'c', 't.category_id = c.id')
             ->where('t.slug = :slug')
@@ -228,13 +226,9 @@ final class TestFetcher implements TestFetcherInterface
                     'numberOfTickets' => $row['number_of_tickets'],
                     'numberQuestionsInTicket' => $row['number_questions_in_ticket'],
                 ],
-                'category' => [
-                    'name' => $row['category_name'],
-                    'slug' => $row['category_slug'],
-                ],
             ];
             $tickets = json_decode($test['tickets'], true, JSON_THROW_ON_ERROR);
-            $ticketNumbers = array_map(static function ($ticket) {
+            $ticketNumbers = array_map(static function (array $ticket): array {
                 unset($ticket['questionIds']);
                 return $ticket;
             }, $tickets);

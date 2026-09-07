@@ -77,6 +77,8 @@ export const API = {
     rename: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/rename`,
     updateSettings: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update-settings`,
     update: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update`,
+    getByCategory: (slug: string) => BASE_URL + `/v1/testing/categories/${slug}/tests`,
+    getBySlug: (slug: string) => BASE_URL + `/v1/testing/tests/${slug}`,
   },
   attempt: {
     launch: () => BASE_URL + `/v1/testing/attempts`,

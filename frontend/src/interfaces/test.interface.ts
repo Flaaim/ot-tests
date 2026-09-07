@@ -13,7 +13,15 @@ export interface TestItem {
   status: string;
   createdAt: string;
 }
-
+export interface TestItemPublic {
+  id: string;
+  name: string;
+  description: string;
+  slug: string;
+  cipher: string;
+  status: string;
+  createdAt: string;
+}
 export interface AddTestPayload {
   categoryId: string;
   name: string;
@@ -68,4 +76,26 @@ export interface Settings {
   numberOfTickets: number;
   numberQuestionsInTicket: number;
   allowedMistakes: number;
+}
+
+export interface TestPublicDTO {
+  id: string;
+  name: string;
+  cipher: string;
+  description: string;
+  status: string;
+  createdAt: string;
+  slug: string;
+  tickets: TicketPublic[];
+  settings: Settings;
+  category: CategoryPublic;
+}
+
+interface TicketPublic {
+  number: number;
+}
+
+interface CategoryPublic {
+  name: string;
+  slug: string;
 }
