@@ -47,4 +47,9 @@ final class TestRepository
     {
         $this->em->remove($test);
     }
+
+    public function hasByCategoryId(string $categoryId): bool
+    {
+        return $this->repo->count(['categoryId' => $categoryId]) > 0;
+    }
 }

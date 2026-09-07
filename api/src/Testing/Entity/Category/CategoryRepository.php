@@ -42,4 +42,14 @@ final class CategoryRepository
         /** @var Category $category */
         return $category;
     }
+
+    public function hasChildren(string $parentId): bool
+    {
+        return $this->repo->count(['parentId' => $parentId]) > 0;
+    }
+
+    public function remove(Category $category): void
+    {
+        $this->em->remove($category);
+    }
 }

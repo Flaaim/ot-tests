@@ -58,6 +58,14 @@ final class TestBuilder
     }
 
     /** @psalm-suppress PossiblyUnusedMethod */
+    public function withCategoryId(string $categoryId): self
+    {
+        $clone = clone $this;
+        $clone->categoryId = $categoryId;
+        return $clone;
+    }
+
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withName(string $name): self
     {
         $clone = clone $this;
