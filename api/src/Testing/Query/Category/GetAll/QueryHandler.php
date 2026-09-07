@@ -36,9 +36,8 @@ final class QueryHandler
         foreach ($elements as $element) {
             if ($element->parentId === $parentId) {
                 $children = $this->buildTree($elements, $element->id);
-                if ($children) {
-                    $element->children = $children;
-                }
+
+                $element->children = $children ?: [];
                 $branch[] = $element;
             }
         }

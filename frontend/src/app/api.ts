@@ -90,5 +90,6 @@ export const API = {
     getAll: () => BASE_URL + `/v1/testing/categories`,
     get: (id: string) => BASE_URL + `/v1/admin/testing/categories/${id}`,
     rename: (id: string) => BASE_URL + `/v1/admin/testing/categories/${id}/rename`,
+    move: (id: string) => BASE_URL + `/v1/admin/testing/categories/${id}/move`,
   },
 };

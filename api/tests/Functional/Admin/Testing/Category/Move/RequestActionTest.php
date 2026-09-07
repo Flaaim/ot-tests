@@ -112,12 +112,14 @@ final class RequestActionTest extends WebTestCase
         ], $data);
     }
 
-    public function testEmpty(): void
+    public function testInvalid(): void
     {
         $this->client->jsonRequest(
             'PUT',
             '/v1/admin/testing/categories/' . RequestFixture::CATEGORY_ID . '/move',
-            [],
+            [
+                'parentId' => 'invalid'
+            ],
             $this->authHeaders($this->adminToken),
         );
 
@@ -129,7 +131,7 @@ final class RequestActionTest extends WebTestCase
 
         self::assertEquals([
             'errors' => [
-                'parentId' => 'This value should not be blank.',
+                'parentId' => 'This is not a valid UUID.',
             ],
         ], $data);
     }

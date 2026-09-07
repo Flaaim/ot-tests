@@ -12,8 +12,7 @@ final class Command
         #[Assert\NotBlank]
         #[Assert\Uuid]
         public string $id,
-        #[Assert\NotBlank]
         #[Assert\Uuid]
-        public string $parentId,
+        public ?string $parentId = null,
     ) {}
 }

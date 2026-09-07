@@ -25,7 +25,7 @@ final class RequestAction
     public function __invoke(Request $request, string $id): Response
     {
         $body = $request->toArray();
-        $parentId = $body['parentId'] ?? '';
+        $parentId = $body['parentId'] ?? null;
 
         $command = new Command($id, $parentId);
 

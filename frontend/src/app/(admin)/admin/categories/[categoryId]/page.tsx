@@ -1,8 +1,9 @@
 import { CategoryFull } from "@/interfaces/category.interface";
-import { fetchCategoryAction } from "@/actions/category";
+import { fetchCategoryAction, fetchCategoryTreeAction } from "@/actions/category";
 import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import RenameCategoryDialog from "@/components/Admin/Category/RenameCategoryDialog";
+import MoveCategoryDialog from "@/components/Admin/Category/MoveCategoryDialog";
 
 interface CategoryOverviewPageProps {
   params: Promise<{ categoryId: string }>;
@@ -18,6 +19,9 @@ export default async function CourseOverviewPage({ params }: CategoryOverviewPag
 
   const category: CategoryFull = result.data;
   const items = [{ title: "Категории", href: "/admin/categories" }, { title: category.name }];
+
+  const categoriesResult = await fetchCategoryTreeAction();
+  const categoriesTree = categoriesResult.ok && categoriesResult.data ? categoriesResult.data : [];
 
   return (
     <div className="space-y-6">
@@ -35,6 +39,16 @@ export default async function CourseOverviewPage({ params }: CategoryOverviewPag
               </div>
             </div>
           </CardHeader>
+          <CardContent className="space-y-4 text-sm">
+            <p className="text-muted-foreground border-b pb-4">{category.description}</p>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div>
+                <p className="text-muted-foreground font-medium">ID</p>
+                <p className="font-mono">{category.id}</p>
+                <MoveCategoryDialog categories={categoriesTree} category={category} />
+              </div>
+            </div>
+          </CardContent>
         </Card>
       </div>
     </div>
