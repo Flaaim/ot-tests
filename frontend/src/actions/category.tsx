@@ -1,7 +1,12 @@
 "use server";
 
 import { ApiResponse } from "@/interfaces/response.interface";
-import { AddCategoryPayload, CategoryDTO, CategoryFull } from "@/interfaces/category.interface";
+import {
+  AddCategoryPayload,
+  CategoryDTO,
+  CategoryFull,
+  RenameCategoryPayload,
+} from "@/interfaces/category.interface";
 import { apiFetch } from "@/lib/apiClient";
 import { API } from "@/app/api";
 import { handleApiResponse } from "@/lib/handleApiResponse";
@@ -55,6 +60,27 @@ export async function addCategoryAction(payload: AddCategoryPayload): Promise<Ap
     return handleApiResponse<void>(response);
   } catch (error) {
     console.error("addCategoryAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function renameCategoryAction(
+  payload: RenameCategoryPayload
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.category.rename(payload.id), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: payload.name,
+      }),
+    });
+    return handleApiResponse<void>(response);
+  } catch (error) {
+    console.error("renameCategoryAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

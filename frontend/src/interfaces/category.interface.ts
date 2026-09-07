@@ -11,7 +11,10 @@ export interface AddCategoryPayload {
   description: string;
   parentId: string | null;
 }
-
+export interface RenameCategoryPayload {
+  id: string;
+  name: string;
+}
 export interface CategoryFull {
   id: string;
   name: string;
