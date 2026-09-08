@@ -63,7 +63,7 @@ final class AttemptFetcher implements AttemptFetcherInterface
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $attempt = $qb->select('a.id, a.status, a.questions_snapshot, a.score, a.mistakes, a.started_at, a.finished_at, a.finished_at, a.ticket_number, t.name, t.cipher, t.allowed_mistakes, u.email')
+        $attempt = $qb->select('a.id, a.status, a.questions_snapshot, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, t.name, t.cipher, t.allowed_mistakes, u.email')
             ->from('attempts', 'a')
             ->leftJoin('a', 'tests', 't', 'a.test_id = t.id')
             ->leftJoin('a', 'users', 'u', 'a.user_id = u.id')
@@ -122,5 +122,20 @@ final class AttemptFetcher implements AttemptFetcherInterface
             ],
             'questions_snapshot' => $questionsSnapshot,
         ];
+    }
+
+    public function getByUser(string $userId): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        return $qb->select('a.id, a.status, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, t.name, t.cipher, t.allowed_mistakes')
+            ->from('attempts', 'a')
+            ->leftJoin('a', 'tests', 't', 'a.test_id = t.id')
+            ->leftJoin('a', 'users', 'u', 'a.user_id = u.id')
+            ->andWhere($qb->expr()->eq('u.id', ':userId'))
+            ->setParameter('userId', $userId)
+            ->orderBy('a.started_at', 'DESC')
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 }

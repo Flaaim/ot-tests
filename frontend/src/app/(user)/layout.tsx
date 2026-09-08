@@ -31,10 +31,12 @@ export default async function UserDashboardLayout({
           <header className="bg-background flex h-16 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="bg-border mx-2 my-auto h-4 w-px" />
-            <span className="font-medium">Панель пользователя</span>
+            <span className="font-medium">Личный кабинет</span>
           </header>
           <main className="flex-1 p-6 max-[765px]:p-2.5">{children}</main>
-          <footer className="text-muted-foreground border-t p-4 text-sm">Footer</footer>
+          <footer className="col-start-2 col-end-4 row-start-3 mb-8 mx-3 text-sm text-muted-foreground max-[765px]:col-start-1 max-[765px]:col-end-2 max-[765px]:mb-4">
+            © {new Date().getFullYear()} Платформа тестов по охране труда. Все права защищены.
+          </footer>
         </div>
       </div>
 

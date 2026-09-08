@@ -21,6 +21,7 @@ export const API = {
   },
   user: {
     profile: () => BASE_URL + `/v1/user/profile`,
+    getAttempts: () => BASE_URL + `/v1/user/attempts`,
   },
   parser: {
     add: () => BASE_URL + `/v1/admin/parsers`,

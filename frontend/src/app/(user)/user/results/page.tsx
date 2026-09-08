@@ -1,0 +1,137 @@
+import UserBreadcrumbs from "@/components/User/UserBreadcrumbs";
+import { fetchUserAttemptsAction } from "@/actions/user";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { UserAttemptsDTO } from "@/interfaces/user.interface";
+import Link from "next/link";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
+import { CheckCircle2, XCircle, Clock } from "lucide-react";
+
+// Хелпер для форматирования даты
+const formatDate = (dateString: string | null) => {
+  if (!dateString) return "—";
+  return format(new Date(dateString), "dd.MM.yyyy, HH:mm", { locale: ru });
+};
+
+// Хелпер для визуального оформления статуса
+const getStatusBadge = (status: string) => {
+  switch (status) {
+    case "passed":
+      return (
+        <span className="inline-flex items-center gap-1.5 rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-500/20">
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          Сдан
+        </span>
+      );
+    case "failed":
+      return (
+        <span className="inline-flex items-center gap-1.5 rounded-md bg-red-500/10 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-500/20">
+          <XCircle className="h-3.5 w-3.5" />
+          Не сдан
+        </span>
+      );
+    case "in_progress":
+      return (
+        <span className="inline-flex items-center gap-1.5 rounded-md bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-500/20">
+          <Clock className="h-3.5 w-3.5" />В процессе
+        </span>
+      );
+    default:
+      return (
+        <span className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border">
+          {status}
+        </span>
+      );
+  }
+};
+
+export default async function UserResultsPage() {
+  const userAttempts = await fetchUserAttemptsAction();
+
+  if (!userAttempts || !userAttempts.data || userAttempts.data.length === 0) {
+    return (
+      <div className="space-y-6">
+        <UserBreadcrumbs items={[{ title: "Результаты" }]} />
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold tracking-tight">Результаты тестов</h1>
+        </div>
+        <div className="flex h-64 w-full items-center justify-center rounded-lg border border-dashed bg-muted/30 text-muted-foreground">
+          Результаты тестов не найдены.
+        </div>
+      </div>
+    );
+  }
+
+  const results: UserAttemptsDTO[] = userAttempts.data;
+
+  return (
+    <div className="space-y-6">
+      <UserBreadcrumbs items={[{ title: "Результаты" }]} />
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold tracking-tight">Результаты тестов</h1>
+      </div>
+
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            <TableRow>
+              <TableHead className="w-[300px]">Название теста</TableHead>
+              <TableHead>Шифр</TableHead>
+              <TableHead>Статус</TableHead>
+              <TableHead className="text-center">Билет</TableHead>
+              <TableHead className="text-center">Правильно</TableHead>
+              <TableHead className="text-center">Ошибки (Допустимо)</TableHead>
+              <TableHead>Начат</TableHead>
+              <TableHead>Окончен</TableHead>
+            </TableRow>
+          </TableHeader>
+          {/* ❗️ TableBody вынесен из TableHeader */}
+          <TableBody>
+            {results.map((result: UserAttemptsDTO) => (
+              <TableRow key={result.id} className="hover:bg-muted/30 transition-colors">
+                <TableCell className="font-medium">
+                  <Link
+                    href={`/attempts/${result.id}/result`}
+                    className="text-foreground hover:text-primary transition-colors"
+                  >
+                    {result.name}
+                  </Link>
+                </TableCell>
+                <TableCell className="text-muted-foreground">{result.cipher}</TableCell>
+                <TableCell>{getStatusBadge(result.status)}</TableCell>
+                <TableCell className="text-center font-mono">{result.ticketNumber}</TableCell>
+                <TableCell className="text-center font-semibold text-green-600">
+                  {result.score > 0 ? result.score : "—"}
+                </TableCell>
+                <TableCell className="text-center">
+                  <span
+                    className={
+                      result.mistakes > result.allowedMistakes ? "text-red-600 font-semibold" : ""
+                    }
+                  >
+                    {result.mistakes}
+                  </span>
+                  {" / "}
+                  <span className="text-muted-foreground">{result.allowedMistakes}</span>
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {formatDate(result.startedAt)}
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {formatDate(result.finishedAt)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}
