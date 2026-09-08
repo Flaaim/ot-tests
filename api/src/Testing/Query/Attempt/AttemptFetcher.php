@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Testing\Query\Attempt;
 
-use App\Testing\Entity\Attempt\Attempt;
 use App\Testing\Entity\Attempt\QuestionForm;
 use App\Testing\Entity\Attempt\Status;
 use Doctrine\DBAL\Connection;

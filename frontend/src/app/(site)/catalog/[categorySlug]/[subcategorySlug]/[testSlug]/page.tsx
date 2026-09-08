@@ -3,7 +3,6 @@ import {
   ChevronRight,
   FileQuestion,
   ListChecks,
-  PlayCircle,
   ShieldAlert,
   Ticket,
 } from "lucide-react";
@@ -14,7 +13,7 @@ import { notFound } from "next/navigation";
 import { fetchPublicTestBySlugAction } from "@/actions/test";
 import { TestPublicDTO } from "@/interfaces/test.interface";
 import PublicTicketButton from "@/components/Testing/Test/PublicTicketButton";
-import { checkIsAuthenticated, fetchUser } from "@/actions/auth";
+import { checkIsAuthenticated } from "@/actions/auth";
 
 interface TestSlugPageProps {
   params: Promise<{ categorySlug: string; subcategorySlug: string; testSlug: string }>;

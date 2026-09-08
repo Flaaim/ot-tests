@@ -11,7 +11,7 @@ import { MultipleChoiceQuestion } from "@/components/Testing/Attempt/MultipleCho
 import { SequenceQuestion } from "@/components/Testing/Attempt/SequenceQuestion";
 import { MatchingQuestion } from "@/components/Testing/Attempt/MatchingQuestion";
 import { useRouter } from "next/navigation";
-import {toast} from "sonner";
+import { toast } from "sonner";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
