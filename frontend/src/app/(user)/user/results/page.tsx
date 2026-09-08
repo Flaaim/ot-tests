@@ -1,5 +1,5 @@
 import UserBreadcrumbs from "@/components/User/UserBreadcrumbs";
-import { fetchUserAttemptsAction } from "@/actions/user";
+import { fetchUserAttemptsPaginationAction } from "@/actions/user";
 import {
   Table,
   TableBody,
@@ -8,11 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserAttemptsDTO } from "@/interfaces/user.interface";
+import { UserAttemptDTO } from "@/interfaces/user.interface";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { CheckCircle2, XCircle, Clock } from "lucide-react";
+import Pagination from "@/components/Pagination/Pagination";
 
 // Хелпер для форматирования даты
 const formatDate = (dateString: string | null) => {
@@ -52,10 +53,17 @@ const getStatusBadge = (status: string) => {
   }
 };
 
-export default async function UserResultsPage() {
-  const userAttempts = await fetchUserAttemptsAction();
+interface UserResultsPageProps {
+  searchParams: Promise<{ page?: string; perPage?: string }>;
+}
 
-  if (!userAttempts || !userAttempts.data || userAttempts.data.length === 0) {
+export default async function UserResultsPage({ searchParams }: UserResultsPageProps) {
+  const currentPage = Number((await searchParams).page) || 1;
+  const perPage = Number((await searchParams).perPage) || 15;
+
+  const result = await fetchUserAttemptsPaginationAction(currentPage, perPage);
+
+  if (!result || !result.data) {
     return (
       <div className="space-y-6">
         <UserBreadcrumbs items={[{ title: "Результаты" }]} />
@@ -68,8 +76,7 @@ export default async function UserResultsPage() {
       </div>
     );
   }
-
-  const results: UserAttemptsDTO[] = userAttempts.data;
+  const userAttempts: UserAttemptDTO[] = result.data.items;
 
   return (
     <div className="space-y-6">
@@ -94,43 +101,50 @@ export default async function UserResultsPage() {
           </TableHeader>
           {/* ❗️ TableBody вынесен из TableHeader */}
           <TableBody>
-            {results.map((result: UserAttemptsDTO) => (
-              <TableRow key={result.id} className="hover:bg-muted/30 transition-colors">
+            {userAttempts.map((attempt: UserAttemptDTO) => (
+              <TableRow key={attempt.id} className="hover:bg-muted/30 transition-colors">
                 <TableCell className="font-medium">
                   <Link
-                    href={`/attempts/${result.id}/result`}
+                    href={`/attempts/${attempt.id}/result`}
                     className="text-foreground hover:text-primary transition-colors"
                   >
-                    {result.name}
+                    {attempt.name}
                   </Link>
                 </TableCell>
-                <TableCell className="text-muted-foreground">{result.cipher}</TableCell>
-                <TableCell>{getStatusBadge(result.status)}</TableCell>
-                <TableCell className="text-center font-mono">{result.ticketNumber}</TableCell>
+                <TableCell className="text-muted-foreground">{attempt.cipher}</TableCell>
+                <TableCell>{getStatusBadge(attempt.status)}</TableCell>
+                <TableCell className="text-center font-mono">{attempt.ticketNumber}</TableCell>
                 <TableCell className="text-center font-semibold text-green-600">
-                  {result.score > 0 ? result.score : "—"}
+                  {attempt.score > 0 ? attempt.score : "—"}
                 </TableCell>
                 <TableCell className="text-center">
                   <span
                     className={
-                      result.mistakes > result.allowedMistakes ? "text-red-600 font-semibold" : ""
+                      attempt.mistakes > attempt.allowedMistakes ? "text-red-600 font-semibold" : ""
                     }
                   >
-                    {result.mistakes}
+                    {attempt.mistakes}
                   </span>
                   {" / "}
-                  <span className="text-muted-foreground">{result.allowedMistakes}</span>
+                  <span className="text-muted-foreground">{attempt.allowedMistakes}</span>
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
-                  {formatDate(result.startedAt)}
+                  {formatDate(attempt.startedAt)}
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
-                  {formatDate(result.finishedAt)}
+                  {formatDate(attempt.finishedAt)}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+      </div>
+      <div className="space-y-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={result.data.totalPages}
+          baseUrl="/user/results"
+        />
       </div>
     </div>
   );

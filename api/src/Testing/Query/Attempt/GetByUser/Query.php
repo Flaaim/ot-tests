@@ -12,5 +12,9 @@ final class Query
         #[Assert\NotBlank]
         #[Assert\Uuid]
         public readonly string $userId,
+        #[Assert\GreaterThan(0)]
+        public readonly int $page = 1,
+        #[Assert\GreaterThan(0)]
+        public readonly int $limit = 15,
     ) {}
 }

@@ -51,7 +51,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'GET',
-            '/v1/user/attempts',
+            '/v1/user/attempts?page=1&limit=10',
             [],
             $this->authHeaders($this->userToken)
         );
@@ -62,15 +62,21 @@ final class RequestActionTest extends WebTestCase
 
         $data = Json::decode($body);
 
-        self::assertArrayHasKey('id', $data[0]);
-        self::assertArrayHasKey('status', $data[0]);
-        self::assertArrayHasKey('score', $data[0]);
-        self::assertArrayHasKey('mistakes', $data[0]);
-        self::assertArrayHasKey('startedAt', $data[0]);
-        self::assertArrayHasKey('ticketNumber', $data[0]);
-        self::assertArrayHasKey('name', $data[0]);
-        self::assertArrayHasKey('cipher', $data[0]);
-        self::assertArrayHasKey('allowedMistakes', $data[0]);
-        self::assertArrayHasKey('finishedAt', $data[0]);
+        self::assertArrayHasKey('totalCount', $data);
+        self::assertArrayHasKey('totalPages', $data);
+        self::assertArrayHasKey('items', $data);
+
+        self::assertCount(1, $data['items']);
+
+        self::assertArrayHasKey('id', $data['items'][0]);
+        self::assertArrayHasKey('status', $data['items'][0]);
+        self::assertArrayHasKey('score', $data['items'][0]);
+        self::assertArrayHasKey('mistakes', $data['items'][0]);
+        self::assertArrayHasKey('startedAt', $data['items'][0]);
+        self::assertArrayHasKey('ticketNumber', $data['items'][0]);
+        self::assertArrayHasKey('name', $data['items'][0]);
+        self::assertArrayHasKey('cipher', $data['items'][0]);
+        self::assertArrayHasKey('allowedMistakes', $data['items'][0]);
+        self::assertArrayHasKey('finishedAt', $data['items'][0]);
     }
 }

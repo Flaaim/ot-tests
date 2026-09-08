@@ -10,5 +10,5 @@ interface AttemptFetcherInterface
 
     public function getAttemptResult(string $attemptId, string $userId): array;
 
-    public function getByUser(string $userId): array;
+    public function getByUser(string $userId, int $page, int $limit): array;
 }

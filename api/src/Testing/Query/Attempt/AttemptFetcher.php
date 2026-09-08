@@ -125,11 +125,15 @@ final class AttemptFetcher implements AttemptFetcherInterface
         ];
     }
 
-    public function getByUser(string $userId): array
+    public function getByUser(string $userId, int $page, int $limit): array
     {
+        $page = max(1, $page);
+        $limit = min(max(1, $limit), 100);
+        $offset = ($page - 1) * $limit;
+
         $qb = $this->connection->createQueryBuilder();
 
-        return $qb->select('a.id, a.status, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, t.name, t.cipher, t.allowed_mistakes')
+        $rows =  $qb->select('a.id, a.status, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, t.name, t.cipher, t.allowed_mistakes')
             ->from('attempts', 'a')
             ->leftJoin('a', 'tests', 't', 'a.test_id = t.id')
             ->leftJoin('a', 'users', 'u', 'a.user_id = u.id')
@@ -138,7 +142,24 @@ final class AttemptFetcher implements AttemptFetcherInterface
             ->setParameter('userId', $userId)
             ->setParameter('status', Status::STATUS_IN_PROGRESS)
             ->orderBy('a.started_at', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->executeQuery()
             ->fetchAllAssociative();
+
+        $countQb = $this->connection->createQueryBuilder();
+        $totalCount = (int)$countQb->select('COUNT(a.id)')
+            ->from('attempts', 'a')
+            ->andWhere($countQb->expr()->eq('a.user_id', ':userId'))
+            ->andWhere($countQb->expr()->neq('a.status', ':status'))
+            ->setParameter('userId', $userId)
+            ->setParameter('status', Status::STATUS_IN_PROGRESS)
+            ->executeQuery()
+            ->fetchOne();
+
+        return [
+            'items' => $rows,
+            'totalCount' => $totalCount,
+        ];
     }
 }

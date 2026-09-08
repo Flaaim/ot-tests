@@ -1,4 +1,4 @@
-export interface UserAttemptsDTO {
+export interface UserAttemptDTO {
   id: string;
   status: string;
   score: number;
@@ -9,4 +9,10 @@ export interface UserAttemptsDTO {
   name: string;
   cipher: string;
   allowedMistakes: number;
+}
+
+export interface ListAttemptsDTO {
+  items: UserAttemptDTO[];
+  totalCount: number;
+  totalPages: number;
 }
