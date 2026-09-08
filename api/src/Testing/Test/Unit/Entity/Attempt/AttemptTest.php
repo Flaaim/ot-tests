@@ -95,4 +95,45 @@ final class AttemptTest extends TestCase
         self::expectExceptionMessage('Attempt is already finished.');
         $attempt->finish(2);
     }
+
+    public function testFinishByTimeout(): void
+    {
+        $attempt = new Attempt(
+            AttemptId::generate(),
+            '244b276c-0f55-4940-8d73-e87f9aacab42',
+            '6b3ae503-2e33-45bf-be3d-93c7383aebf9',
+            Status::inProgress(),
+            new DateTimeImmutable(),
+            1,
+            [],
+            8,
+            1
+        );
+
+        $attempt->finishByTimeout();
+
+        self::assertNotNull($attempt->getFinishedAt());
+        self::assertEquals(Status::timeout(), $attempt->getStatus());
+    }
+
+    public function testFinishByTimeoutAlready(): void
+    {
+        $attempt = new Attempt(
+            AttemptId::generate(),
+            '244b276c-0f55-4940-8d73-e87f9aacab42',
+            '6b3ae503-2e33-45bf-be3d-93c7383aebf9',
+            Status::cancelled(),
+            new DateTimeImmutable(),
+            1,
+            [],
+            8,
+            1
+        );
+
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Attempt is already finished.');
+
+        $attempt->finishByTimeout();
+    }
+
 }

@@ -159,6 +159,15 @@ final class Attempt implements AggregateRoot
         }
     }
 
+    public function finishByTimeout(): void
+    {
+        if (!$this->isInProgress()) {
+            throw new DomainException('Attempt is already finished.');
+        }
+        $this->finishedAt = new DateTimeImmutable();
+        $this->status = Status::timeout();
+    }
+
     private function findQuestionInSnapshot(string $questionId): ?QuestionDTO
     {
         return array_find($this->getQuestionSnapshot(), static fn ($snapshot) => $snapshot->id === $questionId);
