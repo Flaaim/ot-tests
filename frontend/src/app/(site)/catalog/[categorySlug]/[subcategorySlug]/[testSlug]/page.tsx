@@ -13,6 +13,8 @@ import { fetchPublicCategoryTreeAction } from "@/actions/category";
 import { notFound } from "next/navigation";
 import { fetchPublicTestBySlugAction } from "@/actions/test";
 import { TestPublicDTO } from "@/interfaces/test.interface";
+import PublicTicketButton from "@/components/Testing/Test/PublicTicketButton";
+import { checkIsAuthenticated, fetchUser } from "@/actions/auth";
 
 interface TestSlugPageProps {
   params: Promise<{ categorySlug: string; subcategorySlug: string; testSlug: string }>;
@@ -40,6 +42,8 @@ export default async function TestSlugPage({ params }: TestSlugPageProps) {
     notFound();
   }
   const test: TestPublicDTO = testResult.data;
+
+  const isAuthenticated = await checkIsAuthenticated();
 
   const formattedDate = new Date(test.createdAt).toLocaleDateString("ru-RU", {
     year: "numeric",
@@ -136,12 +140,16 @@ export default async function TestSlugPage({ params }: TestSlugPageProps) {
                   Билет {ticket.number}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="mt-auto flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">
+              <CardContent className="mt-auto flex items-center justify-between pb-4">
+                <span className="text-sm font-medium text-muted-foreground text-center">
                   {test.settings.numberQuestionsInTicket} вопросов
                 </span>
                 <div className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <PlayCircle className="h-5 w-5" />
+                  <PublicTicketButton
+                    testId={test.id}
+                    ticketNumber={ticket.number}
+                    isAuthenticated={isAuthenticated}
+                  />
                 </div>
               </CardContent>
             </Card>

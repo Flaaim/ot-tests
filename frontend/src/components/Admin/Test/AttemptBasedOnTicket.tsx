@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { launchAttemptAction } from "@/actions/attempt";
-import { Loader2, PlayIcon } from "lucide-react";
+import { Loader2, PlayCircle, PlayIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 

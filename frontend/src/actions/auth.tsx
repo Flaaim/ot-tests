@@ -418,3 +418,12 @@ export async function changePassword(old_password: string, new_password: string)
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }
+
+export async function checkIsAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies();
+
+  const accessToken = cookieStore.get("access_token")?.value;
+  const refreshToken = cookieStore.get("refresh_token")?.value;
+
+  return !!(accessToken || refreshToken);
+}
