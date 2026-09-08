@@ -11,6 +11,7 @@ import { MultipleChoiceQuestion } from "@/components/Testing/Attempt/MultipleCho
 import { SequenceQuestion } from "@/components/Testing/Attempt/SequenceQuestion";
 import { MatchingQuestion } from "@/components/Testing/Attempt/MatchingQuestion";
 import { useRouter } from "next/navigation";
+import {toast} from "sonner";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
@@ -31,7 +32,15 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
   }
 
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+  const hasSelectedAnswer = currentAnswers.length > 0;
+
   const handleNext = async () => {
+    if (!hasSelectedAnswer) {
+      toast.error("Пожалуйста, выберите вариант ответа.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const payload: SubmitAnswerPayload = {
@@ -39,8 +48,12 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
       questionId: currentQuestion.id,
       selectedAnswersIds: currentAnswers,
     };
-    await submitAnswerAction(payload);
+    const result = await submitAnswerAction(payload);
 
+    if (!result.ok) {
+      toast.error(result.error || "Ошибка при сохранении ответа. Попробуйте еще раз.");
+      return;
+    }
     setIsSubmitting(false);
 
     if (!isLastQuestion) {
