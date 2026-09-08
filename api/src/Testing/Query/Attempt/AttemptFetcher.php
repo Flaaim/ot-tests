@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Testing\Query\Attempt;
 
+use App\Testing\Entity\Attempt\Attempt;
 use App\Testing\Entity\Attempt\QuestionForm;
+use App\Testing\Entity\Attempt\Status;
 use Doctrine\DBAL\Connection;
 
 /** @psalm-suppress UnusedClass */
@@ -133,7 +135,9 @@ final class AttemptFetcher implements AttemptFetcherInterface
             ->leftJoin('a', 'tests', 't', 'a.test_id = t.id')
             ->leftJoin('a', 'users', 'u', 'a.user_id = u.id')
             ->andWhere($qb->expr()->eq('u.id', ':userId'))
+            ->andWhere($qb->expr()->neq('a.status', ':status'))
             ->setParameter('userId', $userId)
+            ->setParameter('status', Status::STATUS_IN_PROGRESS)
             ->orderBy('a.started_at', 'DESC')
             ->executeQuery()
             ->fetchAllAssociative();
