@@ -1,9 +1,10 @@
 import { fetchAttemptResultAction } from "@/actions/attempt";
 import { AttemptResultData } from "@/interfaces/attempt.interface";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResultQuestionCard } from "@/components/Testing/Attempt/ResultQuestionCard";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import { PrintButton } from "@/components/Testing/PrintButton";
 
 interface ResultPageProps {
   params: Promise<{ attemptId: string }>;
@@ -63,6 +64,13 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
             )}
           </div>
         </CardContent>
+        <CardFooter className="flex justify-center w-full">
+          <div className="flex flex-row flex-wrap items-center justify-center w-full max-w-2xl">
+            <div className="flex items-center">
+              <PrintButton />
+            </div>
+          </div>
+        </CardFooter>
       </Card>
 
       <div className="space-y-6">

@@ -13,7 +13,7 @@ import { handleApiResponse } from "@/lib/handleApiResponse";
 
 export async function launchAttemptAction(
   payload: LaunchAttemptPayload
-): Promise<ApiResponse<void>> {
+): Promise<ApiResponse<{attemptId: string }>> {
   try {
     const response = await apiFetch(API.attempt.launch(), {
       method: "POST",
@@ -27,7 +27,7 @@ export async function launchAttemptAction(
       }),
     });
 
-    return handleApiResponse<void>(response);
+    return handleApiResponse<{attemptId: string }>(response);
   } catch (error) {
     console.error("launchAttemptAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };

@@ -64,7 +64,7 @@ final class AttemptFetcher implements AttemptFetcherInterface
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $attempt = $qb->select('a.id, a.status, a.questions_snapshot, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, t.name, t.cipher, t.allowed_mistakes, u.email')
+        $attempt = $qb->select('a.id, a.status, a.questions_snapshot, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, a.test_id, t.name, t.cipher, t.allowed_mistakes, u.email')
             ->from('attempts', 'a')
             ->leftJoin('a', 'tests', 't', 'a.test_id = t.id')
             ->leftJoin('a', 'users', 'u', 'a.user_id = u.id')
@@ -117,6 +117,7 @@ final class AttemptFetcher implements AttemptFetcherInterface
             'ticket_number' => $attempt['ticket_number'],
             'email' => $attempt['email'],
             'test' => [
+                'test_id' => $attempt['test_id'],
                 'name' => $attempt['name'],
                 'cipher' => $attempt['cipher'],
                 'allowed_mistakes' => $attempt['allowed_mistakes'],
