@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Functional\Testing\Attempt\Launch;
 
+use App\Testing\Event\Attempt\TimeoutAttemptCommand;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Messenger\Transport\InMemory\InMemoryTransport;
 use Tests\Functional\FixturesLoader;
 use Tests\Functional\Json;
 use Tests\Functional\OAuthTokenTrait;
@@ -49,6 +51,10 @@ final class RequestActionTest extends WebTestCase
 
     public function testSuccess(): void
     {
+        /** @var InMemoryTransport $transport */
+        $transport = $this->client->getContainer()->get('messenger.transport.async');
+        $transport->reset();
+
         $this->client->jsonRequest(
             'POST',
             '/v1/testing/attempts',
@@ -60,6 +66,17 @@ final class RequestActionTest extends WebTestCase
         );
 
         self::assertEquals(201, $this->client->getResponse()->getStatusCode());
+
+        self::assertJson($body = $this->client->getResponse()->getContent());
+
+        $data = Json::decode($body);
+
+        self::assertArrayHasKey('attemptId', $data);
+
+        self::assertCount(1, $transport->getSent());
+
+        $message = $transport->getSent()[0]->getMessage();
+        self::assertInstanceOf(TimeoutAttemptCommand::class, $message);
     }
 
     public function testNotFound(): void

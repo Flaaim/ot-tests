@@ -7,7 +7,6 @@ namespace App\Http\Action\V1\Testing\Attempt\Launch;
 use App\Infrastructure\Http\Validator\Validator;
 use App\Testing\Command\Attempt\Launch\Command;
 use App\Testing\Command\Attempt\Launch\Handler;
-use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,20 +30,18 @@ final class RequestAction
         if (null === $user) {
             return new JsonResponse(null, Response::HTTP_UNAUTHORIZED);
         }
-
         $userId = $user->getUserIdentifier();
         $body = $request->toArray();
 
-        $attemptId = Uuid::uuid4()->toString();
         $testId = $body['testId'] ?? '';
         $ticketNumber = (int)($body['ticketNumber'] ?? 0);
 
-        $command = new Command($attemptId, $testId, $userId, $ticketNumber);
+        $command = new Command($testId, $userId, $ticketNumber);
 
         $this->validator->validate($command);
 
-        $this->handler->handle($command);
+        $attemptId = $this->handler->handle($command);
 
-        return new JsonResponse($attemptId, Response::HTTP_CREATED);
+        return new JsonResponse(['attemptId' => $attemptId], Response::HTTP_CREATED);
     }
 }

@@ -81,8 +81,10 @@ services:
       - ./api:/app
     user: "1000:1000"
     depends_on:
-      - api-postgres
-      - rabbitmq
+      api-postgres:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     secrets:
       - jwt_public_key
       - jwt_private_key
@@ -110,7 +112,7 @@ services:
       MAILER_FROM_EMAIL: admin@site.ru
       MAILER_FROM_NAME: admin
       FRONTEND_URL: http://localhost:3000
-      MESSENGER_TRANSPORT_DSN: amqp://guest:guest@rabbitmq:5672/%2f/messages
+      MESSENGER_TRANSPORT_DSN: amqp://guest:guest@rabbitmq:5672/%2f
       TELEGRAM_BOT_TOKEN: 8114548384:AAEiVHE1whxgUCXT_-slDjku0SJXi3_iv5s
       TELEGRAM_CHAT_ID: 1954013093
       SENTRY_DSN: https://fc877afad286428611e7152440453816@o4510080200998912.ingest.de.sentry.io/4511806404362320

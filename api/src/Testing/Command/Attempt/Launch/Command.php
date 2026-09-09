@@ -11,9 +11,6 @@ final class Command
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Uuid]
-        public readonly string $id,
-        #[Assert\NotBlank]
-        #[Assert\Uuid]
         public readonly string $testId,
         #[Assert\NotBlank]
         #[Assert\Uuid]

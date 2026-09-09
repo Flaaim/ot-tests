@@ -33,4 +33,14 @@ final class AttemptRepository
         /** @var Attempt $attempt */
         return $attempt;
     }
+
+    public function findUserProcessedAttempt(string $userId, string $testId, int $ticketNumber): ?Attempt
+    {
+        return $this->repo->findOneBy([
+            'userId' => $userId,
+            'status' => Status::STATUS_IN_PROGRESS,
+            'testId' => $testId,
+            'ticketNumber' => $ticketNumber,
+        ]);
+    }
 }

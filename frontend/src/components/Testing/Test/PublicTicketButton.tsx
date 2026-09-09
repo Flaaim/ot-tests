@@ -42,7 +42,7 @@ export default function PublicTicketButton({
       return;
     }
 
-    router.push(`/attempts/${result.data}`);
+    router.push(`/attempts/${result.data.attemptId}`);
   };
 
   return (

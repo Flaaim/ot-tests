@@ -12,8 +12,11 @@ use App\Testing\Entity\Attempt\AttemptRepository;
 use App\Testing\Entity\Attempt\Status;
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Entity\Test\TestRepository;
+use App\Testing\Event\Attempt\TimeoutAttemptCommand;
 use DateTimeImmutable;
 use DomainException;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 final class Handler
 {
@@ -22,11 +25,22 @@ final class Handler
         private readonly TestRepository $tests,
         private readonly AttemptRepository $attempts,
         private readonly QueryHandlerApi $queryHandler,
+        private readonly MessageBusInterface $messageBus,
         private readonly Flusher $flusher,
     ) {}
 
-    public function handle(Command $command): void
+    public function handle(Command $command): string
     {
+        $processedAttempt = $this->attempts->findUserProcessedAttempt(
+            $command->userId,
+            $command->testId,
+            $command->ticketNumber
+        );
+
+        if (null !== $processedAttempt) {
+            return $processedAttempt->getId()->getValue();
+        }
+
         $test = $this->tests->get(new TestId($command->testId));
 
         $tickets = $test->getTickets();
@@ -44,7 +58,7 @@ final class Handler
         }
 
         $attempt = new Attempt(
-            new AttemptId($command->id),
+            AttemptId::generate(),
             $test->getId()->getValue(),
             $command->userId,
             Status::inProgress(),
@@ -56,5 +70,14 @@ final class Handler
         $this->attempts->add($attempt);
 
         $this->flusher->flush();
+
+        $delayInMilliseconds = 60 * 60 * 1000;
+
+        $this->messageBus->dispatch(
+            new TimeoutAttemptCommand($attempt->getId()->getValue()),
+            [new DelayStamp($delayInMilliseconds)]
+        );
+
+        return $attempt->getId()->getValue();
     }
 }

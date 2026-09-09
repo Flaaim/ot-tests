@@ -50,6 +50,8 @@ framework:
             'App\Testing\Event\TestRemoved': async
             'App\Testing\Event\TestChanged': async
 
+            'App\Testing\Event\Attempt\TimeoutAttemptCommand': async
+
 when@test:
     framework:
         messenger:

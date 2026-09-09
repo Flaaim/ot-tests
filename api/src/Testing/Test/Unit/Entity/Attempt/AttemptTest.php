@@ -135,5 +135,4 @@ final class AttemptTest extends TestCase
 
         $attempt->finishByTimeout();
     }
-
 }
