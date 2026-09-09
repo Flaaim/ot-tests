@@ -163,4 +163,59 @@ final class AttemptFetcher implements AttemptFetcherInterface
             'totalCount' => $totalCount,
         ];
     }
+
+    public function getUserStats(string $userId): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $completedTests = $qb->select('COUNT(DISTINCT a.id)')
+            ->from('attempts', 'a')
+            ->where($qb->expr()->eq('a.user_id', ':userId'))
+            ->andWhere($qb->expr()->neq('a.status', ':status'))
+            ->setParameter('userId', $userId)
+            ->setParameter('status', Status::STATUS_IN_PROGRESS)
+            ->executeQuery()
+            ->fetchOne();
+
+        if (false === $completedTests) {
+            $completedTests = 0;
+        }
+
+        $inProgressTests = $qb->select('COUNT(DISTINCT a.id)')
+            ->from('attempts', 'a')
+            ->where($qb->expr()->eq('a.user_id', ':userId'))
+            ->andWhere($qb->expr()->eq('a.status', ':status'))
+            ->setParameter('userId', $userId)
+            ->setParameter('status', Status::STATUS_IN_PROGRESS)
+            ->executeQuery()
+            ->fetchOne();
+
+        if (false === $inProgressTests) {
+            $inProgressTests = 0;
+        }
+
+        $result = $qb->select('SUM(a.score) as score, SUM(a.mistakes) as mistakes')
+            ->from('attempts', 'a')
+            ->where($qb->expr()->eq('a.user_id', ':userId'))
+            ->andWhere($qb->expr()->neq('a.status', ':status'))
+            ->setParameter('userId', $userId)
+            ->setParameter('status', Status::STATUS_IN_PROGRESS)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        $data = [
+            'score' => (int)($result['score'] ?? 0),
+            'mistakes' => (int)($result['mistakes'] ?? 0),
+        ];
+
+        $count = $data['score'] + $data['mistakes'];
+
+        $averageScore = ($count > 0) ? (($data['score'] * 100) / $count) : 0;
+
+        return [
+            'completedTests' => $completedTests,
+            'inProgressTests' => $inProgressTests,
+            'averageScore' => $averageScore,
+        ];
+    }
 }

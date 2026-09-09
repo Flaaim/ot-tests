@@ -16,3 +16,9 @@ export interface ListAttemptsDTO {
   totalCount: number;
   totalPages: number;
 }
+
+export interface UserAttemptStatsDTO {
+  completedTests: number;
+  inProgressTests: number;
+  averageScore: number;
+}

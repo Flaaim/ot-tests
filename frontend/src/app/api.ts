@@ -28,6 +28,7 @@ export const API = {
       });
       return BASE_URL + `/v1/user/attempts?${params.toString()}`;
     },
+    getAttemptStats: () => BASE_URL + `/v1/user/attempts/stats`,
   },
   parser: {
     add: () => BASE_URL + `/v1/admin/parsers`,
