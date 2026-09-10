@@ -171,9 +171,9 @@ final class AttemptFetcher implements AttemptFetcherInterface
         $completedTests = $qb->select('COUNT(DISTINCT a.id)')
             ->from('attempts', 'a')
             ->where($qb->expr()->eq('a.user_id', ':userId'))
-            ->andWhere($qb->expr()->neq('a.status', ':status'))
+            ->andWhere($qb->expr()->eq('a.status', ':status'))
             ->setParameter('userId', $userId)
-            ->setParameter('status', Status::STATUS_IN_PROGRESS)
+            ->setParameter('status', Status::STATUS_PASSED)
             ->executeQuery()
             ->fetchOne();
 

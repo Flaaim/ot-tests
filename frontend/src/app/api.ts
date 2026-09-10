@@ -20,7 +20,7 @@ export const API = {
     attachNetwork: () => BASE_URL + `/v1/auth/network/attach`,
   },
   user: {
-    profile: () => BASE_URL + `/v1/user/profile`,
+    getProfile: () => BASE_URL + `/v1/me`,
     getAttempts: (page: number, perPage: number) => {
       const params = new URLSearchParams({
         page: String(page),

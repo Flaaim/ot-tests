@@ -42,14 +42,14 @@ final class RequestActionTest extends WebTestCase
 
     public function testUnauthorizedUser(): void
     {
-        $this->client->jsonRequest('GET', '/v1/user/profile');
+        $this->client->jsonRequest('GET', '/v1/me');
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
         self::assertJson($body = $this->client->getResponse()->getContent());
 
         $data = Json::decode($body);
 
         self::assertEquals([
-            'message' => 'Unauthorized. Please provide a valid Bearer token.',
+            'error' => 'Unauthorized',
         ], $data);
     }
 
@@ -57,7 +57,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->loginUser(new UserAdapter($this->authenticatedUser->getId()->getValue()));
 
-        $this->client->jsonRequest('GET', '/v1/user/profile');
+        $this->client->jsonRequest('GET', '/v1/me');
         self::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         self::assertJson($body = (string)$this->client->getResponse()->getContent());

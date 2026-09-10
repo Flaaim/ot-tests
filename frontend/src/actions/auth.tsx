@@ -208,7 +208,7 @@ export async function passwordResetConfirm(token: string, password: string): Pro
 }
 
 export async function fetchUser(): Promise<ProfileDTO> {
-  const response = await apiFetch(API.user.profile(), {
+  const response = await apiFetch(API.user.getProfile(), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
