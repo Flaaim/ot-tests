@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ${REGISTRY}/rtn-tests-gateway:${IMAGE_TAG}
+    image: ${REGISTRY}/ot-tests-gateway:${IMAGE_TAG}
     restart: always
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
@@ -13,7 +13,7 @@ services:
       - api
 
   frontend-node:
-    image: ${REGISTRY}/rtn-tests-frontend-node:${IMAGE_TAG}
+    image: ${REGISTRY}/ot-tests-frontend-node:${IMAGE_TAG}
     restart: always
     environment:
       - NODE_ENV=production
@@ -26,13 +26,13 @@ services:
       - api
 
   api:
-    image: ${REGISTRY}/rtn-tests-api:${IMAGE_TAG}
+    image: ${REGISTRY}/ot-tests-api:${IMAGE_TAG}
     restart: always
     depends_on:
       - api-php-fpm
 
   api-php-fpm:
-    image: ${REGISTRY}/rtn-tests-api-php-fpm:${IMAGE_TAG}
+    image: ${REGISTRY}/ot-tests-api-php-fpm:${IMAGE_TAG}
     restart: always
     environment:
       APP_DEBUG: 0
@@ -51,8 +51,6 @@ services:
       MAILER_FROM_NAME: admin
       FRONTEND_URL: http://localhost:8000
       MESSENGER_TRANSPORT_DSN: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/%2f/messages
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
       SENTRY_DSN: ${SENTRY_DSN}
       JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
       JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
@@ -74,7 +72,7 @@ services:
       - jwt_private_key
 
   api-php-cli:
-    image: ${REGISTRY}/rtn-tests-api-php-cli:${IMAGE_TAG}
+    image: ${REGISTRY}/ot-tests-api-php-cli:${IMAGE_TAG}
     environment:
       APP_DEBUG: 0
       SITE_URL: ${SITE_URL}
@@ -91,9 +89,7 @@ services:
       MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
       MAILER_FROM_NAME: ${API_MAILER_FROM_NAME}
       FRONTEND_URL: ${FRONTEND_URL}
-      MESSENGER_TRANSPORT_DSN: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/%2f/messages
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      MESSENGER_TRANSPORT_DSN: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/%2f
       SENTRY_DSN: ${SENTRY_DSN}
       JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
       JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
@@ -142,7 +138,7 @@ services:
       start_period: 20s
 
   api-php-worker:
-    image: ${REGISTRY}/rtn-tests-api-php-cli:${IMAGE_TAG}
+    image: ${REGISTRY}/ot-tests-api-php-cli:${IMAGE_TAG}
     environment:
       APP_DEBUG: 0
       SITE_URL: ${SITE_URL}
@@ -160,8 +156,6 @@ services:
       MAILER_FROM_NAME: ${API_MAILER_FROM_NAME}
       FRONTEND_URL: ${FRONTEND_URL}
       MESSENGER_TRANSPORT_DSN: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/%2f/messages
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
       SENTRY_DSN: ${SENTRY_DSN}
       JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
       JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
