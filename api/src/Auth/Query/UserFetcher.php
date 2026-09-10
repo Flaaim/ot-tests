@@ -39,8 +39,31 @@ final class UserFetcher implements UserFetcherInterface
         ];
     }
 
-    public function getUsers(): array
+    public function getUsers(int $page, int $limit): array
     {
-        // TODO: Implement getUsers() method.
+        $page = max(1, $page);
+        $limit = min(max(1, $limit), 100);
+        $offset = ($page - 1) * $limit;
+
+        $qb = $this->connection->createQueryBuilder();
+
+        $rows = $qb->select('u.id, u.email', 'u.status', 'u.role, u.date')
+            ->from('users', 'u')
+            ->orderBy('u.date', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $countQb = $this->connection->createQueryBuilder();
+        $totalCount = $countQb->select('COUNT(u.id)')
+            ->from('users', 'u')
+            ->executeQuery()
+            ->fetchOne();
+
+        return [
+            'items' => $rows,
+            'totalCount' => $totalCount,
+        ];
     }
 }

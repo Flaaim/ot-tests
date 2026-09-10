@@ -8,5 +8,5 @@ interface UserFetcherInterface
 {
     public function getProfile(string $id): array;
 
-    public function getUsers(): array;
+    public function getUsers(int $page, int $limit): array;
 }
