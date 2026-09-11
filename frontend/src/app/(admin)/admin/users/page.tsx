@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/table";
 import { PaginatedUsers, UserDTO } from "@/interfaces/user.interface";
 import Pagination from "@/components/Pagination/Pagination";
+import UserStatusBadge from "@/components/Admin/Domain/User/UserStatusBadge";
+import UserRoleBadge from "@/components/Admin/Domain/User/UserRoleBadge";
 
 interface AdminUsersPageProps {
   searchParams: Promise<{ page?: string; perPage?: string }>;
@@ -69,8 +71,8 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
               <TableRow key={user.id}>
                 <TableCell className="font-medium">{user.id}</TableCell>
                 <TableCell className="font-medium">{user.email}</TableCell>
-                <TableCell className="font-medium">{user.status}</TableCell>
-                <TableCell className="font-medium">{user.role}</TableCell>
+                <TableCell className="font-medium"><UserStatusBadge type={user.status}/></TableCell>
+                <TableCell className="font-medium"><UserRoleBadge type={user.role} /></TableCell>
                 <TableCell className="font-medium">
                   {new Date(user.date).toLocaleDateString("ru-RU")}
                 </TableCell>
