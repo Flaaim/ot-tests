@@ -34,7 +34,7 @@ docker-build:
 api-init: api-permissions api-composer-install api-migrations api-fixtures
 
 api-composer-install:
-	docker compose run --rm api-php-cli composer install
+	docker compose run --rm -u $$(id -u):$$(id -g) api-php-cli composer install
 
 api-migrations:
 	docker compose run --rm api-php-cli bin/console doctrine:migrations:migrate --no-interaction
