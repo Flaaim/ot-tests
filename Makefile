@@ -134,7 +134,7 @@ deploy:
 	ssh ${HOST} -p ${PORT} 'echo "${REGISTRY_PASSWORD}" | docker login ${REGISTRY} -u "${REGISTRY_USER}" --password-stdin'
 
 	envsubst < .env.template > .env.local
-	scp -P ${PORT} .env.local ${HOST}:site_${BUILD_NUMBER}/.env
+	scp -P ${PORT} .env.local ${HOST}:$(SITE_DIR)/.env
 	rm .env.local
 
 	echo "$$JWT_PUBLIC_KEY" > temp_jwt_public.key
