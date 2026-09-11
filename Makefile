@@ -125,10 +125,11 @@ ifneq ("$(wildcard .env.production)","")
 endif
 
 deploy:
-	ssh ${HOST} -p ${PORT} 'rm -rf site_${BUILD_NUMBER}'
-	ssh ${HOST} -p ${PORT} 'mkdir site_${BUILD_NUMBER}'
+	$(eval DEPLOY_DIR := /home/deploy)
+	$(eval SITE_DIR := $(DEPLOY_DIR)/site_${BUILD_NUMBER})
 
-	scp -P ${PORT} docker-compose-production.yml ${HOST}:site_${BUILD_NUMBER}/docker-compose.yml
+	ssh ${HOST} -p ${PORT} 'rm -rf $(SITE_DIR) && mkdir -p $(SITE_DIR)/secrets'
+	scp -P ${PORT} docker-compose-production.yml ${HOST}:$(SITE_DIR)/docker-compose.yml
 
 	ssh ${HOST} -p ${PORT} 'echo "${REGISTRY_PASSWORD}" | docker login ${REGISTRY} -u "${REGISTRY_USER}" --password-stdin'
 
@@ -136,15 +137,22 @@ deploy:
 	scp -P ${PORT} .env.local ${HOST}:site_${BUILD_NUMBER}/.env
 	rm .env.local
 
+	echo "$$JWT_PUBLIC_KEY" > temp_jwt_public.key
+	echo "$$JWT_PRIVATE_KEY" > temp_jwt_private.key
+
+	scp -o StrictHostKeyChecking=no -P ${PORT} temp_jwt_public.key $(HOST):$(SITE_DIR)/secrets/jwt_public.key
+	scp -o StrictHostKeyChecking=no -P ${PORT} temp_jwt_private.key $(HOST):$(SITE_DIR)/secrets/jwt_private.key
+
+	rm -f temp_jwt_public.key temp_jwt_private.key
+
 	ssh ${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker compose pull'
 	ssh ${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker compose up --build --remove-orphans -d'
 
 	ssh ${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker compose run --rm api-php-cli composer app migrations:migrate -- --allow-no-migration --no-interaction'
 
-	ssh ${HOST} -p ${PORT} 'rm -f site'
-	ssh ${HOST} -p ${PORT} 'ln -sr site_${BUILD_NUMBER} site'
+	ssh ${HOST} -p ${PORT} 'rm -f $(DEPLOY_DIR)/site && ln -sr $(SITE_DIR) $(DEPLOY_DIR)/site'
 	ssh ${HOST} -p ${PORT} 'docker image prune -af'
-	ssh ${HOST} -p ${PORT} 'cd /home/deploy && ls -dt site_* | tail -n +4 | xargs rm -rf'
+	ssh ${HOST} -p ${PORT} 'cd $(DEPLOY_DIR) && ls -dt site_* | tail -n +4 | xargs rm -rf'
 
 
 rollback:
