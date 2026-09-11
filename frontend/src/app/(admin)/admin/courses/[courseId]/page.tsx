@@ -2,7 +2,7 @@ import { fetchCourseAction } from "@/actions/course";
 import { CourseFull, Question } from "@/interfaces/course.interface";
 import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CourseStatusBadge from "@/components/Admin/Course/Status/CourseStatusBadge";
+import CourseStatusBadge from "@/components/Admin/Domain/Course/CourseStatusBadge";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { PUBLIC_ASSETS_URL } from "@/app/api";
 import { Badge } from "@/components/ui/badge";

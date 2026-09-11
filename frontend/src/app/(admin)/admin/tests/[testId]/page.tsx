@@ -2,7 +2,7 @@ import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
 import { TestFull, Ticket } from "@/interfaces/test.interface";
 import { fetchTestAction } from "@/actions/test";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import TestStatusBadge from "@/components/Admin/Test/Status/TestStatusBadge";
+import TestStatusBadge from "@/components/Admin/Domain/Test/TestStatusBadge";
 import { ChangeCipherTestDialog } from "@/components/Admin/Test/ChangeCipherTestDialog";
 import RenameTestDialog from "@/components/Admin/Test/RenameTestDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

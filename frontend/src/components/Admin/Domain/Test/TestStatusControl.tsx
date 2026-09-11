@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { updateStatusAction } from "@/actions/test";
 import { TableCell } from "@/components/ui/table";
-import TestStatusBadge from "@/components/Admin/Test/Status/TestStatusBadge";
+import TestStatusBadge from "@/components/Admin/Domain/Test/TestStatusBadge";
 
 const STATUS_CONFIG: Record<string, boolean> = {
   active: true,

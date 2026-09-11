@@ -13,7 +13,7 @@ import Link from "next/link";
 import Pagination from "@/components/Pagination/Pagination";
 import { TestItem } from "@/interfaces/test.interface";
 import AddTestDialog from "@/components/Admin/Test/AddTestDialog";
-import TestStatusControl from "@/components/Admin/Test/Status/TestStatusControl";
+import TestStatusControl from "@/components/Admin/Domain/Test/TestStatusControl";
 import RemoveTestDialog from "@/components/Admin/Test/RemoveTestDialog";
 import { fetchCategoryTreeAction } from "@/actions/category";
 

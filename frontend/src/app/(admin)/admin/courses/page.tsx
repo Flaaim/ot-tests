@@ -13,7 +13,7 @@ import { CourseItem } from "@/interfaces/course.interface";
 import Pagination from "@/components/Pagination/Pagination";
 import CourseSearch from "@/components/Admin/Course/CourseSearch";
 import Link from "next/link";
-import CourseStatusBadge from "@/components/Admin/Course/Status/CourseStatusBadge";
+import CourseStatusBadge from "@/components/Admin/Domain/Course/CourseStatusBadge";
 import RemoveCourseDialog from "@/components/Admin/Course/RemoveCourseDialog";
 import AddCourseDialog from "@/components/Admin/Course/AddCourseDialog";
 
