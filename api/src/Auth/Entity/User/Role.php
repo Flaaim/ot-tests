@@ -8,9 +8,9 @@ use Webmozart\Assert\Assert;
 
 final class Role
 {
-    public const USER = 'user';
-    public const TEACHER = 'teacher';
-    public const ADMIN = 'admin';
+    public const string USER = 'user';
+    public const string COMPANY = 'company';
+    public const string ADMIN = 'admin';
 
     public function __construct(
         private string $name
@@ -18,7 +18,7 @@ final class Role
         Assert::oneOf($name, [
             self::USER,
             self::ADMIN,
-            self::TEACHER,
+            self::COMPANY,
         ]);
     }
 
@@ -29,7 +29,7 @@ final class Role
 
     public static function teacher(): self
     {
-        return new self(self::TEACHER);
+        return new self(self::COMPANY);
     }
 
     public static function admin(): self
