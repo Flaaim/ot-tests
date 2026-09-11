@@ -1,10 +1,9 @@
-import {Badge} from "@/components/ui/badge";
-
+import { Badge } from "@/components/ui/badge";
 
 const USER_STATUS: Record<string, string> = {
   wait: "Подтверждение",
-  active: "Активный"
-}
+  active: "Активный",
+};
 
 interface UserStatusBadgeProps {
   type: string;
