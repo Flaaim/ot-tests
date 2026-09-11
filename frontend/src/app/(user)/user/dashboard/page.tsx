@@ -4,18 +4,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { fetchUserAttemptStatsAction } from "@/actions/user";
 import { UserAttemptStatsDTO } from "@/interfaces/user.interface";
-import { notFound } from "next/navigation";
 import UserBreadcrumbs from "@/components/User/UserBreadcrumbs";
-// import { fetchUserStatsAction } from "@/actions/user"; // Заготовка для вашего экшена
 
 export default async function DashboardPage() {
-  // Заглушки для данных. В будущем вызовите здесь свой серверный экшен
-  // const stats = await fetchUserStatsAction();
-  const stats = {
-    completedTests: 12,
-    inProgress: 2,
-    averageScore: 85,
-  };
   const result = await fetchUserAttemptStatsAction();
 
   if (!result.ok || !result.data) {

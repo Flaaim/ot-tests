@@ -29,6 +29,13 @@ export const API = {
       return BASE_URL + `/v1/user/attempts?${params.toString()}`;
     },
     getAttemptStats: () => BASE_URL + `/v1/user/attempts/stats`,
+    getPaginated: (page: number, limit: number) => {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+      });
+      return BASE_URL + `/v1/admin/users?${params.toString()}`;
+    },
   },
   parser: {
     add: () => BASE_URL + `/v1/admin/parsers`,
