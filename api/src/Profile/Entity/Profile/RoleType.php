@@ -7,7 +7,7 @@ namespace App\Profile\Entity\Profile;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 
-/** @psalm-supress UnusedClass */
+/** @psalm-suppress UnusedClass */
 final class RoleType extends StringType
 {
     public const string NAME = 'profile_role';

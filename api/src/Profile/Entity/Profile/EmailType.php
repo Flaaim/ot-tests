@@ -7,6 +7,7 @@ namespace App\Profile\Entity\Profile;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 
+/** @psalm-suppress UnusedClass */
 final class EmailType extends StringType
 {
     public const string NAME = 'profile_email';

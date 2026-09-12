@@ -14,7 +14,7 @@ use App\Profile\Entity\Profile\Role;
 use App\Profile\Entity\Profile\Status;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-/** @psalm-supress UnusedClass */
+/** @psalm-suppress UnusedClass */
 #[AsMessageHandler]
 final class UserCreatedHandler
 {

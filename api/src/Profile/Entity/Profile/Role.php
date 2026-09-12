@@ -27,11 +27,13 @@ final class Role
         return new self(self::USER);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function teacher(): self
     {
         return new self(self::COMPANY);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function admin(): self
     {
         return new self(self::ADMIN);
@@ -42,11 +44,13 @@ final class Role
         return $this->name;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function isEqualTo(self $other): bool
     {
         return $this->name === $other->name;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function isAdmin(): bool
     {
         return self::ADMIN === $this->name;
