@@ -69,7 +69,7 @@ final class RequestActionTest extends WebTestCase
 
         self::assertEquals($user->getEmail()->getValue(), $email);
 
-        self::assertCount(2, $transport->getSent());
+        self::assertCount(1, $transport->getSent());
 
         $message = $transport->getSent()[0]->getMessage();
 

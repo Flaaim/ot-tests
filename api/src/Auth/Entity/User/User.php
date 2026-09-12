@@ -11,7 +11,6 @@ use App\Auth\Event\NetworkAttached;
 use App\Auth\Event\PasswordChanged;
 use App\Auth\Event\PasswordReset;
 use App\Auth\Event\PasswordResetRequested;
-use App\Auth\Event\UserCreated;
 use App\Auth\Event\UserJoinConfirmed;
 use App\Auth\Event\UserRemoved;
 use App\Auth\Event\UserRoleChanged;
@@ -75,7 +74,7 @@ final class User implements AggregateRoot
             $token->getValue(),
             $email->getValue()
         ));
-        $user->recordEvent(new UserCreated($email->getValue()));
+
         return $user;
     }
 
@@ -88,9 +87,6 @@ final class User implements AggregateRoot
     ): self {
         $user = new self($id, $date, $email, Status::active());
         $user->networks->add(new Network($user, $network, $identity));
-
-        $user->recordEvent(new UserCreated($email->getValue()));
-
         return $user;
     }
 

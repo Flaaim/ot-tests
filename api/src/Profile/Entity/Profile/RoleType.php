@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace  App\Profile\Entity\Profile;
+namespace App\Profile\Entity\Profile;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 
+/** @psalm-supress UnusedClass */
 final class RoleType extends StringType
 {
     public const string NAME = 'profile_role';

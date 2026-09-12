@@ -11,6 +11,10 @@ use App\Profile\Entity\Profile\Role;
 use App\Profile\Entity\Profile\Status;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ProfileTest extends TestCase
 {
     public function testProfile(): void
@@ -23,11 +27,11 @@ final class ProfileTest extends TestCase
             $name = 'John',
             $surname = 'Doue'
         );
-        $this->assertEquals($id, $profile->getId());
-        $this->assertEquals($email, $profile->getEmail());
-        $this->assertEquals($role, $profile->getRole());
-        $this->assertEquals($status, $profile->getStatus());
-        $this->assertEquals($name, $profile->getName());
-        $this->assertEquals($surname, $profile->getSurname());
+        self::assertEquals($id, $profile->getId());
+        self::assertEquals($email, $profile->getEmail());
+        self::assertEquals($role, $profile->getRole());
+        self::assertEquals($status, $profile->getStatus());
+        self::assertEquals($name, $profile->getName());
+        self::assertEquals($surname, $profile->getSurname());
     }
 }
