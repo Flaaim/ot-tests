@@ -124,10 +124,10 @@ ifneq ("$(wildcard .env.production)","")
     export
 endif
 
-deploy:
-	$(eval DEPLOY_DIR := /home/deploy)
-	$(eval SITE_DIR := $(DEPLOY_DIR)/site_${BUILD_NUMBER})
+DEPLOY_DIR = /home/deploy
+SITE_DIR = $(DEPLOY_DIR)/site_$(BUILD_NUMBER)
 
+deploy:
 	ssh ${HOST} -p ${PORT} 'rm -rf $(SITE_DIR) && mkdir -p $(SITE_DIR)/secrets'
 	scp -P ${PORT} docker-compose-production.yml ${HOST}:$(SITE_DIR)/docker-compose.yml
 
