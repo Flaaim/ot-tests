@@ -6,17 +6,27 @@ namespace App\Profile\Entity\Profile;
 
 use App\SharedDomain\AggregateRoot;
 use App\SharedDomain\Event\EventTrait;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'profiles')]
 final class Profile implements AggregateRoot
 {
     use EventTrait;
 
     public function __construct(
+        #[ORM\Id]
+        #[ORM\Column(type: 'profile_id', unique: true)]
         private ProfileId $id,
+        #[ORM\Column(type: 'profile_email')]
         private Email $email,
+        #[ORM\Column(type: 'profile_role')]
         private Role $role,
+        #[ORM\Column(type: 'profile_status')]
         private Status $status,
+        #[ORM\Column(type: 'string', length: 55, nullable: true)]
         private ?string $name = null,
+        #[ORM\Column(type: 'string', length: 75, nullable: true)]
         private ?string $surname = null
     ) {}
 

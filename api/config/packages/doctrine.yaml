@@ -32,6 +32,11 @@ doctrine:
 
             category_id: App\Testing\Entity\Category\CategoryIdType
 
+            profile_id: App\Profile\Entity\Profile\ProfileIdType
+            profile_status: App\Profile\Entity\Profile\StatusType
+            profile_role: App\Profile\Entity\Profile\RoleType
+            profile_email: App\Profile\Entity\Profile\EmailType
+
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -75,6 +80,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Testing/Entity'
                 prefix: 'App\Testing\Entity'
                 alias: Test
+            Profile:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Profile/Entity'
+                prefix: 'App\Profile\Entity'
+                alias: Profile
 
 when@test:
     doctrine:
