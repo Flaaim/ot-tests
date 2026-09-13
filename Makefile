@@ -124,10 +124,10 @@ ifneq ("$(wildcard .env.production)","")
     export
 endif
 
-DEPLOY_DIR = /home/deploy
-SITE_DIR = $(DEPLOY_DIR)/site_$(BUILD_NUMBER)
-
 deploy:
+	$(eval DEPLOY_DIR := /home/deploy)
+	$(eval SITE_DIR := $(DEPLOY_DIR)/site_${BUILD_NUMBER})
+
 	ssh ${HOST} -p ${PORT} 'rm -rf $(SITE_DIR) && mkdir -p $(SITE_DIR)/secrets'
 	scp -P ${PORT} docker-compose-production.yml ${HOST}:$(SITE_DIR)/docker-compose.yml
 
@@ -145,10 +145,10 @@ deploy:
 
 	rm -f temp_jwt_public.key temp_jwt_private.key
 
-	ssh ${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker compose pull'
-	ssh ${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker compose up --build --remove-orphans -d'
+	ssh ${HOST} -p ${PORT} 'cd $(SITE_DIR) && docker compose pull'
+	ssh ${HOST} -p ${PORT} 'cd $(SITE_DIR) && docker compose up --build --remove-orphans -d'
 
-	ssh ${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker compose run --rm api-php-cli composer app migrations:migrate -- --allow-no-migration --no-interaction'
+	ssh ${HOST} -p ${PORT} 'cd $(SITE_DIR) && docker compose run --rm api-php-cli php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration'
 
 	ssh ${HOST} -p ${PORT} 'rm -f $(DEPLOY_DIR)/site && ln -sr $(SITE_DIR) $(DEPLOY_DIR)/site'
 	ssh ${HOST} -p ${PORT} 'docker image prune -af'
