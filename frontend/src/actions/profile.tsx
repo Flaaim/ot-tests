@@ -4,7 +4,7 @@ import { ApiResponse } from "@/interfaces/response.interface";
 import { handleApiResponse } from "@/lib/handleApiResponse";
 import { API } from "@/app/api";
 import { apiFetch } from "@/lib/apiClient";
-import { ListAttemptsDTO, PaginatedUsers } from "@/interfaces/user.interface";
+import { ListAttemptsDTO, PaginatedUsers, UserAttemptStatsDTO } from "@/interfaces/user.interface";
 import { ProfileDTO } from "@/interfaces/auth.interface";
 
 export async function fetchUserAttemptsPaginationAction(
@@ -60,4 +60,21 @@ export async function fetchProfile(): Promise<ProfileDTO> {
     throw new Error(parsed.error || "Не удалось загрузить профиль");
   }
   return parsed.data;
+}
+
+export async function fetchAttemptStatAction(): Promise<ApiResponse<UserAttemptStatsDTO>> {
+  try {
+    const response = await apiFetch(API.profile.getTestingStat(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    return handleApiResponse<UserAttemptStatsDTO>(response);
+  } catch (error) {
+    console.error("fetchUserStatsAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
 }

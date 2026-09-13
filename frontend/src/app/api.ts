@@ -36,6 +36,7 @@ export const API = {
       });
       return BASE_URL + `/v1/admin/profiles?${params.toString()}`;
     },
+    getTestingStat: () => BASE_URL + `/v1/profiles/testing/stat`,
   },
   parser: {
     add: () => BASE_URL + `/v1/admin/parsers`,
@@ -101,7 +102,6 @@ export const API = {
     submitAnswer: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/submit`,
     getResult: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/result`,
     finish: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/finish`,
-    getAttemptStat: () => BASE_URL + `/v1/testing/attempts/stat`,
   },
   category: {
     add: () => BASE_URL + `/v1/admin/testing/categories`,

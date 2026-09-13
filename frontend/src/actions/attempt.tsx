@@ -10,7 +10,6 @@ import {
 import { apiFetch } from "@/lib/apiClient";
 import { API } from "@/app/api";
 import { handleApiResponse } from "@/lib/handleApiResponse";
-import { UserAttemptStatsDTO } from "@/interfaces/user.interface";
 
 export async function launchAttemptAction(
   payload: LaunchAttemptPayload
@@ -105,23 +104,6 @@ export async function finishAttemptAction(attemptId: string): Promise<ApiRespons
     return handleApiResponse<void>(response);
   } catch (error) {
     console.error("finishAttemptAction Fetch error:", error);
-    return { ok: false, error: "Не удалось подключиться к серверу API." };
-  }
-}
-
-export async function fetchAttemptStatAction(): Promise<ApiResponse<UserAttemptStatsDTO>> {
-  try {
-    const response = await apiFetch(API.attempt.getAttemptStat(), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-
-    return handleApiResponse<UserAttemptStatsDTO>(response);
-  } catch (error) {
-    console.error("fetchUserStatsAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

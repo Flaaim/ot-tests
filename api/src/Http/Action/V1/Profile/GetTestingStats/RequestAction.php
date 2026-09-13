@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Testing\Attempt\GetStats;
+namespace App\Http\Action\V1\Profile\GetTestingStats;
 
 use App\Infrastructure\Http\Validator\Validator;
 use App\Testing\Query\Attempt\GetUserStats\Query;
@@ -20,7 +20,7 @@ final class RequestAction
         private readonly Security $security,
     ) {}
 
-    #[Route('/v1/testing/attempts/stat', name: 'testing.attempts.stats', methods: ['GET'])]
+    #[Route('/v1/profiles/testing/stat', name: 'profiles.testing.stat', methods: ['GET'])]
     public function __invoke(): Response
     {
         $user = $this->security->getUser();
