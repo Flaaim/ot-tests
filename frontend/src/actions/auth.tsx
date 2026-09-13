@@ -1,6 +1,6 @@
 "use server";
 
-import { JoinData, LoginData, ProfileDTO } from "@/interfaces/auth.interface";
+import { JoinData, LoginData } from "@/interfaces/auth.interface";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ApiResponse } from "@/interfaces/response.interface";
@@ -205,22 +205,6 @@ export async function passwordResetConfirm(token: string, password: string): Pro
     console.error("Join confirm password reset error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
-}
-
-export async function fetchUser(): Promise<ProfileDTO> {
-  const response = await apiFetch(API.user.getProfile(), {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  });
-
-  const parsed = await handleApiResponse<ProfileDTO>(response);
-  if (!parsed.ok || !parsed.data) {
-    throw new Error(parsed.error || "Не удалось загрузить профиль");
-  }
-  return parsed.data;
 }
 
 export async function requestEmailChange(email: string): Promise<ApiResponse> {

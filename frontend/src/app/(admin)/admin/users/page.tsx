@@ -1,4 +1,4 @@
-import { fetchUsersPagination } from "@/actions/user";
+import { fetchUsersPagination } from "@/actions/profile";
 import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
 import { AlertCircle } from "lucide-react";
 import {

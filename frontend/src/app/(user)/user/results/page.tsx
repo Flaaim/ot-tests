@@ -1,5 +1,5 @@
 import UserBreadcrumbs from "@/components/User/UserBreadcrumbs";
-import { fetchUserAttemptsPaginationAction } from "@/actions/user";
+import { fetchUserAttemptsPaginationAction } from "@/actions/profile";
 import {
   Table,
   TableBody,

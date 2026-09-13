@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, KeyRound, Link2, Mail, Shield, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchUser } from "@/actions/auth";
+import { fetchProfile } from "@/actions/profile";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { NetworkItem } from "@/interfaces/auth.interface";
@@ -10,7 +10,7 @@ export default async function ProfilePage() {
   let profile;
 
   try {
-    profile = await fetchUser();
+    profile = await fetchProfile();
   } catch (error) {
     console.error("Ошибка авторизации в лейауте, перенаправление...", error);
     redirect("/join/login");

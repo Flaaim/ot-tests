@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { fetchUser } from "@/actions/auth";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "sonner";
 import { AdminSidebar } from "@/components/Admin/AdminSidebar";
 import React from "react";
+import { fetchProfile } from "@/actions/profile";
 
 export const metadata: Metadata = {
   title: "Admin Panel",
@@ -18,7 +18,7 @@ export default async function AdminLayout({
 }>) {
   let profile;
   try {
-    profile = await fetchUser();
+    profile = await fetchProfile();
   } catch {
     redirect("/join/login");
   }

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { Toaster } from "sonner";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/User/Dashboard/DashboardSidebar";
-import { fetchUser } from "@/actions/auth";
+import { fetchProfile } from "@/actions/profile";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default async function UserDashboardLayout({
 }>) {
   let profile;
   try {
-    profile = await fetchUser();
+    profile = await fetchProfile();
   } catch (error) {
     console.error("Ошибка авторизации в лейауте, перенаправление...", error);
     redirect("/join/login");
