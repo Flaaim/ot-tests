@@ -47,7 +47,14 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/**/Test/'
+            - '../src/Auth/Test/'
+            - '../src/Course/Test/'
+            - '../src/Frontend/Test/'
+            - '../src/OAuth/Test/'
+            - '../src/Parser/Test/'
+            - '../src/Profile/Test/'
+            - '../src/SharedDomain/Test/'
+            - '../src/Testing/Test/'
 
 
     App\Auth\Fixture\:
