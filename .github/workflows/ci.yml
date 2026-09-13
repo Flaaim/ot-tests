@@ -42,6 +42,9 @@ jobs:
           REGISTRY: local-registry
           IMAGE_TAG: test
 
+      - name: Format files
+        run: make format
+
       - name: API lint
         run: make api-lint
 
