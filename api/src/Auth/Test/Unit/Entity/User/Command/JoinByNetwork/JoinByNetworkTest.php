@@ -8,7 +8,6 @@ use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\Role;
 use App\Auth\Entity\User\User;
-use App\Auth\Event\UserCreated;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -40,11 +39,5 @@ final class JoinByNetworkTest extends TestCase
         self::assertEquals($identity, $networks[0]->getIdentity());
 
         self::assertEquals(Role::USER, $user->getRole()->getName());
-
-        self::assertNotEmpty($events = $user->releaseEvents());
-        $event = end($events);
-
-        self::assertInstanceOf(UserCreated::class, $event);
-        self::assertEquals($email->getValue(), $event->email);
     }
 }

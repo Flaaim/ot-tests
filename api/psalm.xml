@@ -36,7 +36,7 @@
         <PossiblyUnusedMethod>
             <errorLevel type="suppress">
                 <directory name="src/Auth/Command" />
-                <directory name="src/Auth/Query" />
+                <directory name="src/Profile/Query" />
                 <directory name="src/Auth/Entity" />
                 <directory name="src/Auth/Test/Builder" />
                 <directory name="src/Parser/Command" />
@@ -54,7 +54,7 @@
         <!-- DTO / event properties consumed by serializers and handlers -->
         <PossiblyUnusedProperty>
             <errorLevel type="suppress">
-                <directory name="src/Auth/Query" />
+                <directory name="src/Profile/Query" />
                 <directory name="src/Auth/Event" />
                 <directory name="src/Parser/Query" />
                 <directory name="src/Course/Query" />

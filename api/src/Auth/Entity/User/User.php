@@ -248,9 +248,6 @@ final class User implements AggregateRoot
 
     public function remove(): void
     {
-        if (!$this->isWait()) {
-            throw new DomainException('Unable to remove active user.');
-        }
         $this->recordEvent(new UserRemoved($this->id->getValue()));
     }
 

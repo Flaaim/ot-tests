@@ -7,6 +7,7 @@ namespace App\Profile\Entity\Profile;
 use App\SharedDomain\AggregateRoot;
 use App\SharedDomain\Event\EventTrait;
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'profiles')]
@@ -58,5 +59,12 @@ final class Profile implements AggregateRoot
     public function getSurname(): ?string
     {
         return $this->surname;
+    }
+
+    public function remove(): void
+    {
+        if ($this->role->isAdmin()) {
+            throw new DomainException('Cannot remove admin profile.');
+        }
     }
 }

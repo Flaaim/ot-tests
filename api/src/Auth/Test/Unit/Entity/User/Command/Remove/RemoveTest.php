@@ -14,9 +14,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class RemoveTest extends TestCase
 {
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testSuccess(): void
     {
         $user = new UserBuilder()
@@ -28,16 +25,5 @@ final class RemoveTest extends TestCase
 
         self::assertInstanceOf(UserRemoved::class, $event);
         self::assertEquals($user->getId()->getValue(), $event->id);
-    }
-
-    public function testActive(): void
-    {
-        $user = new UserBuilder()
-            ->active()
-            ->build();
-
-        $this->expectExceptionMessage('Unable to remove active user.');
-
-        $user->remove();
     }
 }

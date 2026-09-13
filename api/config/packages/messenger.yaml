@@ -51,6 +51,7 @@ framework:
             'App\Testing\Event\TestChanged': async
 
             'App\Testing\Event\Attempt\TimeoutAttemptCommand': async
+            'App\Profile\Event\ProfileRemoved': async
 
 when@test:
     framework:

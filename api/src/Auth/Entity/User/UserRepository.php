@@ -128,4 +128,14 @@ final class UserRepository
     {
         $this->em->remove($user);
     }
+
+    public function findById(Id $id): ?User
+    {
+        $user = $this->repo->find($id->getValue());
+        if (null === $user) {
+            return null;
+        }
+        /** @var User $user */
+        return $user;
+    }
 }

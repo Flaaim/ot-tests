@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Auth\Remove;
+namespace Tests\Functional\Profile\GetProfile;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;
@@ -12,14 +12,16 @@ use Doctrine\Persistence\ObjectManager;
 
 final class RequestFixture extends AbstractFixture
 {
-    public const string USER_ID = '2a974384-bcf1-4c48-ab4b-59b241420436';
-    public const string USER_EMAIL = 'active@email.com';
+    public const string ID = '00000000-0000-0000-0000-000000000002';
+    public const string EMAIL = 'test@email.ru';
+    public const string PASSWORD = 'password';
 
     public function load(ObjectManager $manager): void
     {
         $user = new UserBuilder()
-            ->withId(new Id(self::USER_ID))
-            ->withEmail(new Email(self::USER_EMAIL))
+            ->withId(new Id(self::ID))
+            ->withEmail(new Email(self::EMAIL))
+            ->withPassword(self::PASSWORD)
             ->active()
             ->build();
 
