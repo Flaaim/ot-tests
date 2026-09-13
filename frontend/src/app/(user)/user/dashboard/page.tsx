@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BookOpen, History, Trophy, Activity, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { fetchUserAttemptStatsAction } from "@/actions/user";
+import { fetchAttemptStatAction, fetchUserAttemptStatsAction } from "@/actions/user";
 import { UserAttemptStatsDTO } from "@/interfaces/user.interface";
 import UserBreadcrumbs from "@/components/User/UserBreadcrumbs";
 

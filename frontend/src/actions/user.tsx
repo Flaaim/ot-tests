@@ -25,9 +25,9 @@ export async function fetchUserAttemptsPaginationAction(
   }
 }
 
-export async function fetchUserAttemptStatsAction(): Promise<ApiResponse<UserAttemptStatsDTO>> {
+export async function fetchAttemptStatAction(): Promise<ApiResponse<UserAttemptStatsDTO>> {
   try {
-    const response = await apiFetch(API.user.getAttemptStats(), {
+    const response = await apiFetch(API.attempt.getAttemptStat(), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
