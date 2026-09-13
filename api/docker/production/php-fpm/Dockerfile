@@ -19,10 +19,6 @@ RUN composer dump-autoload --optimize --classmap-authoritative \
     && rm -rf /root/.composer/cache
 
 
-RUN rm -rf var/cache/* var/log/*
-
-RUN APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup
-
 ### FPM ###
 
 FROM php:8.4-fpm-alpine
