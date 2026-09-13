@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Testing\Attempt\GetUserStats;
+namespace Tests\Functional\Testing\Attempt\GetStats;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Test\Builder\UserBuilder;

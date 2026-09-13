@@ -19,22 +19,22 @@ export const API = {
     socialLogin: () => BASE_URL + `/token`,
     attachNetwork: () => BASE_URL + `/v1/auth/network/attach`,
   },
-  user: {
+  profile: {
     getProfile: () => BASE_URL + `/v1/me`,
+    remove: (id: string) => BASE_URL + `/v1/profiles/${id}/remove`,
     getAttempts: (page: number, perPage: number) => {
       const params = new URLSearchParams({
         page: String(page),
         limit: String(perPage),
       });
-      return BASE_URL + `/v1/user/attempts?${params.toString()}`;
+      return BASE_URL + `/v1/attempts/profile?${params.toString()}`;
     },
-    getAttemptStats: () => BASE_URL + `/v1/user/attempts/stats`,
     getPaginated: (page: number, limit: number) => {
       const params = new URLSearchParams({
         page: String(page),
         limit: String(limit),
       });
-      return BASE_URL + `/v1/admin/users?${params.toString()}`;
+      return BASE_URL + `/v1/admin/profiles?${params.toString()}`;
     },
   },
   parser: {
@@ -101,6 +101,7 @@ export const API = {
     submitAnswer: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/submit`,
     getResult: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/result`,
     finish: (id: string) => BASE_URL + `/v1/testing/attempts/${id}/finish`,
+    getAttemptStat: () => BASE_URL + `/v1/testing/attempts/stat`,
   },
   category: {
     add: () => BASE_URL + `/v1/admin/testing/categories`,

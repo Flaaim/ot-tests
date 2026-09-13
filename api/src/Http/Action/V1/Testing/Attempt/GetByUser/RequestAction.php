@@ -21,7 +21,7 @@ final class RequestAction
         private readonly Security $security,
     ) {}
 
-    #[Route('/v1/user/attempts', name: 'testing.user.attempts', methods: ['GET'])]
+    #[Route('/v1/attempts/profile', name: 'testing.attempts.user', methods: ['GET'])]
     public function __invoke(Request $request): Response
     {
         $queryParams = $request->query->all();

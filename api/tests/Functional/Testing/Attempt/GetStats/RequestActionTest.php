@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Testing\Attempt\GetUserStats;
+namespace Tests\Functional\Testing\Attempt\GetStats;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -42,14 +42,14 @@ final class RequestActionTest extends WebTestCase
 
     public function testUnauthenticatedReturns401(): void
     {
-        $this->client->jsonRequest('GET', '/v1/user/attempts/stats');
+        $this->client->jsonRequest('GET', '/v1/testing/attempts/stat');
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
 
     public function testSuccess(): void
     {
-        $this->client->jsonRequest('GET', '/v1/user/attempts/stats', [], $this->authHeaders($this->userToken));
+        $this->client->jsonRequest('GET', '/v1/testing/attempts/stat', [], $this->authHeaders($this->userToken));
 
         self::assertEquals(200, $this->client->getResponse()->getStatusCode());
 

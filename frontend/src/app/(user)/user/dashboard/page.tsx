@@ -7,7 +7,7 @@ import { UserAttemptStatsDTO } from "@/interfaces/user.interface";
 import UserBreadcrumbs from "@/components/User/UserBreadcrumbs";
 
 export default async function DashboardPage() {
-  const result = await fetchUserAttemptStatsAction();
+  const result = await fetchAttemptStatAction();
 
   if (!result.ok || !result.data) {
     return (
