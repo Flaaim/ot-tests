@@ -36,8 +36,8 @@ services:
     restart: always
     environment:
       APP_DEBUG: 0
-      SITE_URL: ${API_SITE_URL}
-      SITE_NAME: ${API_SITE_NAME}
+      API_SITE_URL: ${API_SITE_URL}
+      API_SITE_NAME: ${API_SITE_NAME}
       DB_HOST: api-postgres
       DB_USER: app
       DB_PASSWORD: ${API_DB_PASSWORD}
@@ -72,8 +72,8 @@ services:
     image: ${REGISTRY}/ot-tests-api-php-cli:${IMAGE_TAG}
     environment:
       APP_DEBUG: 0
-      SITE_URL: ${SITE_URL}
-      SITE_NAME: ${SITE_NAME}
+      API_SITE_URL: ${API_SITE_URL}
+      API_SITE_NAME: ${API_SITE_NAME}
       DB_HOST: api-postgres
       DB_USER: app
       DB_PASSWORD: ${API_DB_PASSWORD}
@@ -135,8 +135,8 @@ services:
     image: ${REGISTRY}/ot-tests-api-php-cli:${IMAGE_TAG}
     environment:
       APP_DEBUG: 0
-      SITE_URL: ${SITE_URL}
-      SITE_NAME: ${SITE_NAME}
+      API_SITE_URL: ${API_SITE_URL}
+      API_SITE_NAME: ${API_SITE_NAME}
       DB_HOST: api-postgres
       DB_USER: app
       DB_PASSWORD: ${API_DB_PASSWORD}
