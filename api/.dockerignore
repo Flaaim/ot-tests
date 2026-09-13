@@ -1,2 +1,8 @@
 /.idea
 /vendor
+.git
+.idea
+vendor/
+var/cache/
+var/log/
+.env.local
