@@ -90,6 +90,17 @@ final class User implements AggregateRoot
         return $user;
     }
 
+    public static function joinByAdmin(
+        Id $id,
+        DateTimeImmutable $date,
+        Email $email,
+        string $passwordHash,
+    ): self {
+        $user = new self($id, $date, $email, Status::active());
+        $user->passwordHash = $passwordHash;
+        return $user;
+    }
+
     public function getId(): Id
     {
         return $this->id;
