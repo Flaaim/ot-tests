@@ -53,6 +53,9 @@ when@prod:
                 channel: '%env(TELEGRAM_CHAT_ID)%'
                 level: warning
                 channels: ["!event", "!doctrine", "!console"]
+            sentry:
+                type: service
+                id: Sentry\Monolog\Handler
             console:
                 type: console
                 process_psr_3_messages: false
