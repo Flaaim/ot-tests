@@ -64,6 +64,8 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Frontend\:
         resource: '../src/Frontend'
+        exclude:
+            - '../src/Frontend/Test/'
         tags: ['twig.extension']
 
     App\Frontend\FrontendUrlGenerator:
