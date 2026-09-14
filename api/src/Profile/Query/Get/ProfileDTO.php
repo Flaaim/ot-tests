@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Profile\Query\Get;
 
+use DateTimeImmutable;
+
 final class ProfileDTO
 {
     public function __construct(
         public string $id,
         public string $email,
         public string $role,
+        public string $status,
+        public string $date,
         public array $networks = [],
     ) {}
 
@@ -21,7 +25,9 @@ final class ProfileDTO
             id: $data['id'],
             email: $data['email'],
             role: $data['role'],
-            networks: $networks
+            status: $data['status'],
+            date: new DateTimeImmutable($data['date'])->format('Y-m-d'),
+            networks: $networks,
         );
     }
 }

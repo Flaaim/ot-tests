@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Functional\Profile\GetProfile;
 
-use App\Auth\Entity\User\Email;
+use App\Auth\Entity\User\Email as UserEmail;
 use App\Auth\Entity\User\Id;
 use App\Auth\Test\Builder\UserBuilder;
+use App\Profile\Entity\Profile\Email as ProfileEmail;
+use App\Profile\Entity\Profile\ProfileId;
+use App\Profile\Test\Builder\ProfileBuilder;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -20,12 +23,17 @@ final class RequestFixture extends AbstractFixture
     {
         $user = new UserBuilder()
             ->withId(new Id(self::ID))
-            ->withEmail(new Email(self::EMAIL))
+            ->withEmail(new UserEmail(self::EMAIL))
             ->withPassword(self::PASSWORD)
             ->active()
             ->build();
-
         $manager->persist($user);
+
+        $profile = new ProfileBuilder()
+            ->withProfileId(new ProfileId(self::ID))
+            ->withEmail(new ProfileEmail(self::EMAIL))
+            ->build();
+        $manager->persist($profile);
 
         $manager->flush();
     }

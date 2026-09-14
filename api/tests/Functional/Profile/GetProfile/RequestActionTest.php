@@ -8,6 +8,7 @@ use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\UserRepository;
 use App\OAuth\Entity\UserAdapter;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -67,6 +68,8 @@ final class RequestActionTest extends WebTestCase
             'id' => RequestFixture::ID,
             'email' => RequestFixture::EMAIL,
             'role' => 'user',
+            'status' => 'ok',
+            'date' => new DateTimeImmutable()->format('Y-m-d'),
             'networks' => [],
         ], $data);
     }
