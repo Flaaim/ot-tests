@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Profile\Remove;
+namespace Tests\Functional\Admin\Profile\Remove;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;

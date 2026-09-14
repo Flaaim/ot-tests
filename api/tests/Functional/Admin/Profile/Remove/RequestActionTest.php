@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Profile\Remove;
+namespace Tests\Functional\Admin\Profile\Remove;
 
 use App\Profile\Entity\Profile\Email;
 use App\Profile\Entity\Profile\ProfileRepository;
