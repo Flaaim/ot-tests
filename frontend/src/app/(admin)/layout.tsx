@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { AdminSidebar } from "@/components/Admin/AdminSidebar";
 import React from "react";
 import { fetchProfile } from "@/actions/profile";
+import { ProfileDTO } from "@/interfaces/user.interface";
 
 export const metadata: Metadata = {
   title: "Admin Panel",
@@ -16,16 +17,18 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let profile;
-  try {
-    profile = await fetchProfile();
-  } catch {
-    redirect("/join/login");
+  const result = await fetchProfile();
+
+  if (!result.ok || !result.data) {
+    redirect("/join/logout");
   }
+
+  const profile: ProfileDTO = result.data;
 
   if (profile.role !== "admin") {
     redirect("/user/dashboard");
   }
+
   return (
     <SidebarProvider>
       <div className="grid min-h-screen w-full grid-cols-[auto_1fr] max-[765px]:grid-cols-1">

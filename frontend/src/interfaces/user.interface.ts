@@ -1,3 +1,5 @@
+import { NetworkItem } from "@/interfaces/auth.interface";
+
 export interface UserAttemptDTO {
   id: string;
   status: string;
@@ -23,16 +25,17 @@ export interface UserAttemptStatsDTO {
   averageScore: number;
 }
 
-export interface UserDTO {
+export interface ProfileDTO {
   id: string;
   email: string;
   status: string;
   role: string;
   date: string;
+  networks: NetworkItem[];
 }
 
-export interface PaginatedUsers {
-  items: UserDTO[];
+export interface PaginatedProfiles {
+  items: ProfileDTO[];
   totalCount: number;
   totalPages: number;
 }

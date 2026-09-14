@@ -1,14 +1,16 @@
-import { fetchProfile } from "@/actions/profile";
 import { redirect } from "next/navigation";
 import ChangePasswordForm from "@/components/Auth/Password/Change/ChangePasswordForm";
+import { fetchProfile } from "@/actions/profile";
+import { ProfileDTO } from "@/interfaces/user.interface";
 
 export default async function ChangePasswordPage() {
-  let profile;
-  try {
-    profile = await fetchProfile();
-  } catch (error) {
-    console.error("Ошибка авторизации в лейауте, перенаправление...", error);
+  const result = await fetchProfile();
+
+  if (!result.ok || !result.data) {
     redirect("/join/login");
   }
-  return <ChangePasswordForm profile={profile} />;
+
+  const profile: ProfileDTO = result.data;
+
+  return <ChangePasswordForm email={profile.email} />;
 }

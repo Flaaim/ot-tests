@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/User/Dashboard/DashboardSidebar";
 import { fetchProfile } from "@/actions/profile";
 import { redirect } from "next/navigation";
+import { ProfileDTO } from "@/interfaces/user.interface";
 
 export const metadata: Metadata = {
   title: "Панель пользователя",
@@ -16,13 +17,14 @@ export default async function UserDashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let profile;
-  try {
-    profile = await fetchProfile();
-  } catch (error) {
-    console.error("Ошибка авторизации в лейауте, перенаправление...", error);
-    redirect("/join/login");
+  const result = await fetchProfile();
+
+  if (!result.ok || !result.data) {
+    redirect("/join/logout");
   }
+
+  const profile: ProfileDTO = result.data;
+
   return (
     <SidebarProvider>
       <div className="grid min-h-screen w-full grid-cols-[auto_1fr] max-[765px]:grid-cols-1">

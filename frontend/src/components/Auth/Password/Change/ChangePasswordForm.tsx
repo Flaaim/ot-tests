@@ -1,7 +1,6 @@
 "use client";
 
 import { z } from "zod";
-import { ProfileDTO } from "@/interfaces/auth.interface";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,9 +46,9 @@ const schema = z
 
 type FormData = z.infer<typeof schema>;
 interface ChangePasswordFormProps {
-  profile: ProfileDTO;
+  email: string;
 }
-export default function ChangePasswordForm({ profile }: ChangePasswordFormProps) {
+export default function ChangePasswordForm({ email }: ChangePasswordFormProps) {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm({
@@ -84,7 +83,7 @@ export default function ChangePasswordForm({ profile }: ChangePasswordFormProps)
           <CardDescription className="text-base">
             Пароль был изменен. На ваш адрес электронной почты отправлено письмо уведомление.
             <br />
-            <strong className="text-foreground">{profile.email}</strong>.
+            <strong className="text-foreground">{email}</strong>.
           </CardDescription>
         </CardHeader>
         <CardFooter>

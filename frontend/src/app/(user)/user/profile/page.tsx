@@ -1,21 +1,20 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, KeyRound, Link2, Mail, Shield, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchProfile } from "@/actions/profile";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { NetworkItem } from "@/interfaces/auth.interface";
+import { fetchProfile } from "@/actions/profile";
+import { ProfileDTO } from "@/interfaces/user.interface";
 
 export default async function ProfilePage() {
-  let profile;
+  const result = await fetchProfile();
 
-  try {
-    profile = await fetchProfile();
-  } catch (error) {
-    console.error("Ошибка авторизации в лейауте, перенаправление...", error);
+  if (!result.ok || !result.data) {
     redirect("/join/login");
   }
 
+  const profile: ProfileDTO = result.data;
   const getYandexAuthUrl = (isAttach = false) => {
     const rootUrl = "https://oauth.yandex.ru/authorize";
 

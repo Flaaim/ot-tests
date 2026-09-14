@@ -8,7 +8,7 @@ export interface LoginData {
   email: string;
   password: string;
 }
-export interface ProfileDTO {
+export interface AuthDTO {
   id: string;
   email: string;
   role: string;

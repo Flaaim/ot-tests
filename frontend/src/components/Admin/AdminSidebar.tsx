@@ -35,7 +35,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 
 const items = [
   { title: "Дашборд", url: "/admin", icon: LayoutDashboard },
-  { title: "Пользователи", url: "/admin/users", icon: Users },
+  { title: "Пользователи", url: "/admin/profiles", icon: Users },
   {
     title: "Парсинг",
     url: "/admin/parsers",

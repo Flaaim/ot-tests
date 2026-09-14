@@ -9,10 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginatedUsers, UserDTO } from "@/interfaces/user.interface";
+import { PaginatedProfiles, ProfileDTO } from "@/interfaces/user.interface";
 import Pagination from "@/components/Pagination/Pagination";
 import UserStatusBadge from "@/components/Admin/Domain/User/UserStatusBadge";
 import UserRoleBadge from "@/components/Admin/Domain/User/UserRoleBadge";
+import RemoveProfileDialog from "@/components/Admin/Profile/RemoveProfileDialog";
 
 interface AdminUsersPageProps {
   searchParams: Promise<{ page?: string; perPage?: string }>;
@@ -44,9 +45,9 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
       </div>
     );
   }
-  const paginatedUsers: PaginatedUsers = result.data;
+  const paginatedProfiles: PaginatedProfiles = result.data;
 
-  const users = paginatedUsers.items;
+  const profiles = paginatedProfiles.items;
 
   return (
     <div className="space-y-6">
@@ -67,18 +68,21 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user: UserDTO) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.id}</TableCell>
-                <TableCell className="font-medium">{user.email}</TableCell>
+            {profiles.map((profile: ProfileDTO) => (
+              <TableRow key={profile.id}>
+                <TableCell className="font-medium">{profile.id}</TableCell>
+                <TableCell className="font-medium">{profile.email}</TableCell>
                 <TableCell className="font-medium">
-                  <UserStatusBadge type={user.status} />
+                  <UserStatusBadge type={profile.status} />
                 </TableCell>
                 <TableCell className="font-medium">
-                  <UserRoleBadge type={user.role} />
+                  <UserRoleBadge type={profile.role} />
                 </TableCell>
                 <TableCell className="font-medium">
-                  {new Date(user.date).toLocaleDateString("ru-RU")}
+                  {new Date(profile.date).toLocaleDateString("ru-RU")}
+                </TableCell>
+                <TableCell>
+                  <RemoveProfileDialog id={profile.id} />
                 </TableCell>
               </TableRow>
             ))}
@@ -88,7 +92,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
       <Pagination
         currentPage={currentPage}
         totalPages={result.data.totalPages}
-        baseUrl="/admin/users"
+        baseUrl="/admin/profiles"
       />
     </div>
   );
