@@ -4,8 +4,9 @@ import { Toaster } from "sonner";
 import { Header } from "@/components/Home/Header";
 
 export const metadata: Metadata = {
-  title: "Тесты ростехнадзора",
-  description: "Описание страницы",
+  title: "Тесты по охране труда",
+  description:
+    "Готовые и актуальные тесты по охране труда и смежным направлениям для проверки знаний ваших работников.",
 };
 
 export default function SiteLayout({
