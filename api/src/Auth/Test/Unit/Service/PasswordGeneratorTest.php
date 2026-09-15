@@ -7,17 +7,21 @@ namespace App\Auth\Test\Unit\Service;
 use App\Auth\Service\PasswordGenerator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class PasswordGeneratorTest extends TestCase
 {
     public function testPasswordLengthIsWithinBounds(): void
     {
         $generator = new PasswordGenerator();
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 100; ++$i) {
             $password = $generator->generate();
-            $length = strlen($password);
+            $length = \strlen($password);
 
-            $this->assertGreaterThanOrEqual(6, $length, "Пароль слишком короткий: $password");
-            $this->assertLessThanOrEqual(15, $length, "Пароль слишком длинный: $password");
+            self::assertGreaterThanOrEqual(6, $length, "Пароль слишком короткий: {$password}");
+            self::assertLessThanOrEqual(15, $length, "Пароль слишком длинный: {$password}");
         }
     }
 
@@ -26,7 +30,7 @@ final class PasswordGeneratorTest extends TestCase
         $generator = new PasswordGenerator();
         $password = $generator->generate();
 
-        $this->assertMatchesRegularExpression('/^[a-zA-Z0-9]+$/', $password);
+        self::assertMatchesRegularExpression('/^[a-zA-Z0-9]+$/', $password);
     }
 
     public function testPasswordIsNotEmptyString(): void
@@ -34,8 +38,7 @@ final class PasswordGeneratorTest extends TestCase
         $generator = new PasswordGenerator();
         $password = $generator->generate();
 
-        $this->assertIsString($password);
-        $this->assertNotEmpty($password);
+        self::assertNotEmpty($password);
     }
 
     public function testConsecutivePasswordsAreNotTheSame(): void
@@ -44,6 +47,6 @@ final class PasswordGeneratorTest extends TestCase
         $password1 = $generator->generate();
         $password2 = $generator->generate();
 
-        $this->assertNotEquals($password1, $password2, 'Функция сгенерировала два одинаковых пароля подряд');
+        self::assertNotEquals($password1, $password2, 'Функция сгенерировала два одинаковых пароля подряд');
     }
 }

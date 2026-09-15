@@ -13,6 +13,10 @@ use Symfony\Component\Mime\Email as SymfonyEmail;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class CredentialsSenderTest extends TestCase
 {
     public function testSuccess(): void
@@ -23,7 +27,7 @@ final class CredentialsSenderTest extends TestCase
         $template = 'auth/join/credentials.html.twig';
 
         $loader = new ArrayLoader([
-            $template => "<p>Credentials: {email} {password}</p>",
+            $template => '<p>Credentials: {email} {password}</p>',
         ]);
         $twig = new Environment($loader);
 
@@ -54,7 +58,7 @@ final class CredentialsSenderTest extends TestCase
         $template = 'auth/join/credentials.html.twig';
 
         $loader = new ArrayLoader([
-            $template => "<p>Credentials: {email} {password}</p>",
+            $template => '<p>Credentials: {email} {password}</p>',
         ]);
         $twig = new Environment($loader);
 
