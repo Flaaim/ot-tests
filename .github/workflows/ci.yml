@@ -171,6 +171,9 @@ jobs:
           FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
           RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
           RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+          GRANT_TYPE: ${{secrets.GRANT_TYPE}}
+          CLIENT_ID: ${{secrets.CLIENT_ID}}
+          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           JWT_ENCRYPTION_KEY: ${{ secrets.JWT_ENCRYPTION_KEY }}
           YANDEX_CLIENT_ID: ${{ secrets.YANDEX_CLIENT_ID }}
