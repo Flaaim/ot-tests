@@ -49,8 +49,8 @@ services:
     environment:
       APP_DEBUG: 1
       PHP_IDE_CONFIG: serverName=API
-      SITE_URL: localhost
-      SITE_NAME: Docker
+      API_SITE_URL: localhost
+      API_SITE_NAME: Docker
       DB_HOST: api-postgres
       DB_USER: app
       DB_PASSWORD: secret
@@ -98,8 +98,8 @@ services:
     user: "1000:1000"
     environment:
       APP_DEBUG: 1
-      SITE_URL: localhost
-      SITE_NAME: Docker
+      API_SITE_URL: localhost
+      API_SITE_NAME: Docker
       DB_HOST: api-postgres
       DB_USER: app
       DB_PASSWORD: secret
@@ -173,8 +173,8 @@ services:
     user: "1000:1000"
     environment:
       APP_DEBUG: 1
-      SITE_URL: localhost
-      SITE_NAME: Docker
+      API_SITE_URL: localhost
+      API_SITE_NAME: Docker
       DB_HOST: api-postgres
       DB_USER: app
       DB_PASSWORD: secret
