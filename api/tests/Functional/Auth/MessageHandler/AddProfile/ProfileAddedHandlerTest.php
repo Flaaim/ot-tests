@@ -39,6 +39,7 @@ final class ProfileAddedHandlerTest extends KernelTestCase
         $message = new ProfileAdded(
             $id = Uuid::uuid4()->toString(),
             $email = 'test@email.com',
+            'admin',
             '123456'
         );
 

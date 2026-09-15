@@ -11,6 +11,7 @@ use App\Auth\Event\NetworkAttached;
 use App\Auth\Event\PasswordChanged;
 use App\Auth\Event\PasswordReset;
 use App\Auth\Event\PasswordResetRequested;
+use App\Auth\Event\UserCreated;
 use App\Auth\Event\UserJoinConfirmed;
 use App\Auth\Event\UserRemoved;
 use App\Auth\Event\UserRoleChanged;
@@ -94,10 +95,31 @@ final class User implements AggregateRoot
         Id $id,
         DateTimeImmutable $date,
         Email $email,
+        Role $role,
         string $passwordHash,
     ): self {
         $user = new self($id, $date, $email, Status::active());
+        $user->role = $role;
         $user->passwordHash = $passwordHash;
+
+        return $user;
+    }
+
+    public static function createAdmin(
+        Id $id,
+        DateTimeImmutable $date,
+        Email $email,
+        string $passwordHash,
+    ): self {
+        $user = new self($id, $date, $email, Status::active());
+        $user->role = Role::admin();
+        $user->passwordHash = $passwordHash;
+
+        $user->recordEvent(new UserCreated(
+            $user->id->getValue(),
+            $user->email->getValue(),
+            $user->role->getName()
+        ));
         return $user;
     }
 

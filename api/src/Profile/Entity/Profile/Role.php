@@ -28,7 +28,7 @@ final class Role
     }
 
     /** @psalm-suppress PossiblyUnusedMethod */
-    public static function teacher(): self
+    public static function company(): self
     {
         return new self(self::COMPANY);
     }

@@ -9,6 +9,6 @@ final class ProfileAdded
     public function __construct(
         public string $id,
         public string $email,
-        public string $password
+        public string $role
     ) {}
 }

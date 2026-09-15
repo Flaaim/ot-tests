@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Profile\Command\Add;
 
+use App\Profile\Entity\Profile\Role;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class Command
@@ -13,9 +14,8 @@ final class Command
         #[Assert\NotBlank]
         #[Assert\Email]
         public string $email,
-        #[Assert\NotBlank]
-        #[Assert\Length(min: 6, max: 15)]
-        public string $password,
+        #[Assert\Choice(choices: [Role::USER, Role::COMPANY])]
+        public string $role,
         public ?string $name = null,
         public ?string $surname = null,
     ) {}

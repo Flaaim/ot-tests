@@ -73,7 +73,7 @@ final class RequestActionTest extends WebTestCase
             '/v1/admin/profiles',
             [
                 'email' => 'new@email.ru',
-                'password' => '123456',
+                'role' => 'user',
                 'name' => 'name',
                 'surname' => 'surname',
             ],
@@ -100,7 +100,7 @@ final class RequestActionTest extends WebTestCase
 
         self::assertEquals(['errors' => [
             'email' => 'This value should not be blank.',
-            'password' => 'This value is too short. It should have 6 characters or more.',
+            'role' => 'The value you selected is not a valid choice.',
         ]], $data);
     }
 }

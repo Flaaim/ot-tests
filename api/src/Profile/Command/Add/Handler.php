@@ -28,6 +28,7 @@ final class Handler
     public function handle(Command $command): void
     {
         $email = new Email($command->email);
+        $role = new Role($command->role);
         if ($this->profiles->hasByEmail($email)) {
             throw new DomainException('This email already exists.');
         }
@@ -35,7 +36,7 @@ final class Handler
         $profile = new Profile(
             $profileId = ProfileId::generate(),
             $email,
-            Role::user(),
+            $role,
             Status::ok(),
             $command->name,
             $command->surname
@@ -48,7 +49,7 @@ final class Handler
         $this->messageBus->dispatch(new ProfileAdded(
             id: $profileId->getValue(),
             email: $email->getValue(),
-            password: $command->password,
+            role: $role->getName()
         ));
     }
 }

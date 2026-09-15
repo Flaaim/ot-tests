@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Profile\Add;
+namespace App\Http\Action\V1\Admin\Profile\Add;
 
 use App\Infrastructure\Http\Validator\Validator;
 use App\Profile\Command\Add\Command;
@@ -25,11 +25,11 @@ final class RequestAction
     {
         $body = $request->toArray();
         $email = $body['email'] ?? '';
-        $password = $body['password'] ?? '';
+        $role = $body['role'] ?? '';
         $name = $body['name'] ?? '';
         $surname = $body['surname'] ?? '';
 
-        $command = new Command($email, $password, $name, $surname);
+        $command = new Command($email, $role, $name, $surname);
 
         $this->validator->validate($command);
 
