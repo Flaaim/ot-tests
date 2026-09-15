@@ -5,6 +5,7 @@ import { handleApiResponse } from "@/lib/handleApiResponse";
 import { API } from "@/app/api";
 import { apiFetch } from "@/lib/apiClient";
 import {
+  AddProfilePayload,
   ListAttemptsDTO,
   PaginatedProfiles,
   ProfileDTO,
@@ -92,6 +93,29 @@ export async function removeProfileAction(id: string): Promise<ApiResponse<void>
         Accept: "application/json",
       },
     });
+    return handleApiResponse<void>(response);
+  } catch (error) {
+    console.error("removeProfileAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function addProfileAction(values: AddProfilePayload): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.profile.add(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        email: values.email,
+        role: values.role,
+        name: values.name,
+        surname: values.surname,
+      }),
+    });
+
     return handleApiResponse<void>(response);
   } catch (error) {
     console.error("removeProfileAction Fetch error:", error);

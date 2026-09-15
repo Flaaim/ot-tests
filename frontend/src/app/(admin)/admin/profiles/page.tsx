@@ -14,6 +14,7 @@ import Pagination from "@/components/Pagination/Pagination";
 import UserStatusBadge from "@/components/Admin/Domain/User/UserStatusBadge";
 import UserRoleBadge from "@/components/Admin/Domain/User/UserRoleBadge";
 import RemoveProfileDialog from "@/components/Admin/Profile/RemoveProfileDialog";
+import AddProfileDialog from "@/components/Admin/Profile/AddProfileDialog";
 
 interface AdminUsersPageProps {
   searchParams: Promise<{ page?: string; perPage?: string }>;
@@ -30,6 +31,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
         <AdminBreadcrumbs items={[{ title: "Пользователи" }]} />
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Пользователи</h1>
+          <AddProfileDialog />
         </div>
         <div className="mx-auto max-w-4xl p-4 md:p-8">
           <div className="flex min-h-[40vh] flex-col items-center justify-center space-y-4 text-center">
@@ -54,6 +56,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
       <AdminBreadcrumbs items={[{ title: "Пользователи" }]} />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Пользователи</h1>
+        <AddProfileDialog />
       </div>
       <div className="rounded-md border bg-white">
         <Table>

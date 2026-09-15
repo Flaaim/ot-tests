@@ -33,7 +33,12 @@ export interface ProfileDTO {
   date: string;
   networks: NetworkItem[];
 }
-
+export interface AddProfilePayload {
+  email: string;
+  role: string;
+  name: string;
+  surname: string;
+}
 export interface PaginatedProfiles {
   items: ProfileDTO[];
   totalCount: number;

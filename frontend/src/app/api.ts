@@ -37,6 +37,7 @@ export const API = {
       return BASE_URL + `/v1/admin/profiles?${params.toString()}`;
     },
     getTestingStat: () => BASE_URL + `/v1/profiles/testing/stat`,
+    add: () => BASE_URL + `/v1/admin/profiles`,
   },
   parser: {
     add: () => BASE_URL + `/v1/admin/parsers`,
