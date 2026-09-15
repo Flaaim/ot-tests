@@ -20,6 +20,9 @@ services:
       - NEXT_PUBLIC_BACKEND_URL=https://api.${API_SITE_NAME}
       - INTERNAL_BACKEND_URL=http://api
       - PORT=3000
+      - GRANT_TYPE=password
+      - CLIENT_ID=frontend
+      - CLIENT_SECRET=my-super-secret-123
     expose:
       - "3000"
     depends_on:
