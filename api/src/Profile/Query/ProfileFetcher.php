@@ -69,4 +69,36 @@ final class ProfileFetcher implements ProfileFetcherInterface
             'totalCount' => $totalCount,
         ];
     }
+
+    public function getFullProfile(string $id): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $result = $qb->select('p.id, p.email', 'p.status', 'u.date', 'un.network', 'un.identity', 'u.role', 'p.name', 'p.surname', 'u.password_hash')
+            ->from('profiles', 'p')
+            ->leftJoin('p', 'users', 'u', 'p.id = u.id')
+            ->leftJoin('p', 'user_networks', 'un', 'p.id = un.user_id')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false === $result) {
+            return [];
+        }
+
+        return [
+            'id' => $result['id'],
+            'email' => $result['email'],
+            'role' => $result['role'],
+            'status' => $result['status'],
+            'date' => $result['date'],
+            'network' => [
+                'name' => $result['network'],
+                'identity' => $result['identity'],
+            ],
+            'name' => $result['name'],
+            'surname' => $result['surname'],
+            'password_hash' => $result['password_hash'],
+        ];
+    }
 }

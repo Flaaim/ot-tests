@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Profile\GetProfile;
+namespace App\Http\Action\V1\Profile\Get;
 
 use App\OAuth\Entity\UserAdapter;
 use App\Profile\Query\Get\Query;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Profile\Remove;
+namespace App\Http\Action\V1\Admin\Profile\Remove;
 
 use App\Infrastructure\Http\Validator\Validator;
 use App\Profile\Command\Remove\Command;
@@ -18,7 +18,7 @@ final class RequestAction
         private readonly Validator $validator
     ) {}
 
-    #[Route('/v1/profiles/{id}/remove', name: 'auth.user.pending.remove', methods: ['DELETE'])]
+    #[Route('/v1/admin/profiles/{id}/remove', name: 'auth.user.pending.remove', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
     public function __invoke(string $id): Response
     {
