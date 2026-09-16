@@ -30,25 +30,8 @@ export default async function ProfilePage() {
     const qs = new URLSearchParams(options);
     return `${rootUrl}?${qs.toString()}`;
   };
-  const getGoogleAuthUrl = (isAttach = false) => {
-    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-
-    const redirectUri = isAttach
-      ? process.env.NEXT_PUBLIC_GOOGLE_ATTACH_REDIRECT_URI
-      : process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI;
-
-    const options = {
-      response_type: "code",
-      scope: "email",
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
-      redirect_uri: redirectUri as string,
-    };
-    const qs = new URLSearchParams(options);
-    return `${rootUrl}?${qs.toString()}`;
-  };
   const attachedNetworks: NetworkItem[] = profile.networks || [];
   const isYandexAttached = attachedNetworks.some((net) => net.network === "yandex");
-  const isGoogleAttached = attachedNetworks.some((net) => net.network === "google");
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-4 md:p-8">
@@ -187,25 +170,7 @@ export default async function ProfilePage() {
                     />
                   </svg>
                 </div>
-                <div>
-                  <p className="text-sm font-medium">Google</p>
-                  {isGoogleAttached ? (
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
-                      <p className="text-xs text-green-600 font-medium">Привязан</p>
-                    </div>
-                  ) : (
-                    <p className="text-xs text-muted-foreground mt-0.5">Не привязан</p>
-                  )}
-                </div>
               </div>
-              {isGoogleAttached ? (
-                ""
-              ) : (
-                <Button variant="secondary" size="sm">
-                  <Link href={getGoogleAuthUrl(true)}>Привязать</Link>
-                </Button>
-              )}
             </div>
           </CardContent>
         </Card>
