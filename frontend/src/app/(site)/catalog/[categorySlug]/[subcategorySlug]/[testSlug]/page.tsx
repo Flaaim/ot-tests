@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: TestSlugPageProps) {
     }
     const test = result.data;
     return {
-      title: test.name,
-      description: test.description || `Перечень ${test.name}`,
+      title: `Тест: ${test.name.toLowerCase()}`,
+      description: test.description || `Тест для проверки знаний ${test.name}`,
     };
   } catch (error) {
     console.error(`Ошибка загрузки метаданных  ${testSlug}:`, error);
