@@ -1,4 +1,4 @@
-import { fetchCategoryTreeAction, fetchPublicCategoryTreeAction } from "@/actions/category";
+import { fetchPublicCategoryTreeAction } from "@/actions/category";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
