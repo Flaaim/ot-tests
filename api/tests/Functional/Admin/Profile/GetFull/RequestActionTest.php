@@ -87,7 +87,8 @@ final class RequestActionTest extends WebTestCase
         self::assertArrayHasKey('name', $data);
         self::assertArrayHasKey('surname', $data);
         self::assertArrayHasKey('networks', $data);
-        self::assertArrayHasKey('status', $data);
+        self::assertArrayHasKey('profileStatus', $data);
         self::assertArrayHasKey('date', $data);
+        self::assertArrayHasKey('authStatus', $data);
     }
 }

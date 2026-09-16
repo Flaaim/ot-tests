@@ -9,6 +9,7 @@ import {
   ListAttemptsDTO,
   PaginatedProfiles,
   ProfileDTO,
+  ProfileFull,
   UserAttemptStatsDTO,
 } from "@/interfaces/user.interface";
 
@@ -119,6 +120,23 @@ export async function addProfileAction(values: AddProfilePayload): Promise<ApiRe
     return handleApiResponse<void>(response);
   } catch (error) {
     console.error("removeProfileAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function fetchProfileAction(id: string): Promise<ApiResponse<ProfileFull>> {
+  try {
+    const response = await apiFetch(API.profile.get(id), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    return handleApiResponse<ProfileFull>(response);
+  } catch (error) {
+    console.error("fetchProfileAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

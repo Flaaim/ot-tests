@@ -21,6 +21,7 @@ export const API = {
   },
   profile: {
     getProfile: () => BASE_URL + `/v1/me`,
+    get: (id: string) => BASE_URL + `/v1/admin/profiles/${id}`,
     remove: (id: string) => BASE_URL + `/v1/profiles/${id}/remove`,
     getAttempts: (page: number, perPage: number) => {
       const params = new URLSearchParams({

@@ -15,6 +15,7 @@ import UserStatusBadge from "@/components/Admin/Domain/User/UserStatusBadge";
 import UserRoleBadge from "@/components/Admin/Domain/User/UserRoleBadge";
 import RemoveProfileDialog from "@/components/Admin/Profile/RemoveProfileDialog";
 import AddProfileDialog from "@/components/Admin/Profile/AddProfileDialog";
+import Link from "next/link";
 
 interface AdminUsersPageProps {
   searchParams: Promise<{ page?: string; perPage?: string }>;
@@ -73,7 +74,11 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
           <TableBody>
             {profiles.map((profile: ProfileDTO) => (
               <TableRow key={profile.id}>
-                <TableCell className="font-medium">{profile.id}</TableCell>
+                <TableCell className="font-medium">
+                  <Link href={`/admin/profiles/${profile.id}`} className="hover:underline">
+                    {profile.id}
+                  </Link>
+                </TableCell>
                 <TableCell className="font-medium">{profile.email}</TableCell>
                 <TableCell className="font-medium">
                   <UserStatusBadge type={profile.status} />

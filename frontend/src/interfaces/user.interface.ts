@@ -44,3 +44,16 @@ export interface PaginatedProfiles {
   totalCount: number;
   totalPages: number;
 }
+
+export interface ProfileFull {
+  id: string;
+  email: string;
+  profileStatus: string;
+  role: string;
+  date: string;
+  authStatus: string;
+  networks: NetworkItem[];
+  passwordHash?: string | null;
+  name?: string | null;
+  surname?: string | null;
+}
