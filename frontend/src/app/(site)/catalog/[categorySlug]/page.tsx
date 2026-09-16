@@ -1,4 +1,4 @@
-import { fetchPublicCategoryTreeAction } from "@/actions/category";
+import { fetchCategoryTreeAction, fetchPublicCategoryTreeAction } from "@/actions/category";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -6,6 +6,40 @@ import { ChevronRight, Folder, ArrowRight } from "lucide-react";
 
 interface CategoryPageProps {
   params: Promise<{ categorySlug: string }>;
+}
+
+export async function generateMetadata({ params }: CategoryPageProps) {
+  const { categorySlug } = await params;
+
+  try {
+    const result = await fetchPublicCategoryTreeAction();
+
+    if (!result.ok || !result.data) {
+      return {
+        title: "Сервис недоступен",
+        description: "Не удалось загрузить данные категории.",
+      };
+    }
+
+    const category = result.data.find((c) => c.slug === categorySlug);
+    if (!category) {
+      return {
+        title: "Категория не найдена",
+        description: "Запрашиваемая категория не существует.",
+      };
+    }
+
+    return {
+      title: category.name,
+      description: category.description || `Перечень ${category.name}`,
+    };
+  } catch (error) {
+    console.error(`Ошибка загрузки метаданных  ${categorySlug}:`, error);
+    return {
+      title: "Категория не найдена.",
+      description: "Запрашиваемая категория не существует.",
+    };
+  }
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {

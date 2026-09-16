@@ -19,6 +19,31 @@ interface TestSlugPageProps {
   params: Promise<{ categorySlug: string; subcategorySlug: string; testSlug: string }>;
 }
 
+export async function generateMetadata({ params }: TestSlugPageProps) {
+  const { testSlug } = await params;
+
+  try {
+    const result = await fetchPublicTestBySlugAction(testSlug);
+    if (!result.ok || !result.data) {
+      return {
+        title: "Сервис недоступен",
+        description: "Не удалось загрузить данные теста.",
+      };
+    }
+    const test = result.data;
+    return {
+      title: test.name,
+      description: test.description || `Перечень ${test.name}`,
+    };
+  } catch (error) {
+    console.error(`Ошибка загрузки метаданных  ${testSlug}:`, error);
+    return {
+      title: "Тест не найден.",
+      description: "Запрашиваемый тест не существует.",
+    };
+  }
+}
+
 export default async function TestSlugPage({ params }: TestSlugPageProps) {
   const { categorySlug, subcategorySlug, testSlug } = await params;
 

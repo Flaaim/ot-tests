@@ -3,6 +3,7 @@ import { CategoryDTO } from "@/interfaces/category.interface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Flame, FolderOpen, ShieldCheck, Zap } from "lucide-react";
+import { Metadata } from "next";
 
 // Тот же хелпер для иконок, что и на главной странице
 const getCategoryIcon = (slug: string) => {
@@ -10,6 +11,11 @@ const getCategoryIcon = (slug: string) => {
   if (slug.includes("elektro")) return <Zap className="h-6 w-6 text-yellow-500" />;
   if (slug.includes("ohrana-truda")) return <ShieldCheck className="h-6 w-6 text-blue-500" />;
   return <FolderOpen className="h-6 w-6 text-primary" />;
+};
+
+export const metadata: Metadata = {
+  title: "Каталог тестов",
+  description: "Выберите направление тестирования: охрана труда, пожарная безопасность и другие.",
 };
 
 export default async function CatalogPage() {

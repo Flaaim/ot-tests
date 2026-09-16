@@ -10,6 +10,38 @@ interface SubcategoryPageProps {
   params: Promise<{ categorySlug: string; subcategorySlug: string }>;
 }
 
+export async function generateMetadata({ params }: SubcategoryPageProps) {
+  const { categorySlug, subcategorySlug } = await params;
+
+  try {
+    const result = await fetchPublicCategoryTreeAction();
+    if (!result.ok || !result.data) {
+      return {
+        title: "Сервис недоступен",
+        description: "Не удалось загрузить данные подкатегории.",
+      };
+    }
+    const parentCategory = result.data?.find((c) => c.slug === categorySlug);
+    const subcategory = parentCategory?.children?.find((c) => c.slug === subcategorySlug);
+    if (!parentCategory || !subcategory) {
+      return {
+        title: "Подкатегория не найдена",
+        description: "Запрашиваемая подкатегория не существует.",
+      };
+    }
+    return {
+      title: subcategory.name,
+      description: subcategory.description || `Перечень ${subcategory.name}`,
+    };
+  } catch (error) {
+    console.error(`Ошибка загрузки метаданных  ${subcategorySlug}:`, error);
+    return {
+      title: "Подкатегория не найдена.",
+      description: "Запрашиваемая подкатегория не существует.",
+    };
+  }
+}
+
 export default async function SubcategoryPage({ params }: SubcategoryPageProps) {
   const { categorySlug, subcategorySlug } = await params;
 
@@ -70,7 +102,7 @@ export default async function SubcategoryPage({ params }: SubcategoryPageProps) 
           {tests.map((test: TestItemPublic) => (
             <Card
               key={test.id}
-              className="relative flex flex-col transition-colors hover:border-primary/50"
+              className="group relative flex flex-col transition-colors hover:border-primary/50"
             >
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-start gap-3 text-xl leading-tight">
