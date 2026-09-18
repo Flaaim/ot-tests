@@ -1,9 +1,7 @@
 "use client";
 
-import { z } from "zod";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { renameTestAction } from "@/actions/test";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,31 +16,37 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Pencil } from "lucide-react";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { changeDescriptionCategoryAction } from "@/actions/category";
+import { z } from "zod";
 
 const schema = z.object({
-  name: z.string().trim().min(1, "Имя обязательно для заполнения"),
-  description: z.string().trim().min(1, "Описание обязательно для заполнения"),
+  description: z
+    .string()
+    .trim()
+    .min(1, "Описание обязательно для заполнения")
+    .max(255, "Описание слишком длинное!"),
 });
 
-type RenameFormData = z.infer<typeof schema>;
+type ChangeDescriptionFormData = z.infer<typeof schema>;
 
-interface RenameTestDialogProps {
+interface ChangeDescriptionCategoryProps {
   id: string;
-  name: string;
   description: string;
 }
-export default function RenameTestDialog({ id, name, description }: RenameTestDialogProps) {
+
+export default function ChangeDescriptionCategoryDialog({
+  id,
+  description,
+}: ChangeDescriptionCategoryProps) {
   const [open, setOpen] = useState<boolean>(false);
 
   const router = useRouter();
 
-  async function onSubmit(values: RenameFormData) {
-    const result = await renameTestAction({
+  async function onSubmit(values: ChangeDescriptionFormData) {
+    const result = await changeDescriptionCategoryAction({
       id: id,
-      name: values.name,
       description: values.description,
     });
 
@@ -51,25 +55,25 @@ export default function RenameTestDialog({ id, name, description }: RenameTestDi
       return;
     }
 
-    toast.success("Тест успешно изменен.");
+    toast.success("Описание категории успешно изменено.");
     form.reset(values);
     setOpen(false);
     router.refresh();
   }
+
   const form = useForm({
     mode: "onSubmit",
     resolver: zodResolver(schema),
     defaultValues: {
-      name: name,
       description: description,
     },
   });
   const submitButton = (
     <Button
       type="submit"
-      form="rename-test-form"
+      form="change-description-category-form"
       disabled={form.formState.isSubmitting}
-      className="w-full cursor-pointer py-2"
+      className="cursor-pointer py-2"
     >
       {form.formState.isSubmitting ? "Загрузка..." : "Изменить"}
     </Button>
@@ -78,15 +82,15 @@ export default function RenameTestDialog({ id, name, description }: RenameTestDi
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button />}>
-        <Pencil className="mr-2 h-4 w-4" /> Переименовать
+        <Pencil className=" h-4 w-4" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Переименовать тест</DialogTitle>
-          <DialogDescription>Изменение названия и описания курса</DialogDescription>
+          <DialogTitle>Изменить описание категории</DialogTitle>
+          <DialogDescription>Изменение описания категории</DialogDescription>
         </DialogHeader>
         <form
-          id="rename-test-form"
+          id="change-description-category-form"
           onSubmit={(e) => {
             void form.handleSubmit(onSubmit)(e);
           }}
@@ -96,25 +100,6 @@ export default function RenameTestDialog({ id, name, description }: RenameTestDi
         >
           <FieldGroup>
             <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="name">Название курса</FieldLabel>
-                  <Input
-                    {...field}
-                    id="name"
-                    value={field.value}
-                    placeholder=""
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            ></Controller>
-          </FieldGroup>
-          <FieldGroup>
-            <Controller
               name="description"
               control={form.control}
               render={({ field, fieldState }) => (
@@ -122,7 +107,7 @@ export default function RenameTestDialog({ id, name, description }: RenameTestDi
                   <Textarea
                     {...field}
                     id="description"
-                    placeholder="Описание теста"
+                    placeholder="Описание категории"
                     aria-invalid={fieldState.invalid}
                     className="h-[40vh] max-h-[100px]"
                     value={field.value}
