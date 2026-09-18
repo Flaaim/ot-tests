@@ -82,6 +82,7 @@ export async function fetchAttemptResultAction(
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      cache: "no-store",
     });
 
     return handleApiResponse<AttemptResultData>(response);
