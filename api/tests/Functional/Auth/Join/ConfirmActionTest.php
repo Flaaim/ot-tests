@@ -50,7 +50,7 @@ final class ConfirmActionTest extends WebTestCase
         $user = $this->users->getByEmail(new Email(ConfirmFixture::VALID_EMAIL));
         self::assertTrue($user->isActive());
 
-        self::assertCount(2, $transport->getSent());
+        self::assertCount(1, $transport->getSent());
         $message = $transport->getSent()[0]->getMessage();
 
         self::assertInstanceOf(UserJoinConfirmed::class, $message);

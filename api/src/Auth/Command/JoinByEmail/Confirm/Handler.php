@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace App\Auth\Command\JoinByEmail\Confirm;
 
 use App\Auth\Entity\User\UserRepository;
-use App\Auth\Event\UserCreated;
 use App\Infrastructure\Doctrine\Flusher;
 use DateTimeImmutable;
 use DomainException;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 final class Handler
 {
     public function __construct(
         private readonly UserRepository $users,
-        private readonly Flusher $flusher,
-        private readonly MessageBusInterface $messageBus
+        private readonly Flusher $flusher
     ) {}
 
     public function handle(Command $command): void
@@ -28,11 +25,5 @@ final class Handler
         $user->confirmJoin($command->token, new DateTimeImmutable());
 
         $this->flusher->flush();
-
-        $this->messageBus->dispatch(new UserCreated(
-            $user->getId()->getValue(),
-            $user->getEmail()->getValue(),
-            $user->getRole()->getName()
-        ));
     }
 }
