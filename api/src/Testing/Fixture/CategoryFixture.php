@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Testing\Fixture;
 
 use App\Testing\Entity\Category\Category;
@@ -7,9 +9,10 @@ use App\Testing\Entity\Category\CategoryId;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
-class CategoryFixture extends AbstractFixture
+final class CategoryFixture extends AbstractFixture
 {
     public const string CATEGORY_ID = '199f466e-a593-45be-9bdb-959c06ed5572';
+
     public function load(ObjectManager $manager): void
     {
         $parent = new Category(

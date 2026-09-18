@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default function SiteLayout({
-                                     children,
-                                   }: Readonly<{
+  children,
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
@@ -19,7 +19,6 @@ export default function SiteLayout({
     <div className="flex min-h-screen flex-col">
       {/* Центрированный ограничивающий контейнер. Ширина 1024px (max-w-5xl) примерно равна вашим 270+700+gap */}
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 sm:px-6 md:px-8">
-
         <header className="pt-4 sm:pt-6">
           <Header />
         </header>
@@ -33,7 +32,6 @@ export default function SiteLayout({
         <footer className="pb-4 sm:pb-8 text-sm text-muted-foreground text-center sm:text-left">
           © {new Date().getFullYear()} Платформа тестов по охране труда. Все права защищены.
         </footer>
-
       </div>
     </div>
   );

@@ -82,7 +82,10 @@ export default async function SubcategoryPage({ params }: SubcategoryPageProps) 
           Каталог
         </Link>
         <ChevronRight className="mx-2 h-4 w-4 shrink-0" />
-        <Link href={`/catalog/${categorySlug}`} className="hover:text-foreground transition-colors line-clamp-1 max-w-[150px] sm:max-w-none">
+        <Link
+          href={`/catalog/${categorySlug}`}
+          className="hover:text-foreground transition-colors line-clamp-1 max-w-[150px] sm:max-w-none"
+        >
           {parentCategory?.name}
         </Link>
         <ChevronRight className="mx-2 h-4 w-4 shrink-0" />
@@ -125,9 +128,7 @@ export default async function SubcategoryPage({ params }: SubcategoryPageProps) 
                       >
                         {/* Выделяем шифр, чтобы он не сливался с текстом */}
                         {test.cipher && (
-                          <span className="text-primary font-bold mr-2">
-                            {test.cipher}
-                          </span>
+                          <span className="text-primary font-bold mr-2">{test.cipher}</span>
                         )}
                         <span className="group-hover:text-primary transition-colors">
                           {test.name}
