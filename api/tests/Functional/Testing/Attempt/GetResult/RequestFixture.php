@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Functional\Testing\Attempt\GetResult;
 
-use App\Auth\Entity\User\Email;
+use App\Auth\Entity\User\Email as UserEmail;
+use App\Auth\Entity\User\Id;
 use App\Auth\Test\Builder\UserBuilder;
+use App\Profile\Entity\Profile\Email as ProfileEmail;
+use App\Profile\Entity\Profile\ProfileId;
+use App\Profile\Test\Builder\ProfileBuilder;
 use App\Testing\Entity\Attempt\Attempt;
 use App\Testing\Entity\Attempt\AttemptId;
 use App\Testing\Entity\Attempt\Status;
@@ -23,8 +27,8 @@ final class RequestFixture extends AbstractFixture
     public const string TEST_CIPHER = 'ОТ 201.18';
     public const int TICKET_NUMBER = 1;
     public const string ATTEMPT_ID = '86732793-3874-4146-bc65-72d3fa75ddcb';
-    public const string ATTEMPT_ID_NOT_FOUND = '581cae87-f0b5-4994-a6aa-5821fa2b963a';
 
+    public const string USER_ID = '3772675d-e205-4dd8-84a9-52861773f740';
     public const string USER_EMAIL = 'user@mail.ru';
     public const string USER_PASSWORD = 'user';
     public const string COURSE_ID = '63879491-6883-4e88-8be2-295d3d260346';
@@ -32,11 +36,18 @@ final class RequestFixture extends AbstractFixture
     public function load(ObjectManager $manager): void
     {
         $user = new UserBuilder()
-            ->withEmail(new Email(self::USER_EMAIL))
+            ->withId(new Id(self::USER_ID))
+            ->withEmail(new UserEmail(self::USER_EMAIL))
             ->withPassword(self::USER_PASSWORD)
             ->active()
             ->build();
         $manager->persist($user);
+
+        $profile = new ProfileBuilder()
+            ->withProfileId(new ProfileId(self::USER_ID))
+            ->withEmail(new ProfileEmail(self::USER_EMAIL))
+            ->build();
+        $manager->persist($profile);
 
         $test = new TestBuilder()
             ->withId(new TestId(self::TEST_ID))

@@ -64,12 +64,13 @@ final class AttemptFetcher implements AttemptFetcherInterface
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $attempt = $qb->select('a.id, a.status, a.questions_snapshot, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, a.test_id, t.name, t.cipher, t.allowed_mistakes, u.email')
+        $attempt = $qb->select('a.id, a.status, a.questions_snapshot, a.score, a.mistakes, a.started_at, a.finished_at, a.ticket_number, a.test_id, t.name, t.cipher, t.allowed_mistakes, u.email, p.name as profile_name, p.surname as profile_surname')
             ->from('attempts', 'a')
             ->leftJoin('a', 'tests', 't', 'a.test_id = t.id')
             ->leftJoin('a', 'users', 'u', 'a.user_id = u.id')
-            ->andWhere($qb->expr()->eq('a.id', ':id'))
-            ->andWhere($qb->expr()->eq('u.id', ':userId'))
+            ->leftJoin('u', 'profiles', 'p', 'u.id = p.id')
+            ->where($qb->expr()->eq('a.id', ':id'))
+            ->andWhere($qb->expr()->eq('a.user_id', ':userId'))
             ->setParameter('id', $attemptId)
             ->setParameter('userId', $userId)
             ->executeQuery()
@@ -115,7 +116,11 @@ final class AttemptFetcher implements AttemptFetcherInterface
             'started_at' => $attempt['started_at'],
             'finished_at' => $attempt['finished_at'],
             'ticket_number' => $attempt['ticket_number'],
-            'email' => $attempt['email'],
+            'profile' => [
+                'name' => $attempt['profile_name'],
+                'surname' => $attempt['profile_surname'],
+                'email' => $attempt['email'],
+            ],
             'test' => [
                 'test_id' => $attempt['test_id'],
                 'name' => $attempt['name'],

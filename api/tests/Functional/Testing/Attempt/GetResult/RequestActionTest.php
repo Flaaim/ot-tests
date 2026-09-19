@@ -72,7 +72,7 @@ final class RequestActionTest extends WebTestCase
         self::assertArrayHasKey('finishedAt', $data);
         self::assertArrayHasKey('test', $data);
         self::assertArrayHasKey('questions', $data);
-        self::assertArrayHasKey('email', $data);
+        self::assertArrayHasKey('profile', $data);
     }
 
     public function testNotFound(): void

@@ -17,7 +17,7 @@ final class AttemptResultDTO
         public string $startedAt,
         public TestDTO $test,
         public array $questions,
-        public string $email,
+        public ProfileDTO $profile,
         public ?string $finishedAt = null,
     ) {}
 
@@ -30,6 +30,8 @@ final class AttemptResultDTO
             $data['questions_snapshot']
         );
 
+        $profile = ProfileDTO::fromArray($data['profile']);
+
         return new self(
             id: $data['id'],
             status: $data['status'],
@@ -39,7 +41,7 @@ final class AttemptResultDTO
             startedAt: new DateTimeImmutable($data['started_at'])->format('Y-m-d H:i:s'),
             test: $test,
             questions: $questions,
-            email: $data['email'],
+            profile: $profile,
             finishedAt: !empty($data['finished_at']) ? new DateTimeImmutable($data['finished_at'])->format('Y-m-d H:i:s') : null,
         );
     }
