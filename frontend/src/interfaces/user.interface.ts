@@ -32,6 +32,8 @@ export interface ProfileDTO {
   role: string;
   date: string;
   networks: NetworkItem[];
+  name?: string | null;
+  surname?: string | null;
 }
 export interface AddProfilePayload {
   email: string;
@@ -56,4 +58,9 @@ export interface ProfileFull {
   passwordHash?: string | null;
   name?: string | null;
   surname?: string | null;
+}
+
+export interface ChangePersonalDataPayload {
+  name: string;
+  surname: string;
 }

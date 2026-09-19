@@ -17,7 +17,7 @@ final class ProfileFetcher implements ProfileFetcherInterface
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $result = $qb->select('p.id, p.email', 'p.status', 'u.date', 'un.network', 'un.identity', 'u.role')
+        $result = $qb->select('p.id, p.email', 'p.status', 'u.date', 'un.network', 'un.identity', 'u.role, p.name, p.surname')
             ->from('profiles', 'p')
             ->leftJoin('p', 'users', 'u', 'p.id = u.id')
             ->leftJoin('p', 'user_networks', 'un', 'p.id = un.user_id')
@@ -39,6 +39,8 @@ final class ProfileFetcher implements ProfileFetcherInterface
                 'name' => $result['network'],
                 'identity' => $result['identity'],
             ],
+            'name' => $result['name'],
+            'surname' => $result['surname'],
         ];
     }
 

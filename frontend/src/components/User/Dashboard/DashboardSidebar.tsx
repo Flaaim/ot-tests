@@ -18,7 +18,7 @@ import Link from "next/link";
 
 const items = [
   { title: "Главная", url: "/user/dashboard", icon: LayoutDashboard },
-  { title: "Результаты тестов", url: "/user/results", icon: FileText },
+  { title: "Результаты", url: "/user/results", icon: FileText },
 ];
 export interface DashboardSidebarProps {
   email: string;

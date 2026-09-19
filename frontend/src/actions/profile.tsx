@@ -6,6 +6,7 @@ import { API } from "@/app/api";
 import { apiFetch } from "@/lib/apiClient";
 import {
   AddProfilePayload,
+  ChangePersonalDataPayload,
   ListAttemptsDTO,
   PaginatedProfiles,
   ProfileDTO,
@@ -137,6 +138,28 @@ export async function fetchProfileAction(id: string): Promise<ApiResponse<Profil
     return handleApiResponse<ProfileFull>(response);
   } catch (error) {
     console.error("fetchProfileAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function changePersonalDataAction(
+  payload: ChangePersonalDataPayload
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.profile.changePersonalData(), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: payload.name,
+        surname: payload.surname,
+      }),
+    });
+    return handleApiResponse<void>(response);
+  } catch (error) {
+    console.error("changePersonalDataAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

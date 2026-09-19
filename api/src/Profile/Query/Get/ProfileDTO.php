@@ -15,6 +15,8 @@ final class ProfileDTO
         public string $status,
         public string $date,
         public array $networks = [],
+        public ?string $name = null,
+        public ?string $surname = null,
     ) {}
 
     public static function fromArray(array $data): self
@@ -28,6 +30,8 @@ final class ProfileDTO
             status: $data['status'],
             date: new DateTimeImmutable($data['date'])->format('Y-m-d'),
             networks: $networks,
+            name: $data['name'] ?? null,
+            surname: $data['surname'] ?? null,
         );
     }
 }

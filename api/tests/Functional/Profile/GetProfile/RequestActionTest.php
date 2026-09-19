@@ -71,6 +71,8 @@ final class RequestActionTest extends WebTestCase
             'status' => 'ok',
             'date' => new DateTimeImmutable()->format('Y-m-d'),
             'networks' => [],
+            'name' => null,
+            'surname' => null,
         ], $data);
     }
 }
