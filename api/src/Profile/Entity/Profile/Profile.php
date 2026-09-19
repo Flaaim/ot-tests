@@ -67,4 +67,10 @@ final class Profile implements AggregateRoot
             throw new DomainException('Cannot remove admin profile.');
         }
     }
+
+    public function changePersonalData(string $name, string $surname): void
+    {
+        $this->name = $name;
+        $this->surname = $surname;
+    }
 }

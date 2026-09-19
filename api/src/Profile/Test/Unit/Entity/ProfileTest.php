@@ -34,4 +34,21 @@ final class ProfileTest extends TestCase
         self::assertEquals($name, $profile->getName());
         self::assertEquals($surname, $profile->getSurname());
     }
+
+    public function testChangePersonalData(): void
+    {
+        $profile = new Profile(
+            ProfileId::generate(),
+            new Email('email@test.ru'),
+            Role::user(),
+            Status::ok(),
+            'John',
+            'Doue'
+        );
+
+        $profile->changePersonalData($name = 'Александр', $surname = 'Григорьев');
+
+        self::assertEquals($name, $profile->getName());
+        self::assertEquals($surname, $profile->getSurname());
+    }
 }
