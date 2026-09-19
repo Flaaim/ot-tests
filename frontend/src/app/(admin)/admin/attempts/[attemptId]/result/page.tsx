@@ -19,6 +19,7 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
 
   const attemptData: AttemptResultData = result.data;
   const isPassed = attemptData.status === "passed";
+  const profile = attemptData.profile;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-8">
@@ -32,21 +33,39 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
           </p>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6 text-center">
             <div className="flex flex-col p-4 bg-muted/30 rounded-lg">
-              <span className="text-sm text-muted-foreground">Пользователь</span>
-              <span className="font-semibold truncate" title={attemptData.email}>
-                {attemptData.email}
+              <span className="text-sm text-muted-foreground">Имя</span>
+              <span className="font-semibold truncate" title={profile.name || "Не указано"}>
+                {profile.name || "—"}
               </span>
             </div>
+
+            <div className="flex flex-col p-4 bg-muted/30 rounded-lg">
+              <span className="text-sm text-muted-foreground">Фамилия</span>
+              <span className="font-semibold truncate" title={profile.surname || "Не указано"}>
+                {profile.surname || "—"}
+              </span>
+            </div>
+
+            <div className="flex flex-col p-4 bg-muted/30 rounded-lg">
+              <span className="text-sm text-muted-foreground">Email</span>
+              <span className="font-semibold truncate" title={profile.email}>
+                {profile.email}
+              </span>
+            </div>
+
+            {/* --- НИЖНИЙ РЯД (Результаты) --- */}
             <div className="flex flex-col p-4 bg-muted/30 rounded-lg">
               <span className="text-sm text-muted-foreground">Билет</span>
               <span className="font-semibold">{attemptData.ticketNumber}</span>
             </div>
+
             <div className="flex flex-col p-4 bg-green-500/10 rounded-lg">
               <span className="text-sm text-muted-foreground">Правильно</span>
               <span className="font-semibold text-green-700">{attemptData.score}</span>
             </div>
+
             <div className="flex flex-col p-4 bg-red-500/10 rounded-lg">
               <span className="text-sm text-muted-foreground">Ошибок</span>
               <span className="font-semibold text-red-700">
@@ -54,6 +73,7 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
               </span>
             </div>
           </div>
+
           <div className="text-center mt-6 text-sm text-muted-foreground">
             Завершен:{" "}
             {format(

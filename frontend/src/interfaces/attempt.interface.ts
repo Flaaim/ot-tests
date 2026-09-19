@@ -70,5 +70,11 @@ export interface AttemptResultData {
   finishedAt: string | null;
   test: TestInfoDTO;
   questions: ResultQuestionDTO[];
+  profile: ProfileInfoDTO;
+}
+
+interface ProfileInfoDTO {
   email: string;
+  name?: string | null;
+  surname: string | null;
 }
