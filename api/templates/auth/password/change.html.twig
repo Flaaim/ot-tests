@@ -4,17 +4,29 @@
 {% block preheader %}Уведомление об успешном обновлении пароля от вашего аккаунта.{% endblock %}
 
 {% block body %}
-    <h2 style="margin: 0 0 20px 0; font-size: 20px; color: #0f172a;">Здравствуйте!</h2>
+    <h1 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; color: #09090b;">
+        Пароль успешно изменен
+    </h1>
 
-    <p style="margin: 0 0 15px 0;">
-        Уведомляем вас о том, что пароль от вашего аккаунта на сайте OT-TESTS.RU был успешно изменен.
+    <p style="margin: 0 0 16px 0; font-size: 15px; color: #3f3f46; line-height: 24px;">
+        Здравствуйте! Уведомляем вас о том, что пароль от вашего аккаунта на платформе <strong>OT-TESTS.RU</strong> был успешно обновлен.
     </p>
 
-    <p style="margin: 0 0 20px 0;">
-        Если вы самостоятельно обновили пароль, никаких дополнительных действий не требуется. При следующем входе в систему используйте ваши новые данные.
+    <p style="margin: 0 0 32px 0; font-size: 15px; color: #3f3f46; line-height: 24px;">
+        Если вы самостоятельно внесли эти изменения, никаких дополнительных действий не требуется. При следующем входе в систему используйте ваши новые данные.
     </p>
 
-    <p style="margin: 0 0 20px 0; padding: 15px; background-color: #f8fafc; border-left: 4px solid #cbd5e1; font-size: 15px; color: #475569;">
-        <strong>Внимание:</strong> Если вы не вносили эти изменения и считаете, что кто-то другой получил доступ к вашему аккаунту, пожалуйста, немедленно воспользуйтесь функцией восстановления пароля или свяжитесь со службой поддержки.
-    </p>
+    <!-- Блок предупреждения (в стиле shadcn Alert) -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px;">
+        <tr>
+            <td style="padding: 16px;">
+                <p style="margin: 0 0 6px 0; font-size: 14px; color: #09090b; font-weight: 600; letter-spacing: -0.2px;">
+                    Подозрительная активность?
+                </p>
+                <p style="margin: 0; font-size: 14px; color: #71717a; line-height: 20px;">
+                    Если вы не вносили эти изменения и считаете, что кто-то другой получил доступ к вашему аккаунту, пожалуйста, немедленно воспользуйтесь функцией восстановления пароля или свяжитесь со службой поддержки.
+                </p>
+            </td>
+        </tr>
+    </table>
 {% endblock %}
