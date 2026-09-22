@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: CategoryPageProps) {
     }
 
     return {
-      title: category.name,
+      title: `Каталог тестов по ${category.name}`,
       description: category.description || `Перечень ${category.name}`,
     };
   } catch (error) {

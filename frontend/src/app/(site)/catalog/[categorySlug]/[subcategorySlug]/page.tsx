@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: SubcategoryPageProps) {
       };
     }
     return {
-      title: subcategory.name,
+      title: `Тесты по ${subcategory.name}`,
       description: subcategory.description || `Перечень ${subcategory.name}`,
     };
   } catch (error) {
