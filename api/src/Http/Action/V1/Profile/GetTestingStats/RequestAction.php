@@ -20,7 +20,7 @@ final class RequestAction
         private readonly Security $security,
     ) {}
 
-    #[Route('/v1/profiles/testing/stat', name: 'profiles.testing.stat', methods: ['GET'])]
+    #[Route('/v1/me/get-testing-stats', name: 'me.get.testing.stat', methods: ['GET'])]
     public function __invoke(): Response
     {
         $user = $this->security->getUser();

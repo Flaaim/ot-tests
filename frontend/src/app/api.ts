@@ -20,7 +20,6 @@ export const API = {
     attachNetwork: () => BASE_URL + `/v1/auth/network/attach`,
   },
   profile: {
-    getProfile: () => BASE_URL + `/v1/me`,
     get: (id: string) => BASE_URL + `/v1/admin/profiles/${id}`,
     remove: (id: string) => BASE_URL + `/v1/admin/profiles/${id}/remove`,
     getAttempts: (page: number, perPage: number) => {
@@ -37,8 +36,9 @@ export const API = {
       });
       return BASE_URL + `/v1/admin/profiles?${params.toString()}`;
     },
-    getTestingStat: () => BASE_URL + `/v1/profiles/testing/stat`,
     add: () => BASE_URL + `/v1/admin/profiles`,
+    getTestingStat: () => BASE_URL + `/v1/me/get-testing-stats`,
+    getProfile: () => BASE_URL + `/v1/me`,
     changePersonalData: () => BASE_URL + `/v1/me/change-personal-data`,
   },
   parser: {

@@ -22,7 +22,7 @@ final readonly class RequestAction
         private Security $security,
     ) {}
 
-    #[Route('/v1/me/change-personal-data', name: 'profile.change.personal.data', methods: ['PUT'])]
+    #[Route('/v1/me/change-personal-data', name: 'me.change.personal.data', methods: ['PUT'])]
     public function __invoke(Request $request): Response
     {
         /** @var UserAdapter|null $currentUser */
