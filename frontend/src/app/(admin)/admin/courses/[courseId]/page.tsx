@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import RenameCourseDialog from "@/components/Admin/Course/RenameCourseDialog";
 import UpdateQuestionsCourseDialog from "@/components/Admin/Course/UpdateQuestionsCourseDialog";
 import QuestionSearchForm from "@/components/Admin/Course/QuestionSearchForm";
-import QuestionFormTypeBadge from "@/components/Admin/Domain/QuestionFormTypeBadge";
+import QuestionFormTypeBadge from "@/components/Domain/QuestionFormTypeBadge";
 
 interface CourseOverviewPageProps {
   params: Promise<{ courseId: string }>;

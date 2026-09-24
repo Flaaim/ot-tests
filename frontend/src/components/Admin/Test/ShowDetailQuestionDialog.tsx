@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 import { Answer } from "@/components/Admin/Course/UpdateQuestionsCourseDialog";
 import { PUBLIC_ASSETS_URL } from "@/app/api";
-import QuestionFormTypeBadge from "@/components/Admin/Domain/QuestionFormTypeBadge";
+import QuestionFormTypeBadge from "@/components/Domain/QuestionFormTypeBadge";
 
 interface ShowDetailQuestionDialogProps {
   question: Question;

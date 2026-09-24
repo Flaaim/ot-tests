@@ -12,6 +12,7 @@ import { SequenceQuestion } from "@/components/Testing/Attempt/SequenceQuestion"
 import { MatchingQuestion } from "@/components/Testing/Attempt/MatchingQuestion";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import QuestionFormTypeBadge from "@/components/Domain/QuestionFormTypeBadge";
 
 interface TestRunnerClientProps {
   attempt: AttemptInterface;
@@ -111,10 +112,21 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
         Вопрос {currentQuestionIndex + 1} из {questions.length}
       </div>
       <Card>
-        <CardHeader>
-          <CardTitle className="leading-relaxed">{currentQuestion.text}</CardTitle>
+        <CardHeader className="space-y-3">
+          {/* Строка с мета-информацией над заголовком */}
+          <div className="flex items-center justify-between mb-1">
+      <span className="text-sm font-medium text-muted-foreground">
+        Текущий вопрос
+      </span>
+            <QuestionFormTypeBadge type={currentQuestion.form} />
+          </div>
+
+          <CardTitle className="leading-relaxed text-xl">
+            {currentQuestion.text}
+          </CardTitle>
+
           {currentQuestion.questionImg && (
-            <div className="mt-4 border rounded-md overflow-hidden relative inline-block">
+            <div className="mt-4 border rounded-md overflow-hidden relative inline-block bg-white p-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${PUBLIC_ASSETS_URL}${process.env.NEXT_PUBLIC_QUESTION_IMAGES}${currentQuestion.questionImg}`}
