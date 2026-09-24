@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Admin\Testing\Test\ChangeCipher;
+namespace Tests\Functional\Admin\Testing\Test\ChangeCategory;
 
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Entity\Test\TestRepository;
@@ -56,7 +56,7 @@ final class RequestActionTest extends WebTestCase
 
     public function testUnauthenticatedReturns401(): void
     {
-        $this->client->jsonRequest('PUT', '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-cipher');
+        $this->client->jsonRequest('PUT', '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-category');
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
@@ -65,7 +65,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'PUT',
-            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-cipher',
+            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-category',
             [],
             $this->authHeaders($this->userToken)
         );
@@ -77,9 +77,9 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'PUT',
-            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-cipher',
+            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-category',
             [
-                'cipher' => 'ЕИСОТ 101.4',
+                'categoryId' => RequestFixture::CATEGORY_ID_NEW,
             ],
             $this->authHeaders($this->adminToken)
         );
@@ -88,17 +88,16 @@ final class RequestActionTest extends WebTestCase
 
         $test = $this->tests->get(new TestId(RequestFixture::TEST_ID));
 
-        self::assertEquals('ЕИСОТ 101.4', $test->getCipher());
-        self::assertEquals('eisot-101', $test->getSlug());
+        self::assertEquals(RequestFixture::CATEGORY_ID_NEW, $test->getCategoryId());
     }
 
-    public function testAlready(): void
+    public function testActive(): void
     {
         $this->client->jsonRequest(
             'PUT',
-            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-cipher',
+            '/v1/admin/testing/tests/' . RequestFixture::TEST_ACTIVE_ID . '/change-category',
             [
-                'cipher' => RequestFixture::TEST_CIPHER_ACTIVE,
+                'categoryId' => RequestFixture::CATEGORY_ID_NEW,
             ],
             $this->authHeaders($this->adminToken)
         );
@@ -110,7 +109,7 @@ final class RequestActionTest extends WebTestCase
         $data = Json::decode($body);
 
         self::assertEquals([
-            'message' => 'Test with this cipher/slug already exists.',
+            'message' => 'Can not change category of an active test.',
         ], $data);
     }
 
@@ -118,9 +117,9 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'PUT',
-            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-cipher',
+            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-category',
             [
-                'cipher' => RequestFixture::TEST_CIPHER,
+                'categoryId' => RequestFixture::CATEGORY_ID,
             ],
             $this->authHeaders($this->adminToken)
         );
@@ -128,13 +127,13 @@ final class RequestActionTest extends WebTestCase
         self::assertEquals(204, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testEmpty(): void
+    public function testNotFound(): void
     {
         $this->client->jsonRequest(
             'PUT',
-            '/v1/admin/testing/tests/' . RequestFixture::TEST_NOT_FOUND_ID . '/change-cipher',
+            '/v1/admin/testing/tests/' . RequestFixture::TEST_NOT_FOUND_ID . '/change-category',
             [
-                'cipher' => 'ПБ 115.26',
+                'categoryId' => RequestFixture::CATEGORY_ID,
             ],
             $this->authHeaders($this->adminToken)
         );
@@ -148,11 +147,11 @@ final class RequestActionTest extends WebTestCase
         self::assertEquals(['message' => 'Test not found.'], $data);
     }
 
-    public function testInvalid(): void
+    public function testEmpty(): void
     {
         $this->client->jsonRequest(
             'PUT',
-            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-cipher',
+            '/v1/admin/testing/tests/' . RequestFixture::TEST_ID . '/change-category',
             [],
             $this->authHeaders($this->adminToken)
         );
@@ -164,7 +163,7 @@ final class RequestActionTest extends WebTestCase
         $data = Json::decode($body);
 
         self::assertEquals(['errors' => [
-            'cipher' => 'This value should not be blank.',
+            'categoryId' => 'This value should not be blank.',
         ]], $data);
     }
 }

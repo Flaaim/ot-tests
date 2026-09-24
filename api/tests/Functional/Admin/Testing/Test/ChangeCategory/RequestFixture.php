@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Admin\Testing\Test\ChangeCipher;
+namespace Tests\Functional\Admin\Testing\Test\ChangeCategory;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Role;
@@ -19,11 +19,8 @@ final class RequestFixture extends AbstractFixture
     public const string TEST_ACTIVE_ID = '958467b2-37c1-4301-bb69-df3325aff49c';
 
     public const string TEST_NAME = 'Первая помощь';
-    public const string TEST_CIPHER = 'ОТ 201.18';
-    public const string TEST_CIPHER_ACTIVE = 'ПБ 115.26';
-
-    public const string TEST_SLUG = 'ot-201';
-    public const string TEST_SLUG_ACTIVE = 'pb-115';
+    public const string CATEGORY_ID = 'caea8a87-7c4b-497c-a50e-8c30ce08e8b9';
+    public const string CATEGORY_ID_NEW = '5dd4ffc4-2c5d-4830-98a4-05d688f28e15';
 
     public const string ADMIN_EMAIL = 'admin@mail.ru';
     public const string ADMIN_PASSWORD = 'admin';
@@ -51,16 +48,16 @@ final class RequestFixture extends AbstractFixture
         $test = new TestBuilder()
             ->withId(new TestId(self::TEST_ID))
             ->withName(self::TEST_NAME)
-            ->withCipher(self::TEST_CIPHER)
-            ->withSlug(self::TEST_SLUG)
+            ->withCategoryId(self::CATEGORY_ID)
+            ->withSlug('not-active')
             ->build();
         $manager->persist($test);
 
         $testActive = new TestBuilder()
             ->withId(new TestId(self::TEST_ACTIVE_ID))
             ->withName(self::TEST_NAME)
-            ->withCipher(self::TEST_CIPHER_ACTIVE)
-            ->withSlug(self::TEST_SLUG_ACTIVE)
+            ->withCategoryId(self::CATEGORY_ID)
+            ->withSlug('active')
             ->active()
             ->build();
         $manager->persist($testActive);
