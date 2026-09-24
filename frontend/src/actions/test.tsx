@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/interfaces/response.interface";
 import {
   AddTestPayload,
+  ChangeCategoryTestPayload,
   ChangeCipherTestPayload,
   PaginatedTests,
   RenameTestPayload,
@@ -238,6 +239,27 @@ export async function fetchPublicTestBySlugAction(
     return handleApiResponse<TestPublicDTO>(response);
   } catch (error) {
     console.error("fetchPublicTestBySlugAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function changeCategoryTestAction(
+  payload: ChangeCategoryTestPayload
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.test.changeCategory(payload.id), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        categoryId: payload.categoryId,
+      }),
+    });
+    return handleApiResponse<void>(response);
+  } catch (error) {
+    console.error("changeCategoryTestAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

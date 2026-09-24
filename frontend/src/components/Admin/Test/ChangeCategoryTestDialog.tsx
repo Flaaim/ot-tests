@@ -1,21 +1,25 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { CategoryDTO } from "@/interfaces/category.interface";
-import { fetchCoursesToSelectAction } from "@/actions/course";
 import { toast } from "sonner";
-import { fetchCategoryTreeAction } from "@/actions/category";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { changeCategoryTestAction } from "@/actions/test";
 
 const schema = z.object({
   categoryId: z.string().uuid("Некорректный формат UUID"),
@@ -23,8 +27,11 @@ const schema = z.object({
 
 interface ChangeCategoryTestDialogProps {
   testId: string;
-  currentCategoryId: string;
+  currentCategory: { id: string; name: string };
+  categories: CategoryDTO[];
 }
+
+type ChangeCategoryFormData = z.infer<typeof schema>;
 
 function flattenCategories(
   categories: CategoryDTO[],
@@ -39,7 +46,7 @@ function flattenCategories(
     result.push({
       id: cat.id,
       name: `${prefix}${cat.name}`,
-      isLeaf: !hasChildren, // Если нет детей, значит это конечная категория (лист)
+      isLeaf: !hasChildren,
     });
 
     if (hasChildren) {
@@ -52,47 +59,104 @@ function flattenCategories(
 
 export default function ChangeCategoryTestDialog({
   testId,
-  currentCategoryId,
+  currentCategory,
+  categories = [],
 }: ChangeCategoryTestDialogProps) {
   const [open, setOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const router = useRouter();
 
-  useEffect(() => {
-    if (open) {
-      const initData = async () => {
-        setLoading(true);
-        try {
-          const response = await fetchCategoryTreeAction();
-          if (response.ok && response.data) {
-            setCategories(response.data);
-          }
-        } catch (error) {
-          const err = error instanceof Error ? error : new Error("Ошибка при получении данных");
-          toast.error(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      void initData();
-    }
-  }, [open]);
+  // Оптимизация: вычисляем плоский список только при изменении категорий или текущей категории
+  const availableCategories = useMemo(() => {
+    const flat = flattenCategories(categories);
+    return flat.filter((cat) => cat.id !== currentCategory.id);
+  }, [categories, currentCategory.id]);
 
-  const flatCategories = flattenCategories(categories);
-  console.log(flatCategories);
+  const form = useForm<ChangeCategoryFormData>({
+    mode: "onSubmit",
+    resolver: zodResolver(schema),
+    defaultValues: {
+      categoryId: currentCategory.id,
+    },
+  });
+
+  async function onSubmit(values: ChangeCategoryFormData) {
+    const result = await changeCategoryTestAction({
+      id: testId,
+      categoryId: values.categoryId,
+    });
+
+    if (!result.ok) {
+      form.setError("root", { type: "server", message: result.error });
+      return;
+    }
+
+    toast.success("Категория успешно изменена.");
+    form.reset(values);
+    setOpen(false);
+    router.refresh();
+  }
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Pencil size={12} className="mr-1 " />
-        Изменить
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger className="inline-flex items-center hover:opacity-70 transition-opacity">
+        <Pencil size={12} className="mr-2" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Изменить категорию</DialogTitle>
           <DialogDescription>Изменение категории теста</DialogDescription>
         </DialogHeader>
+        <form
+          id="change-test-category-form"
+          onSubmit={form.handleSubmit(onSubmit)} // Убрал лишнюю функцию-обертку, handleSubmit сам справится
+          className="grid gap-4 py-4"
+        >
+          <FieldGroup>
+            <Controller
+              name="categoryId"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="categoryId">Категория</FieldLabel>
+                  <select
+                    {...field}
+                    id="categoryId"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {/* Исправлено: value вместо defaultValue */}
+                    <option value={currentCategory.id}>{currentCategory.name}</option>
+                    {availableCategories.map((cat) => (
+                      <option
+                        key={cat.id}
+                        value={cat.id}
+                        disabled={!cat.isLeaf}
+                        className={!cat.isLeaf ? "font-bold text-muted-foreground bg-muted/20" : ""}
+                      >
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </form>
+        {form.formState.errors.root && (
+          <div className="rounded-md bg-destructive/10 p-2 text-center text-sm font-medium text-destructive">
+            {form.formState.errors.root.message}
+          </div>
+        )}
+        <DialogFooter>
+          <Button
+            type="submit"
+            form="change-test-category-form"
+            disabled={form.formState.isSubmitting}
+            className="w-full sm:w-auto"
+          >
+            {form.formState.isSubmitting ? "Сохранение..." : "Изменить"}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
