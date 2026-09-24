@@ -49,7 +49,9 @@ function RightItemCard({
       <div
         {...dragHandleProps}
         className={`text-muted-foreground shrink-0 h-full flex items-center ${
-          isOverlay ? "cursor-grabbing" : "cursor-grab active:cursor-grabbing hover:text-foreground touch-none"
+          isOverlay
+            ? "cursor-grabbing"
+            : "cursor-grab active:cursor-grabbing hover:text-foreground touch-none"
         }`}
       >
         <GripVertical className="h-5 w-5" />

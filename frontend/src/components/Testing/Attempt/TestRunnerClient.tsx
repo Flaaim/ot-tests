@@ -115,15 +115,11 @@ export default function TestRunnerClient({ attempt }: TestRunnerClientProps) {
         <CardHeader className="space-y-3">
           {/* Строка с мета-информацией над заголовком */}
           <div className="flex items-center justify-between mb-1">
-      <span className="text-sm font-medium text-muted-foreground">
-        Текущий вопрос
-      </span>
+            <span className="text-sm font-medium text-muted-foreground">Текущий вопрос</span>
             <QuestionFormTypeBadge type={currentQuestion.form} />
           </div>
 
-          <CardTitle className="leading-relaxed text-xl">
-            {currentQuestion.text}
-          </CardTitle>
+          <CardTitle className="leading-relaxed text-xl">{currentQuestion.text}</CardTitle>
 
           {currentQuestion.questionImg && (
             <div className="mt-4 border rounded-md overflow-hidden relative inline-block bg-white p-2">

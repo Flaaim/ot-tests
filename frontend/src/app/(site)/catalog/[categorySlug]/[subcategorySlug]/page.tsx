@@ -6,7 +6,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ChevronRight, FileText, ArrowRight, Calendar } from "lucide-react";
 import { TestItemPublic } from "@/interfaces/test.interface";
 import Pagination from "@/components/Pagination/Pagination";
-import {CategoryDTO} from "@/interfaces/category.interface";
 
 interface SubcategoryPageProps {
   params: Promise<{ categorySlug: string; subcategorySlug: string }>;
