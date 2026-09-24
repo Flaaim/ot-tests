@@ -241,6 +241,17 @@ final class Test implements AggregateRoot
         ));
     }
 
+    public function changeCategory(string $categoryId): void
+    {
+        if ($this->isActive()) {
+            throw new DomainException('Can not change category of an active test.');
+        }
+        if ($this->categoryId === $categoryId) {
+            return;
+        }
+        $this->categoryId = $categoryId;
+    }
+
     private function regenerateTickets(array $allQuestionIds): void
     {
         if (empty($allQuestionIds)) {
