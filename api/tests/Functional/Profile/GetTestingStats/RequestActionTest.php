@@ -42,7 +42,7 @@ final class RequestActionTest extends WebTestCase
 
     public function testUnauthenticatedReturns401(): void
     {
-        $this->client->jsonRequest('GET', '/v1/profiles/testing/stat');
+        $this->client->jsonRequest('GET', '/v1/me/get-testing-stats');
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
@@ -50,7 +50,7 @@ final class RequestActionTest extends WebTestCase
     public function testSuccess(): void
     {
         $this->client->catchExceptions(false);
-        $this->client->jsonRequest('GET', '/v1/profiles/testing/stat', [], $this->authHeaders($this->userToken));
+        $this->client->jsonRequest('GET', '/v1/me/get-testing-stats', [], $this->authHeaders($this->userToken));
 
         self::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
