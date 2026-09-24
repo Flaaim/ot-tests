@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Testing\Test\GetByCategory;
+namespace Tests\Functional\Testing\Test\GetByCategoryPaginated;
 
 use App\Testing\Entity\Test\TestId;
 use App\Testing\Test\Builder\TestBuilder;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Testing\Query\Test\GetByCategory;
+namespace App\Testing\Query\Test\GetByCategoryPaginated;
 
 use DateTimeImmutable;
 

@@ -10,7 +10,7 @@ interface TestFetcherInterface
 
     public function getOneById(string $id): array;
 
-    public function getByCategory(string $categorySlug): array;
+    public function getByCategoryPaginated(string $categorySlug, int $page = 1, int $limit = 10): array;
 
     public function getBySlug(string $slug): array;
 }

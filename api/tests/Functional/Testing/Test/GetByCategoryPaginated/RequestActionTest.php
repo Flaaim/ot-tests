@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Testing\Test\GetByCategory;
+namespace Tests\Functional\Testing\Test\GetByCategoryPaginated;
 
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -34,7 +34,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'GET',
-            '/v1/testing/categories/ohrana-truda/tests'
+            '/v1/testing/categories/ohrana-truda/tests?page=1&limit=10'
         );
 
         self::assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -43,16 +43,20 @@ final class RequestActionTest extends WebTestCase
 
         $data = Json::decode($body);
 
-        self::assertCount(1, $data);
+        self::assertCount(1, $data['items']);
         self::assertEquals([
-            [
-                'id' => RequestFixture::TEST_ACTIVE_ID,
-                'name' => RequestFixture::TEST_ACTIVE_NAME,
-                'slug' => RequestFixture::TEST_ACTIVE_SLUG,
-                'description' => 'Test description',
-                'cipher' => RequestFixture::TEST_ACTIVE_CIPHER,
-                'createdAt' => new DateTimeImmutable()->format('Y-m-d'),
+            'items' => [
+                [
+                    'id' => RequestFixture::TEST_ACTIVE_ID,
+                    'name' => RequestFixture::TEST_ACTIVE_NAME,
+                    'slug' => RequestFixture::TEST_ACTIVE_SLUG,
+                    'description' => 'Test description',
+                    'cipher' => RequestFixture::TEST_ACTIVE_CIPHER,
+                    'createdAt' => new DateTimeImmutable()->format('Y-m-d'),
+                ],
             ],
+            'totalPages' => 1,
+            'totalCount' => 1,
         ], $data);
     }
 }

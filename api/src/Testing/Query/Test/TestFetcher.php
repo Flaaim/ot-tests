@@ -174,20 +174,37 @@ final class TestFetcher implements TestFetcherInterface
         return $test ?: [];
     }
 
-    public function getByCategory(string $categorySlug): array
+    public function getByCategoryPaginated(string $categorySlug, int $page = 1, int $limit = 10): array
     {
+        $page = max(1, $page);
+        $limit = min(max(1, $limit), 100);
+        $offset = ($page - 1) * $limit;
+
         $qb = $this->connection->createQueryBuilder();
 
-        return $qb->select('t.id, t.name, t.cipher, t.description, t.status, t.slug, t.created_at')
-            ->from('tests', 't')
+        $qb->from('tests', 't')
             ->innerJoin('t', 'test_categories', 'c', 't.category_id = c.id')
             ->where('c.slug = :slug')
             ->andWhere('t.status = :status')
             ->setParameter('slug', $categorySlug)
-            ->setParameter('status', Status::ACTIVE)
+            ->setParameter('status', Status::ACTIVE);
+
+        $countQb = clone $qb;
+        $totalCount = (int)$countQb->select('COUNT(t.id)')
+            ->executeQuery()
+            ->fetchOne();
+
+        $rows = $qb->select('t.id, t.name, t.cipher, t.description, t.status, t.slug, t.created_at')
             ->orderBy('t.name', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->executeQuery()
             ->fetchAllAssociative();
+
+        return [
+            'items' => $rows,
+            'totalCount' => $totalCount,
+        ];
     }
 
     public function getBySlug(string $slug): array
