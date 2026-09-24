@@ -22,6 +22,11 @@ export interface TestItemPublic {
   status: string;
   createdAt: string;
 }
+export interface TestPublicPaginated {
+  items: TestItemPublic[];
+  totalPages: number;
+  totalCount: number;
+}
 export interface AddTestPayload {
   categoryId: string;
   name: string;

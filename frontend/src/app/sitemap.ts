@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { fetchPublicCategoryTreeAction } from "@/actions/category";
 import { fetchPublicTestsByCategoryAction } from "@/actions/test";
+import { TestItemPublic } from "@/interfaces/test.interface";
 
 export const revalidate = 86400; // Обновляем раз в сутки
 
@@ -42,11 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               priority: 0.6,
             };
 
-            const testsResult = await fetchPublicTestsByCategoryAction(subcategory.slug);
-
+            const testsResult = await fetchPublicTestsByCategoryAction(subcategory.slug, 1, 100);
             let testUrls: MetadataRoute.Sitemap = [];
+
             if (testsResult.ok && testsResult.data) {
-              testUrls = testsResult.data.map((test) => ({
+              const tests: TestItemPublic[] = testsResult.data.items;
+              testUrls = tests.map((test) => ({
                 url: `${baseUrl}/catalog/${parentCategory.slug}/${subcategory.slug}/${test.slug}`,
                 lastModified: test.createdAt,
                 changeFrequency: "monthly",

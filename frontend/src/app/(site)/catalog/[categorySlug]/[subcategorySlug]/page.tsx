@@ -5,13 +5,17 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ChevronRight, FileText, ArrowRight, Calendar } from "lucide-react";
 import { TestItemPublic } from "@/interfaces/test.interface";
+import Pagination from "@/components/Pagination/Pagination";
 
 interface SubcategoryPageProps {
   params: Promise<{ categorySlug: string; subcategorySlug: string }>;
+  searchParams: Promise<{ page?: string; perPage?: string }>;
 }
 
-export async function generateMetadata({ params }: SubcategoryPageProps) {
+export async function generateMetadata({ params, searchParams }: SubcategoryPageProps) {
   const { categorySlug, subcategorySlug } = await params;
+  const currentPage = Number((await searchParams).page) || 1;
+  const perPage = Number((await searchParams).perPage) || 10;
 
   try {
     const result = await fetchPublicCategoryTreeAction();
@@ -30,8 +34,10 @@ export async function generateMetadata({ params }: SubcategoryPageProps) {
       };
     }
     return {
-      title: `Тесты по ${subcategory.name}`,
-      description: subcategory.description || `Перечень ${subcategory.name}`,
+      title: `Тесты по ${subcategory.name}. Страница: ${currentPage}`,
+      description:
+        subcategory.description ||
+        `Перечень ${subcategory.name}, страница: ${currentPage}, всего записей: ${perPage}`,
     };
   } catch (error) {
     console.error(`Ошибка загрузки метаданных  ${subcategorySlug}:`, error);
@@ -42,8 +48,10 @@ export async function generateMetadata({ params }: SubcategoryPageProps) {
   }
 }
 
-export default async function SubcategoryPage({ params }: SubcategoryPageProps) {
+export default async function SubcategoryPage({ params, searchParams }: SubcategoryPageProps) {
   const { categorySlug, subcategorySlug } = await params;
+  const currentPage = Number((await searchParams).page) || 1;
+  const perPage = Number((await searchParams).perPage) || 10;
 
   // 1. Получаем дерево, чтобы построить крошки и найти название текущей подкатегории
   const treeResult = await fetchPublicCategoryTreeAction();
@@ -58,8 +66,7 @@ export default async function SubcategoryPage({ params }: SubcategoryPageProps) 
     notFound();
   }
 
-  // 2. Получаем список активных тестов
-  const testsResult = await fetchPublicTestsByCategoryAction(subcategorySlug);
+  const testsResult = await fetchPublicTestsByCategoryAction(subcategorySlug, currentPage, perPage);
 
   if (!testsResult.ok || !testsResult.data) {
     return (
@@ -68,7 +75,8 @@ export default async function SubcategoryPage({ params }: SubcategoryPageProps) 
       </div>
     );
   }
-  const tests = testsResult.data || [];
+  const tests = testsResult.data.items || [];
+  const totalPages: number = testsResult.data.totalPages;
 
   return (
     <div className="space-y-8 pb-10">
@@ -161,6 +169,11 @@ export default async function SubcategoryPage({ params }: SubcategoryPageProps) 
           })}
         </div>
       )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        baseUrl={`/catalog/${parentCategory}/${subcategory}`}
+      />
     </div>
   );
 }

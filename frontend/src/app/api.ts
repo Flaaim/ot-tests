@@ -96,7 +96,14 @@ export const API = {
     rename: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/rename`,
     updateSettings: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update-settings`,
     update: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update`,
-    getByCategory: (slug: string) => BASE_URL + `/v1/testing/categories/${slug}/tests`,
+    getByCategoryPaginated: (slug: string, page: number, perPage: number) => {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(perPage),
+      });
+      return BASE_URL + `/v1/testing/categories/${slug}/tests?${params.toString()}`;
+    },
+
     getBySlug: (slug: string) => BASE_URL + `/v1/testing/tests/${slug}`,
     changeCategory: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/change-category`,
   },

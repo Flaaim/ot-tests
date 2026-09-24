@@ -8,8 +8,8 @@ import {
   PaginatedTests,
   RenameTestPayload,
   TestFull,
-  TestItemPublic,
   TestPublicDTO,
+  TestPublicPaginated,
   UpdateSettingsTestPayload,
   UpdateTestPayload,
 } from "@/interfaces/test.interface";
@@ -207,10 +207,12 @@ export async function updateTestAction(payload: UpdateTestPayload): Promise<ApiR
 }
 
 export async function fetchPublicTestsByCategoryAction(
-  slug: string
-): Promise<ApiResponse<TestItemPublic[]>> {
+  slug: string,
+  currentPage: number,
+  perPage: number
+): Promise<ApiResponse<TestPublicPaginated>> {
   try {
-    const response = await apiFetch(API.test.getByCategory(slug), {
+    const response = await apiFetch(API.test.getByCategoryPaginated(slug, currentPage, perPage), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -218,7 +220,7 @@ export async function fetchPublicTestsByCategoryAction(
       },
     });
 
-    return handleApiResponse<TestItemPublic[]>(response);
+    return handleApiResponse<TestPublicPaginated>(response);
   } catch (error) {
     console.error("fetchPublicTestsByCategoryAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
