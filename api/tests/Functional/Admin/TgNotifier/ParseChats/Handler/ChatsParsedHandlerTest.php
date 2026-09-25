@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\TgNotifier\ParseChats\Handler;
+namespace Tests\Functional\Admin\TgNotifier\ParseChats\Handler;
 
 use App\TgNotifier\Entity\DTO\ChatDTO;
 use App\TgNotifier\Event\ChatsParsed;
@@ -13,11 +13,16 @@ use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ChatsParsedHandlerTest extends KernelTestCase
 {
     private readonly ContainerInterface $container;
     private readonly ContactFetcherInterface $contacts;
-    public function setUp(): void
+
+    protected function setUp(): void
     {
         self::bootKernel();
         $this->container = self::getContainer();
@@ -30,7 +35,7 @@ final class ChatsParsedHandlerTest extends KernelTestCase
     {
         $handler = $this->container->get(ChatsParsedHandler::class);
         $message = new ChatsParsed([
-            new ChatDTO('3c733c71-1255-4952-b1c0-b657c85bf610', 'name', '12345678', '2026-09-25')
+            new ChatDTO('3c733c71-1255-4952-b1c0-b657c85bf610', 'name', '12345678', '2026-09-25'),
         ]);
         $handler($message);
 

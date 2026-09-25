@@ -8,7 +8,7 @@ use App\TgNotifier\Entity\DTO\ChatDTO;
 
 final class ChatsParsed
 {
-    /** @var ChatDTO[] $chats */
+    /** @var ChatDTO[] */
     public function __construct(
         public array $chats,
     ) {}
