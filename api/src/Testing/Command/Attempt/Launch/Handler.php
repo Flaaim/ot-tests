@@ -38,6 +38,7 @@ final class Handler
         );
 
         if (null !== $processedAttempt) {
+            $processedAttempt->reset();
             return $processedAttempt->getId()->getValue();
         }
 
