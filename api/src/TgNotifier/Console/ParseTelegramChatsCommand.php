@@ -30,7 +30,7 @@ final class ParseTelegramChatsCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $filePath = __DIR__ . '/../../public/Telegram/chat.yml';
+        $filePath = __DIR__ . '/../../../public/Telegram/chat.yml';
 
         if (!file_exists($filePath)) {
             $io->error('Файл chat.yml не найден!');

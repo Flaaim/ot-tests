@@ -35,7 +35,7 @@ final readonly class ChatsParsedHandler
                 $params[] = $chat->date;
             }
 
-            $sql = 'INSERT INTO telegram_chats (contact_id, chat_id, name, created_at) VALUES '
+            $sql = 'INSERT INTO telegram_chats (id, chat_id, name, created_at) VALUES '
                 . implode(', ', $values)
                 . ' ON CONFLICT (chat_id) DO NOTHING';
 
