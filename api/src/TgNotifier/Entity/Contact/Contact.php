@@ -19,10 +19,12 @@ final class Contact
         #[Column(type: 'string', length: 55)]
         private string $name,
         #[Column(type: 'string', length: 55)]
-        private string $chatId
+        private string $chatId,
+        #[Column(type: 'datetime_immutable')]
+        private \DateTimeImmutable $createdAt,
     ) {}
 
-    public function getId(): ContactId
+    public function getContactId(): ContactId
     {
         return $this->id;
     }
@@ -35,5 +37,9 @@ final class Contact
     public function getChatId(): string
     {
         return $this->chatId;
+    }
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 }
