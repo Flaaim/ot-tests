@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 namespace App\TgNotifier\Entity\Contact;
+
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
@@ -21,7 +23,7 @@ final class Contact
         #[Column(type: 'string', length: 55, unique: true)]
         private string $chatId,
         #[Column(type: 'datetime_immutable')]
-        private \DateTimeImmutable $createdAt,
+        private DateTimeImmutable $createdAt,
     ) {}
 
     public function getContactId(): ContactId
@@ -38,7 +40,8 @@ final class Contact
     {
         return $this->chatId;
     }
-    public function getCreatedAt(): \DateTimeImmutable
+
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
