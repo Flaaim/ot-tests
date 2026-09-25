@@ -18,7 +18,7 @@ final class Contact
         private ContactId $id,
         #[Column(type: 'string', length: 55)]
         private string $name,
-        #[Column(type: 'string', length: 55)]
+        #[Column(type: 'string', length: 55, unique: true)]
         private string $chatId,
         #[Column(type: 'datetime_immutable')]
         private \DateTimeImmutable $createdAt,
