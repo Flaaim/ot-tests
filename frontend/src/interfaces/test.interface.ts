@@ -55,6 +55,11 @@ export interface UpdateSettingsTestPayload {
   numberQuestionsInTicket: number;
   allowedMistakes: number;
 }
+export interface ChangeNormativeDocsPayload {
+  id: string;
+  normativeDocs: string[];
+}
+
 export interface UpdateTestPayload {
   id: string;
   courseIds: string[];
@@ -71,6 +76,7 @@ export interface TestFull {
   status: string;
   settings: Settings;
   category: { id: string; name: string };
+  normativeDocs: string[];
 }
 
 export interface Ticket {

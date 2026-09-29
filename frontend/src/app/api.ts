@@ -103,9 +103,9 @@ export const API = {
       });
       return BASE_URL + `/v1/testing/categories/${slug}/tests?${params.toString()}`;
     },
-
     getBySlug: (slug: string) => BASE_URL + `/v1/testing/tests/${slug}`,
     changeCategory: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/change-category`,
+    changeNormativeDocs: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/change-npa`,
   },
   attempt: {
     launch: () => BASE_URL + `/v1/testing/attempts`,

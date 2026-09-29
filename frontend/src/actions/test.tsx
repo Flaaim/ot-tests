@@ -5,6 +5,7 @@ import {
   AddTestPayload,
   ChangeCategoryTestPayload,
   ChangeCipherTestPayload,
+  ChangeNormativeDocsPayload,
   PaginatedTests,
   RenameTestPayload,
   TestFull,
@@ -262,6 +263,27 @@ export async function changeCategoryTestAction(
     return handleApiResponse<void>(response);
   } catch (error) {
     console.error("changeCategoryTestAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function changeNormativeDocsAction(
+  payload: ChangeNormativeDocsPayload
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.test.changeNormativeDocs(payload.id), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        normativeDocs: payload.normativeDocs,
+      }),
+    });
+    return handleApiResponse<void>(response);
+  } catch (error) {
+    console.error("changeNormativeDocsAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

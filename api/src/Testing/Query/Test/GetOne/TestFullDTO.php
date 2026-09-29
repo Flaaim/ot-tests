@@ -22,7 +22,8 @@ final class TestFullDTO
         public string $createdAt,
         public string $status,
         public array $settings,
-        public CategoryDTO $category
+        public CategoryDTO $category,
+        public array $normativeDocs,
     ) {}
 
     public static function fromArray(array $data): self
@@ -51,6 +52,7 @@ final class TestFullDTO
             status: $data['status'],
             settings: $data['settings'] ?? [],
             category: $category,
+            normativeDocs: $data['normativeDocs'],
         );
     }
 }

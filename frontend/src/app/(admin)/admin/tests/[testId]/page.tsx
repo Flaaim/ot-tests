@@ -30,6 +30,8 @@ import { Question } from "@/interfaces/task.interface";
 import AttemptBasedOnTicket from "@/components/Admin/Test/AttemptBasedOnTicket";
 import ChangeCategoryTestDialog from "@/components/Admin/Test/ChangeCategoryTestDialog";
 import { fetchCategoryTreeAction } from "@/actions/category";
+import ChangeNormativeDocs from "@/components/Admin/Test/ChangeNormativeDocs";
+import { FileText } from "lucide-react";
 
 interface TestOverviewPageProps {
   params: Promise<{ testId: string }>;
@@ -144,6 +146,31 @@ export default async function TestOverviewPage({ params }: TestOverviewPageProps
           </CardContent>
         </Card>
       </div>
+
+      <div className="pt-6 mt-6 border-t">
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-base font-semibold">Нормативные документы</h3>
+          <ChangeNormativeDocs testId={test.id} normativeDocs={test.normativeDocs} />
+        </div>
+
+        {test.normativeDocs && test.normativeDocs.length > 0 ? (
+          <ul className="space-y-3">
+            {test.normativeDocs.map((doc: string, idx: number) => (
+              <li
+                key={idx}
+                className="flex items-start gap-3 p-3 rounded-md border bg-slate-50 text-sm text-slate-700"
+              >
+                <FileText className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
+                <span className="leading-relaxed">{doc}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted-foreground">Не указаны</p>
+        )}
+      </div>
+
+      <hr />
       <UpdateTestDialog id={test.id} currentCourses={test.courses} />
       <div className="space-y-6">
         <Tabs defaultValue="json" className="w-full">

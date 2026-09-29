@@ -78,7 +78,8 @@ final class TestFetcher implements TestFetcherInterface
             t.category_id,
             tc.name as category_name,
             t.number_of_tickets,
-            t.number_questions_in_ticket',
+            t.number_questions_in_ticket,
+            t.normative_docs',
         )->from('tests', 't')
 
             ->where($qb->expr()->eq('t.id', ':id'))
@@ -108,6 +109,7 @@ final class TestFetcher implements TestFetcherInterface
                     'id' => $row['category_id'],
                     'name' => $row['category_name'],
                 ],
+                'normativeDocs' => json_decode($row['normative_docs'], true, JSON_THROW_ON_ERROR),
             ];
 
             $courseIds = json_decode($test['course_ids'], true, JSON_THROW_ON_ERROR);
