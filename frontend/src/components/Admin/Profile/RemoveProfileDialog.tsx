@@ -39,6 +39,7 @@ export default function RemoveProfileDialog({ id }: RemoveProfileDialogProps) {
         return;
       }
       toast.success("Профиль успешно удален!");
+      setOpen(false);
       router.refresh();
     } catch (error) {
       console.error("Error:", error);
