@@ -101,6 +101,7 @@ export interface TestPublicDTO {
   tickets: TicketPublic[];
   settings: Settings;
   category: CategoryPublic;
+  normativeDocs: string[];
 }
 
 interface TicketPublic {

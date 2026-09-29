@@ -2,6 +2,7 @@ import {
   Calendar,
   ChevronRight,
   FileQuestion,
+  FileText,
   ListChecks,
   ShieldAlert,
   Ticket,
@@ -178,6 +179,29 @@ export default async function TestSlugPage({ params }: TestSlugPageProps) {
               </CardContent>
             </Card>
           ))}
+        </div>
+        <div className="pt-6 mt-6 border-t border-slate-200">
+          <div className="flex items-center gap-2 mb-2 text-xs font-medium">
+            При составлении перечня вопросов тестирования были использованы следующие
+            нормативно-правывые акты:
+          </div>
+          {test.normativeDocs && test.normativeDocs.length > 0 ? (
+            <ul className="space-y-2">
+              {test.normativeDocs.map((doc: string, idx: number) => (
+                <li
+                  key={idx}
+                  className="flex items-start gap-2 p-2 rounded-md border bg-slate-50 text-xs text-slate-700"
+                >
+                  <FileText className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
+                  <span className="leading-relaxed">{doc}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Не указаны. Будут добавлены в ближайшее время
+            </p>
+          )}
         </div>
       </section>
     </div>
