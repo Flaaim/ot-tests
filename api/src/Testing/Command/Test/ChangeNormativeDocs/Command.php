@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Testing\Command\Test\ChangeNormativeDocs;
+
+use Symfony\Component\Validator\Constraints as Assert;
+
+final readonly class Command
+{
+    public function __construct(
+        #[Assert\NotBlank]
+        #[Assert\Uuid]
+        public string $id,
+        #[Assert\Count(min: 1)]
+        #[Assert\All(
+            new Assert\Type('string')
+        )]
+        public array $normativeDocs
+    ) {}
+}

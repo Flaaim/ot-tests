@@ -262,6 +262,29 @@ final class TestTest extends TestCase
         $test->changeCategory('bc29e21a-fe46-4165-98d5-7c15532b4b28');
     }
 
+    public function testChangeNormativeDocs(): void
+    {
+        $test = new TestBuilder()
+            ->withNormativeDocs(['npa1', 'npa2', 'npa3'])
+            ->build();
+
+        $test->changeNormativeDoc($newDocs = ['npa4', 'npa5', 'npa6']);
+        self::assertEquals($newDocs, $test->getNormativeDocs());
+    }
+
+    public function testChangeNormativeDocsActive(): void
+    {
+        $test = new TestBuilder()
+            ->withNormativeDocs(['npa1', 'npa2', 'npa3'])
+            ->active()
+            ->build();
+
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Can not change normative docs of an active test.');
+
+        $test->changeNormativeDoc([]);
+    }
+
     private function getQuestionIds(): array
     {
         return [
