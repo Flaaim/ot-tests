@@ -55,6 +55,7 @@ final class RequestActionTest extends WebTestCase
         self::assertArrayHasKey('numberOfTickets', $data['settings']);
         self::assertArrayHasKey('numberQuestionsInTicket', $data['settings']);
         self::assertArrayHasKey('status', $data);
+        self::assertArrayHasKey('normativeDocs', $data);
     }
 
     public function testNotActive(): void

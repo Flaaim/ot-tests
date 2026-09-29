@@ -36,7 +36,8 @@ final class TestTest extends TestCase
                 $numberOfTickets = 1,
                 $numberOfQuestionInTickets = 2,
                 $allowedMistakes = 1
-            )
+            ),
+            $normativeDocs = ['npa1', 'npa2', 'npa3', 'npa4', 'npa5', 'npa6'],
         );
 
         self::assertEquals($id, $test->getId());
@@ -51,6 +52,7 @@ final class TestTest extends TestCase
         self::assertEquals($numberOfTickets, $test->getSettings()->getNumberOfTickets());
         self::assertEquals($numberOfQuestionInTickets, $test->getSettings()->getNumberQuestionsInTicket());
         self::assertEquals($allowedMistakes, $test->getSettings()->getAllowedMistakes());
+        self::assertEquals($normativeDocs, $test->getNormativeDocs());
     }
 
     public function testGetSequenceQuestions(): void

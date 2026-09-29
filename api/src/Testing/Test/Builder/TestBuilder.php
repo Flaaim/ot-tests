@@ -23,6 +23,7 @@ final class TestBuilder
     private DateTimeImmutable $createdAt;
     private Settings $settings;
     private bool $active = false;
+    private array $normativeDocs;
 
     public function __construct(
     ) {
@@ -47,6 +48,7 @@ final class TestBuilder
         $this->slug = 'ot201';
         $this->createdAt = new DateTimeImmutable();
         $this->settings = new Settings(5, 2, 1);
+        $this->normativeDocs = ['npa1', 'npa2', 'npa3', 'npa4', 'npa5', 'npa6'];
     }
 
     /** @psalm-suppress PossiblyUnusedMethod */
@@ -129,6 +131,14 @@ final class TestBuilder
         return $clone;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
+    public function withNormativeDocs(array $normativeDocs): self
+    {
+        $clone = clone $this;
+        $clone->normativeDocs = $normativeDocs;
+        return $clone;
+    }
+
     public function build(): Test
     {
         $currentSlug = $this->slug ?? $this->generateSlug($this->cipher);
@@ -144,6 +154,7 @@ final class TestBuilder
             $currentSlug,
             $this->createdAt,
             $this->settings,
+            $this->normativeDocs,
         );
 
         if ($this->active) {

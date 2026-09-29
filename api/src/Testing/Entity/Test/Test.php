@@ -29,6 +29,8 @@ final class Test implements AggregateRoot
     /** @param array<int, array|TicketDTO> $tickets */
     #[ORM\Column(type: Types::JSON, options: ['jsonb' => true])]
     private array $tickets;
+    #[ORM\Column(type: Types::JSON, options: ['jsonb' => true])]
+    private array $normativeDocs;
 
     public function __construct(
         #[ORM\Id]
@@ -50,10 +52,11 @@ final class Test implements AggregateRoot
         #[ORM\Column(type: 'datetime_immutable')]
         private DateTimeImmutable $createdAt,
         #[ORM\Embedded(class: Settings::class, columnPrefix: false)]
-        private Settings $settings
+        private Settings $settings,
+        array $normativeDocs = []
     ) {
         Assert::notEmpty($questionIds, 'Question IDs should not be empty.');
-
+        $this->normativeDocs = array_values(array_filter(array_map('trim', $normativeDocs)));
         $this->regenerateTickets($questionIds);
 
         $this->status = Status::inactive();
@@ -134,6 +137,11 @@ final class Test implements AggregateRoot
     public function getSettings(): Settings
     {
         return $this->settings;
+    }
+
+    public function getNormativeDocs(): array
+    {
+        return $this->normativeDocs;
     }
 
     public function changeSettings(Settings $settings, array $allQuestionIds): void
@@ -250,6 +258,14 @@ final class Test implements AggregateRoot
             return;
         }
         $this->categoryId = $categoryId;
+    }
+
+    public function changeNormativeDoc(array $docs): void
+    {
+        if ($this->isActive()) {
+            throw new DomainException('Can not change normative docs of an active test.');
+        }
+        $this->normativeDocs = $docs;
     }
 
     private function regenerateTickets(array $allQuestionIds): void
