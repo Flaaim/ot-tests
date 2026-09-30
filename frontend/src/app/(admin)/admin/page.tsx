@@ -1,8 +1,12 @@
-import { fetchAdminUsersStatsAction } from "@/actions/admin";
+import { fetchAdminAttemptsStatsAction, fetchAdminUsersStatsAction } from "@/actions/admin";
 import UsersStatsCard from "@/components/Admin/Stats/UsersStatsCard";
+import AttemptsStatsCard from "@/components/Admin/Stats/AttemptsStatsCard";
 
 export default async function AdminDashboardPage() {
-  const [usersStats] = await Promise.all([fetchAdminUsersStatsAction()]);
+  const [usersStats, attemptsStats] = await Promise.all([
+    fetchAdminUsersStatsAction(),
+    fetchAdminAttemptsStatsAction(),
+  ]);
 
   return (
     <div className="space-y-8">
@@ -21,6 +25,17 @@ export default async function AdminDashboardPage() {
           </div>
         ) : (
           <UsersStatsCard stats={usersStats.data} />
+        )}
+      </div>
+
+      <div className="space-y-4">
+        <h2 className="text-lg font-medium tracking-tight">Попытки тестирования</h2>
+        {!attemptsStats.ok || !attemptsStats.data ? (
+          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            Не удалось загрузить статистику попыток тестирования.
+          </div>
+        ) : (
+          <AttemptsStatsCard stats={attemptsStats.data} />
         )}
       </div>
     </div>

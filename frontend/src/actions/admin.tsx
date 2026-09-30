@@ -1,7 +1,7 @@
 "use server";
 
 import { handleApiResponse } from "@/lib/handleApiResponse";
-import { AdminUsersStats } from "@/interfaces/admin.interface";
+import { AdminAttemptsStats, AdminUsersStats } from "@/interfaces/admin.interface";
 import { ApiResponse } from "@/interfaces/response.interface";
 import { apiFetch } from "@/lib/apiClient";
 import { API } from "@/app/api";
@@ -18,6 +18,22 @@ export async function fetchAdminUsersStatsAction(): Promise<ApiResponse<AdminUse
     return handleApiResponse<AdminUsersStats>(response);
   } catch (error) {
     console.error("fetchAdminUsersStatsAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function fetchAdminAttemptsStatsAction(): Promise<ApiResponse<AdminAttemptsStats>> {
+  try {
+    const response = await apiFetch(API.admin.getAttemptsStats(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return handleApiResponse<AdminAttemptsStats>(response);
+  } catch (error) {
+    console.error("fetchAdminAttemptsStatsAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

@@ -4,3 +4,11 @@ export interface AdminUsersStats {
   registrationsThisWeek: number;
   registrationsLast30Days: number;
 }
+
+export interface AdminAttemptsStats {
+  totalAttempts: number;
+  attemptsToday: number;
+  attemptsThisWeek: number;
+  totalPassedAttempts: number;
+  successRate: number;
+}
