@@ -7,4 +7,6 @@ namespace App\Admin\Stats\Query;
 interface StatsFetcherInterface
 {
     public function getUsersStats(): ?array;
+
+    public function getAttemptsStats(): ?array;
 }
