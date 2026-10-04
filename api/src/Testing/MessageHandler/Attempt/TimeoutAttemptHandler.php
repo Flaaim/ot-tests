@@ -19,11 +19,15 @@ final class TimeoutAttemptHandler
         private readonly Flusher $flusher
     ) {}
 
-    public function __invoke(TimeoutAttemptCommand $event): void
+    public function __invoke(TimeoutAttemptCommand $command): void
     {
-        $attempt = $this->attempts->get(new AttemptId($event->attemptId));
+        $attempt = $this->attempts->get(new AttemptId($command->attemptId));
 
         if (!$attempt->isInProgress()) {
+            return;
+        }
+
+        if ($attempt->getStartedAt()->getTimestamp() !== $command->startedAt->getTimestamp()) {
             return;
         }
 

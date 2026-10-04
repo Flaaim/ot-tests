@@ -168,13 +168,14 @@ final class Attempt implements AggregateRoot
         $this->status = Status::timeout();
     }
 
-    public function reset(): void
+    public function reset(DateTimeImmutable $now): void
     {
-        if ($this->status !== Status::inProgress()) {
+        if (!$this->isInProgress()) {
             throw new DomainException('The only processed attempt can be reset.');
         }
         $this->score = 0;
         $this->mistakes = 0;
+        $this->startedAt = $now;
     }
 
     private function findQuestionInSnapshot(string $questionId): ?QuestionDTO

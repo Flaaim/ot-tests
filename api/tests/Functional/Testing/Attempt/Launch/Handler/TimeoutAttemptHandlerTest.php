@@ -26,7 +26,7 @@ final class TimeoutAttemptHandlerTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
+        self::bootKernel();
         $this->container = self::getContainer();
 
         /** @var EntityManagerInterface $em */
@@ -40,7 +40,7 @@ final class TimeoutAttemptHandlerTest extends KernelTestCase
     public function testSuccess(): void
     {
         $handler = $this->container->get(TimeoutAttemptHandler::class);
-        $message = new TimeoutAttemptCommand(RequestFixture::ATTEMPT_ID);
+        $message = new TimeoutAttemptCommand(RequestFixture::ATTEMPT_ID, new DateTimeImmutable());
 
         $handler($message);
 

@@ -18,15 +18,15 @@ use DomainException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 
-final class Handler
+final readonly class Handler
 {
     /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
-        private readonly TestRepository $tests,
-        private readonly AttemptRepository $attempts,
-        private readonly QueryHandlerApi $queryHandler,
-        private readonly MessageBusInterface $messageBus,
-        private readonly Flusher $flusher,
+        private TestRepository $tests,
+        private AttemptRepository $attempts,
+        private QueryHandlerApi $queryHandler,
+        private MessageBusInterface $messageBus,
+        private Flusher $flusher,
     ) {}
 
     public function handle(Command $command): string
@@ -37,8 +37,24 @@ final class Handler
             $command->ticketNumber
         );
 
+        $now = new DateTimeImmutable();
+        $delayInMilliseconds = 60 * 60 * 1000;
+
         if (null !== $processedAttempt) {
-            $processedAttempt->reset();
+            $processedAttempt->reset($now);
+
+            $this->attempts->removeUserProcessedAnswersAttempt($processedAttempt);
+
+            $this->flusher->flush();
+
+            $this->messageBus->dispatch(
+                new TimeoutAttemptCommand(
+                    $processedAttempt->getId()->getValue(),
+                    $now
+                ),
+                [new DelayStamp($delayInMilliseconds)]
+            );
+
             return $processedAttempt->getId()->getValue();
         }
 
@@ -75,7 +91,7 @@ final class Handler
         $delayInMilliseconds = 60 * 60 * 1000;
 
         $this->messageBus->dispatch(
-            new TimeoutAttemptCommand($attempt->getId()->getValue()),
+            new TimeoutAttemptCommand($attempt->getId()->getValue(), $now),
             [new DelayStamp($delayInMilliseconds)]
         );
 

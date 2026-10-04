@@ -43,4 +43,14 @@ final class AttemptRepository
             'ticketNumber' => $ticketNumber,
         ]);
     }
+
+    public function removeUserProcessedAnswersAttempt(Attempt $attempt): void
+    {
+        $this->em->createQueryBuilder()
+            ->delete(Answer::class, 'a')
+            ->where('a.attempt = :attempt')
+            ->setParameter('attempt', $attempt)
+            ->getQuery()
+            ->execute();
+    }
 }
