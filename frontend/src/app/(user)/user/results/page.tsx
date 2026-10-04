@@ -89,7 +89,7 @@ export default async function UserResultsPage({ searchParams }: UserResultsPageP
         <Table>
           <TableHeader className="bg-muted/50">
             <TableRow>
-              <TableHead className="w-[300px]">Название теста</TableHead>
+              <TableHead className="max-w-[300px] truncate">Название теста</TableHead>
               <TableHead>Шифр</TableHead>
               <TableHead>Статус</TableHead>
               <TableHead className="text-center">Билет</TableHead>
