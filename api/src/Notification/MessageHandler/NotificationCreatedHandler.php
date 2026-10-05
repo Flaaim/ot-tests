@@ -15,9 +15,9 @@ use App\Profile\Api\GetProfilesIds\QueryHandlerApi;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class NotificationsCreatedHandler
+final readonly class NotificationCreatedHandler
 {
-    /** @psalm-suppress UnusedClass */
+
     public function __construct(
         private QueryHandlerApi $profileApi,
         private MessageRepository $messages,
