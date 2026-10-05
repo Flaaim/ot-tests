@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notification\Entity\Message;
 
+use App\Notification\Entity\Notification\NotificationId;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
@@ -26,5 +27,15 @@ final class MessageRepository
     public function clear(): void
     {
         $this->em->clear();
+    }
+
+    public function remove(NotificationId $notificationId): void
+    {
+        $this->repo->createQueryBuilder('t')
+            ->delete(Message::class, 't')
+            ->where('t.notificationId = :notificationId')
+            ->setParameter(':notificationId', $notificationId->getValue())
+            ->getQuery()
+            ->execute();
     }
 }

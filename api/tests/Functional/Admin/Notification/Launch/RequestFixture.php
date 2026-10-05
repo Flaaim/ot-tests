@@ -13,6 +13,7 @@ use Doctrine\Persistence\ObjectManager;
 final class RequestFixture extends AbstractFixture implements DependentFixtureInterface
 {
     public const string PROFILE_ID = '5b396d0d-a14c-4612-add6-54875f87e41c';
+
     public function load(ObjectManager $manager): void
     {
         $profile = new ProfileBuilder()

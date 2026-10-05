@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Notification\Entity\Message;
 
-use Doctrine\DBAL\Types\StringType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\StringType;
 
 /** @psalm-suppress UnusedClass */
 final class MessageIdType extends StringType

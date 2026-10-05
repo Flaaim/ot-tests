@@ -7,9 +7,12 @@ namespace App\Notification\Test\Unit\Entity\Message;
 use App\Notification\Entity\Message\Message;
 use App\Notification\Entity\Message\MessageId;
 use App\Notification\Entity\Message\Status;
-use App\Notification\Entity\Notification\NotificationId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class MessageTest extends TestCase
 {
     public function testMessage(): void

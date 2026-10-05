@@ -17,7 +17,6 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final readonly class NotificationCreatedHandler
 {
-
     public function __construct(
         private QueryHandlerApi $profileApi,
         private MessageRepository $messages,
@@ -53,6 +52,5 @@ final readonly class NotificationCreatedHandler
 
         $this->flusher->flush();
         $this->messages->clear();
-
     }
 }

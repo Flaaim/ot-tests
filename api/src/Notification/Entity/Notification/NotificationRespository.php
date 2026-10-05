@@ -6,6 +6,7 @@ namespace App\Notification\Entity\Notification;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use DomainException;
 
 final class NotificationRespository
 {
@@ -27,8 +28,13 @@ final class NotificationRespository
     {
         $notification = $this->repo->find($id);
         if (null === $notification) {
-            throw new \DomainException('Notification was not found.');
+            throw new DomainException('Notification was not found.');
         }
         return $notification;
+    }
+
+    public function remove(Notification $notification): void
+    {
+        $this->em->remove($notification);
     }
 }

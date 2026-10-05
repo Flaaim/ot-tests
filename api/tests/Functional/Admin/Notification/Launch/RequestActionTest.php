@@ -16,6 +16,10 @@ use Tests\Functional\FixturesLoader;
 use Tests\Functional\Json;
 use Tests\Functional\OAuthTokenTrait;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class RequestActionTest extends WebTestCase
 {
     use OAuthTokenTrait;
@@ -96,7 +100,6 @@ final class RequestActionTest extends WebTestCase
 
         self::assertEquals('subject', $notification->getSubject());
         self::assertEquals('message', $notification->getMessage());
-
     }
 
     public function testEmpty(): void

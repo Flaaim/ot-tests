@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final readonly class RequestAction
 {
     public function __construct(
-        private Handler   $handler,
+        private Handler $handler,
         private Validator $validator
     ) {}
 
