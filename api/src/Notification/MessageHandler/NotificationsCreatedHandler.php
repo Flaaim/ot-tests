@@ -49,12 +49,10 @@ final readonly class NotificationsCreatedHandler
         }
 
         $notification = $this->notifications->get(new NotificationId($event->notificationId));
-        $notification->completed();
-
+        $notification->markAsCompleted();
 
         $this->flusher->flush();
         $this->messages->clear();
-
 
     }
 }

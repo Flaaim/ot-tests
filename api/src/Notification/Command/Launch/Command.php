@@ -9,9 +9,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Command
 {
     public function __construct(
-        #[Assert\NotBlank]
+        #[Assert\Length(min: 3, max: 100)]
         public string $subject,
-        #[Assert\NotBlank]
+        #[Assert\Length(min: 3, max: 10000)]
         public string $message,
     ) {}
 }

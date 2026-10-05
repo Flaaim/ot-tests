@@ -41,7 +41,7 @@ final class NotificationTest extends TestCase
             new DateTimeImmutable(),
         );
 
-        $notification->completed();
+        $notification->markAsCompleted();
         self::assertEquals(Status::COMPLETED, $notification->getStatus()->getValue());
     }
 }

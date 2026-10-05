@@ -53,6 +53,8 @@ framework:
             'App\Testing\Event\Attempt\TimeoutAttemptCommand': async
             'App\Profile\Event\ProfileRemoved': async
 
+            'App\Notification\Event\NotificationCreated': async
+
 when@test:
     framework:
         messenger:
