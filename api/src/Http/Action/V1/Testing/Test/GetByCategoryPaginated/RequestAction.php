@@ -25,8 +25,9 @@ final class RequestAction
         $queryParams = $request->query->all();
         $page = isset($queryParams['page']) && is_numeric($queryParams['page']) ? (int)$queryParams['page'] : 1;
         $limit = isset($queryParams['limit']) && is_numeric($queryParams['limit']) ? (int)$queryParams['limit'] : 15;
+        $search = isset($queryParams['search']) && \is_string($queryParams['search']) ? $queryParams['search'] : '';
 
-        $query = new Query($slug, $page, $limit);
+        $query = new Query($slug, $page, $limit, $search);
 
         $this->validator->validate($query);
 

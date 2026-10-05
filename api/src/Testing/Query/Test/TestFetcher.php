@@ -176,7 +176,7 @@ final class TestFetcher implements TestFetcherInterface
         return $test ?: [];
     }
 
-    public function getByCategoryPaginated(string $categorySlug, int $page = 1, int $limit = 10): array
+    public function getByCategoryPaginated(string $categorySlug, int $page = 1, int $limit = 10, ?string $search = null): array
     {
         $page = max(1, $page);
         $limit = min(max(1, $limit), 100);
@@ -190,6 +190,18 @@ final class TestFetcher implements TestFetcherInterface
             ->andWhere('t.status = :status')
             ->setParameter('slug', $categorySlug)
             ->setParameter('status', Status::ACTIVE);
+
+        if (null !== $search && '' !== trim($search)) {
+            $normalizedSearch = trim($search);
+            $searchValue = '%' . mb_strtolower($normalizedSearch) . '%';
+
+            $qb->andWhere($qb->expr()->or(
+                $qb->expr()->like('LOWER(t.name)', ':search_name'),
+                $qb->expr()->like('LOWER(t.cipher)', ':search_cipher')
+            ))
+                ->setParameter('search_name', $searchValue)
+                ->setParameter('search_cipher', $searchValue);
+        }
 
         $countQb = clone $qb;
         $totalCount = (int)$countQb->select('COUNT(t.id)')

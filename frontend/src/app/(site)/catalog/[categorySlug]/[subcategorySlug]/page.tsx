@@ -6,16 +6,18 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ChevronRight, FileText, ArrowRight, Calendar } from "lucide-react";
 import { TestItemPublic } from "@/interfaces/test.interface";
 import Pagination from "@/components/Pagination/Pagination";
+import TestSearch from "@/components/Testing/TestSearch";
 
 interface SubcategoryPageProps {
   params: Promise<{ categorySlug: string; subcategorySlug: string }>;
-  searchParams: Promise<{ page?: string; perPage?: string }>;
+  searchParams: Promise<{ page?: string; perPage?: string; q?: string }>;
 }
 
 export async function generateMetadata({ params, searchParams }: SubcategoryPageProps) {
   const { categorySlug, subcategorySlug } = await params;
-  const currentPage = Number((await searchParams).page) || 1;
-  const perPage = Number((await searchParams).perPage) || 10;
+  const resolvedSearchParams = await searchParams;
+  const currentPage = Number(resolvedSearchParams.page) || 1;
+  const perPage = Number(resolvedSearchParams.perPage) || 10;
 
   try {
     const result = await fetchPublicCategoryTreeAction();
@@ -50,8 +52,11 @@ export async function generateMetadata({ params, searchParams }: SubcategoryPage
 
 export default async function SubcategoryPage({ params, searchParams }: SubcategoryPageProps) {
   const { categorySlug, subcategorySlug } = await params;
-  const currentPage = Number((await searchParams).page) || 1;
-  const perPage = Number((await searchParams).perPage) || 10;
+  const resolvedSearchParams = await searchParams;
+
+  const currentPage = Number(resolvedSearchParams.page) || 1;
+  const perPage = Number(resolvedSearchParams.perPage) || 10;
+  const search = resolvedSearchParams.q || "";
 
   // 1. Получаем дерево, чтобы построить крошки и найти название текущей подкатегории
   const treeResult = await fetchPublicCategoryTreeAction();
@@ -66,7 +71,12 @@ export default async function SubcategoryPage({ params, searchParams }: Subcateg
     notFound();
   }
 
-  const testsResult = await fetchPublicTestsByCategoryAction(subcategorySlug, currentPage, perPage);
+  const testsResult = await fetchPublicTestsByCategoryAction(
+    subcategorySlug,
+    currentPage,
+    perPage,
+    search
+  );
 
   if (!testsResult.ok || !testsResult.data) {
     return (
@@ -107,7 +117,7 @@ export default async function SubcategoryPage({ params, searchParams }: Subcateg
           <p className="text-lg text-muted-foreground max-w-3xl">{subcategory.description}</p>
         )}
       </div>
-
+      <TestSearch />
       {tests.length === 0 ? (
         <div className="rounded-lg border border-dashed p-8 text-center text-muted-foreground">
           В этом разделе пока нет активных тестов.

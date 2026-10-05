@@ -100,11 +100,12 @@ export const API = {
     rename: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/rename`,
     updateSettings: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update-settings`,
     update: (id: string) => BASE_URL + `/v1/admin/testing/tests/${id}/update`,
-    getByCategoryPaginated: (slug: string, page: number, perPage: number) => {
+    getByCategoryPaginated: (slug: string, page: number, perPage: number, search?: string) => {
       const params = new URLSearchParams({
         page: String(page),
         limit: String(perPage),
       });
+      if (search) params.set("search", search);
       return BASE_URL + `/v1/testing/categories/${slug}/tests?${params.toString()}`;
     },
     getBySlug: (slug: string) => BASE_URL + `/v1/testing/tests/${slug}`,

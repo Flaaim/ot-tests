@@ -15,5 +15,6 @@ final readonly class Query
         public int $page = 1,
         #[Assert\GreaterThan(0)]
         public int $limit = 15,
+        public string $search = '',
     ) {}
 }

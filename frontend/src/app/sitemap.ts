@@ -43,7 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               priority: 0.6,
             };
 
-            const testsResult = await fetchPublicTestsByCategoryAction(subcategory.slug, 1, 100);
+            const testsResult = await fetchPublicTestsByCategoryAction(
+              subcategory.slug,
+              1,
+              100,
+              ""
+            );
             let testUrls: MetadataRoute.Sitemap = [];
 
             if (testsResult.ok && testsResult.data) {

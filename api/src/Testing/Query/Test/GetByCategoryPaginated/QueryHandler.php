@@ -19,7 +19,8 @@ final readonly class QueryHandler
         $result = $this->tests->getByCategoryPaginated(
             $query->slug,
             $query->page,
-            $query->limit
+            $query->limit,
+            $query->search
         );
 
         $items = array_map(

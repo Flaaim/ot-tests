@@ -210,16 +210,20 @@ export async function updateTestAction(payload: UpdateTestPayload): Promise<ApiR
 export async function fetchPublicTestsByCategoryAction(
   slug: string,
   currentPage: number,
-  perPage: number
+  perPage: number,
+  search?: string
 ): Promise<ApiResponse<TestPublicPaginated>> {
   try {
-    const response = await apiFetch(API.test.getByCategoryPaginated(slug, currentPage, perPage), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
+    const response = await apiFetch(
+      API.test.getByCategoryPaginated(slug, currentPage, perPage, search),
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
 
     return handleApiResponse<TestPublicPaginated>(response);
   } catch (error) {
