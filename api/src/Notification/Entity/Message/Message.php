@@ -4,13 +4,23 @@ declare(strict_types=1);
 
 namespace App\Notification\Entity\Message;
 
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'notification_messages')]
 final class Message
 {
+    #[ORM\Column(type: Types::ENUM)]
     private Status $status;
 
     public function __construct(
+        #[ORM\Id]
+        #[ORM\Column(type: 'ntf_message_id', unique: true)]
         private MessageId $messageId,
+        #[ORM\Column(type: Types::GUID)]
         private string $notificationId,
+        #[ORM\Column(type: Types::GUID)]
         private string $profileId
     ) {
         $this->status = Status::NOT_READ;

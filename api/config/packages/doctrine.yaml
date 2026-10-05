@@ -40,6 +40,8 @@ doctrine:
             notification_id: App\Notification\Entity\Notification\NotificationIdType
             notification_status: App\Notification\Entity\Notification\StatusType
 
+            ntf_message_id: App\Notification\Entity\Message\MessageIdType
+
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -92,9 +94,15 @@ doctrine:
             Notification:
                 type: attribute
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Profile/Entity'
+                dir: '%kernel.project_dir%/src/Notification/Entity'
                 prefix: 'App\Notification\Entity'
                 alias: Notification
+            Message:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Notification/Entity'
+                prefix: 'App\Notification\Entity'
+                alias: Message
 
 when@test:
     doctrine:
