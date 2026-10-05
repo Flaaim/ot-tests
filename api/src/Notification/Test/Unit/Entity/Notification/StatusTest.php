@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Test\Unit\Entity;
+namespace App\Notification\Test\Unit\Entity\Notification;
 
-use App\Notification\Entity\Status;
+use App\Notification\Entity\Notification\Status;
 use PHPUnit\Framework\TestCase;
 
 /**

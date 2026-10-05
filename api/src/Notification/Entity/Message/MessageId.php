@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Entity;
+namespace App\Notification\Entity\Message;
 
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
-final class NotificationId
+final class MessageId
 {
     public function __construct(
         private string $value

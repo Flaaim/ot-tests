@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Entity;
+namespace App\Notification\Entity\Notification;
 
 use Webmozart\Assert\Assert;
 

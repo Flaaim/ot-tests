@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Test\Unit\Entity;
+namespace App\Notification\Test\Unit\Entity\Message;
 
-use App\Notification\Entity\NotificationId;
+use App\Notification\Entity\Message\MessageId;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -13,11 +13,11 @@ use Ramsey\Uuid\Uuid;
  * @internal
  * @coversNothing
  */
-final class NotificationIdTest extends TestCase
+final class MessageIdTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $id = new NotificationId($value = Uuid::uuid4()->toString());
+        $id = new MessageId($value = Uuid::uuid4()->toString());
 
         self::assertEquals($value, $id->getValue());
     }
@@ -26,14 +26,14 @@ final class NotificationIdTest extends TestCase
     {
         $value = Uuid::uuid4()->toString();
 
-        $id = new NotificationId(mb_strtoupper($value));
+        $id = new MessageId(mb_strtoupper($value));
 
         self::assertEquals($value, $id->getValue());
     }
 
     public function testGenerate(): void
     {
-        $id = NotificationId::generate();
+        $id = MessageId::generate();
 
         self::assertNotEmpty($id->getValue());
     }
@@ -41,12 +41,12 @@ final class NotificationIdTest extends TestCase
     public function testIncorrect(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new NotificationId('12345');
+        new MessageId('12345');
     }
 
     public function testEmpty(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new NotificationId('');
+        new MessageId('');
     }
 }
