@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Profile\Query;
 
 use Doctrine\DBAL\Connection;
+use Generator;
 
 /** @psalm-suppress UnusedClass */
 final class ProfileFetcher implements ProfileFetcherInterface
@@ -105,7 +106,7 @@ final class ProfileFetcher implements ProfileFetcherInterface
         ];
     }
 
-    public function getProfileIds(): \Generator
+    public function getProfileIds(): Generator
     {
         $qb = $this->connection->createQueryBuilder();
 
@@ -116,6 +117,16 @@ final class ProfileFetcher implements ProfileFetcherInterface
         while ($data = $result->fetchAssociative()) {
             yield (string)$data['id'];
         }
+    }
 
+    public function hasProfiles(): bool
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $count = $qb->select('COUNT(p.id)')
+            ->from('profiles', 'p')
+            ->executeQuery()
+            ->fetchOne();
+
+        return $count > 0;
     }
 }

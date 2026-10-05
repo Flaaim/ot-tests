@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Profile\Query;
 
+use Generator;
+
 interface ProfileFetcherInterface
 {
     public function getProfile(string $id): array;
@@ -12,5 +14,7 @@ interface ProfileFetcherInterface
 
     public function getFullProfile(string $id): array;
 
-    public function getProfileIds(): \Generator;
+    public function getProfileIds(): Generator;
+
+    public function hasProfiles(): bool;
 }
