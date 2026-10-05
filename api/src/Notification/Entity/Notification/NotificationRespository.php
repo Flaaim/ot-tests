@@ -22,4 +22,13 @@ final class NotificationRespository
     {
         $this->em->persist($notification);
     }
+
+    public function get(NotificationId $id): Notification
+    {
+        $notification = $this->repo->find($id);
+        if (null === $notification) {
+            throw new \DomainException('Notification was not found.');
+        }
+        return $notification;
+    }
 }
