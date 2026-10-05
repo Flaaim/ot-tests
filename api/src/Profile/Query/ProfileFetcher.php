@@ -104,4 +104,18 @@ final class ProfileFetcher implements ProfileFetcherInterface
             'auth_status' => $result['auth_status'],
         ];
     }
+
+    public function getProfileIds(): \Generator
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $result = $qb->select('p.id')
+            ->from('profiles', 'p')
+            ->executeQuery();
+
+        while ($data = $result->fetchAssociative()) {
+            yield (string)$data['id'];
+        }
+
+    }
 }
