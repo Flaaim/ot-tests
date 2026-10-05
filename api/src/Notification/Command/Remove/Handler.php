@@ -21,7 +21,7 @@ final readonly class Handler
     {
         $notification = $this->notifications->get(new NotificationId($command->notificationId));
 
-        $this->messages->remove($notification->getNotificationId());
+        $this->messages->remove($notification->getNotificationId()->getValue());
 
         $this->notifications->remove($notification);
 

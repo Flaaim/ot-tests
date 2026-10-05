@@ -46,20 +46,20 @@ final class RequestActionTest extends WebTestCase
 
         $this->adminToken = $this->getAccessToken(
             $this->client,
-            RequestFixture::ADMIN_EMAIL,
-            RequestFixture::ADMIN_PASSWORD,
+            RoleFixture::ADMIN_EMAIL,
+            RoleFixture::ADMIN_PASSWORD,
         );
 
         $this->userToken = $this->getAccessToken(
             $this->client,
-            RequestFixture::USER_EMAIL,
-            RequestFixture::USER_PASSWORD,
+            RoleFixture::USER_EMAIL,
+            RoleFixture::USER_PASSWORD,
         );
     }
 
     public function testUnauthenticatedReturns401(): void
     {
-        $this->client->jsonRequest('DELETE', '/v1/admin/profiles/' . RequestFixture::USER_ID);
+        $this->client->jsonRequest('DELETE', '/v1/admin/profiles/' . RoleFixture::USER_ID);
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
@@ -68,7 +68,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'DELETE',
-            '/v1/admin/profiles/' . RequestFixture::USER_ID,
+            '/v1/admin/profiles/' . RoleFixture::USER_ID,
             [],
             $this->authHeaders($this->userToken)
         );
@@ -84,27 +84,28 @@ final class RequestActionTest extends WebTestCase
 
         $this->client->jsonRequest(
             'DELETE',
-            '/v1/admin/profiles/' . RequestFixture::USER_ID,
+            '/v1/admin/profiles/' . RoleFixture::USER_ID,
             [],
             $this->authHeaders($this->adminToken)
         );
 
         self::assertEquals(204, $this->client->getResponse()->getStatusCode());
 
-        self::assertFalse($this->profiles->hasByEmail(new Email(RequestFixture::USER_EMAIL)));
+        self::assertFalse($this->profiles->hasByEmail(new Email(RoleFixture::USER_EMAIL)));
 
         self::assertCount(1, $transport->getSent());
 
         $message = $transport->getSent()[0]->getMessage();
 
         self::assertInstanceOf(ProfileRemoved::class, $message);
+        self::assertNotNull($message->id);
     }
 
     public function testRemoveHimself(): void
     {
         $this->client->jsonRequest(
             'DELETE',
-            '/v1/admin/profiles/' . RequestFixture::ADMIN_ID,
+            '/v1/admin/profiles/' . RoleFixture::ADMIN_ID,
             [],
             $this->authHeaders($this->adminToken)
         );

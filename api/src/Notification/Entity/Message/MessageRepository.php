@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Notification\Entity\Message;
 
-use App\Notification\Entity\Notification\NotificationId;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
@@ -29,12 +28,22 @@ final class MessageRepository
         $this->em->clear();
     }
 
-    public function remove(NotificationId $notificationId): void
+    public function remove(string $notificationId): void
     {
         $this->repo->createQueryBuilder('t')
             ->delete(Message::class, 't')
             ->where('t.notificationId = :notificationId')
-            ->setParameter(':notificationId', $notificationId->getValue())
+            ->setParameter(':notificationId', $notificationId)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function removeByProfile(string $profileId): void
+    {
+        $this->repo->createQueryBuilder('t')
+            ->delete(Message::class, 't')
+            ->where('t.profileId = :profileId')
+            ->setParameter(':profileId', $profileId)
             ->getQuery()
             ->execute();
     }

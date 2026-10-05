@@ -19,6 +19,10 @@ framework:
                     max_retries: 3
                     delay: 1000
             failed: 'doctrine://default?queue_name=failed'
+        buses:
+            messenger.bus.default:
+                middleware:
+                    - doctrine_transaction
 
 
         routing:
