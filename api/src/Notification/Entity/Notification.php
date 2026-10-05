@@ -11,14 +11,16 @@ use DateTimeImmutable;
 final class Notification implements AggregateRoot
 {
     use EventTrait;
-
+    private Status $status;
     public function __construct(
         private NotificationId $notificationId,
         private string $subject,
+        private string $message,
         private array $profileIds,
-        private Status $status,
         private DateTimeImmutable $createdAt,
-    ) {}
+    ) {
+        $this->status = Status::inProgress();
+    }
 
     public function getNotificationId(): NotificationId
     {
@@ -34,4 +36,18 @@ final class Notification implements AggregateRoot
     {
         return $this->subject;
     }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+    public function getStatus(): Status
+    {
+        return $this->status;
+    }
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
 }

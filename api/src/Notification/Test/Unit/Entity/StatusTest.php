@@ -7,6 +7,10 @@ namespace App\Notification\Test\Unit\Entity;
 use App\Notification\Entity\Status;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class StatusTest extends TestCase
 {
     public function testCompleted(): void
