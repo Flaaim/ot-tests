@@ -24,12 +24,14 @@
                 <directory name="src/Auth/Entity" />
                 <directory name="src/OAuth/MessageHandler" />
                 <directory name="src/Parser/MessageHandler" />
+                <directory name="src/Notification/MessageHandler" />
                 <directory name="src/Parser/Entity" />
                 <directory name="src/Admin/Stats/Query" />
                 <directory name="src/Parser/Query" />
                 <directory name="src/Parser/Service" />
                 <directory name="src/Infrastructure" />
                 <directory name="src/Course/Command" />
+                <directory name="src/Notification/Command" />
             </errorLevel>
         </UnusedClass>
 

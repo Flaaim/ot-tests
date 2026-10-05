@@ -8,6 +8,8 @@ use App\Infrastructure\Doctrine\Flusher;
 use App\Notification\Entity\Message\Message;
 use App\Notification\Entity\Message\MessageId;
 use App\Notification\Entity\Message\MessageRepository;
+use App\Notification\Entity\Notification\NotificationId;
+use App\Notification\Entity\Notification\NotificationRespository;
 use App\Notification\Event\NotificationCreated;
 use App\Profile\Api\GetProfilesIds\QueryHandlerApi;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -19,6 +21,7 @@ final readonly class NotificationsCreatedHandler
     public function __construct(
         private QueryHandlerApi $profileApi,
         private MessageRepository $messages,
+        private NotificationRespository $notifications,
         private Flusher $flusher,
     ) {}
 
@@ -45,7 +48,13 @@ final readonly class NotificationsCreatedHandler
             }
         }
 
+        $notification = $this->notifications->get(new NotificationId($event->notificationId));
+        $notification->completed();
+
+
         $this->flusher->flush();
         $this->messages->clear();
+
+
     }
 }

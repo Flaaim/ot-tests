@@ -31,4 +31,17 @@ final class NotificationTest extends TestCase
         self::assertEquals($createdAt, $test->getCreatedAt());
         self::assertEquals(Status::IN_PROGRESS, $test->getStatus()->getValue());
     }
+
+    public function testComplete(): void
+    {
+        $notification = new Notification(
+            NotificationId::generate(),
+            'test subject',
+            'test message',
+            new DateTimeImmutable(),
+        );
+
+        $notification->completed();
+        self::assertEquals(Status::COMPLETED, $notification->getStatus()->getValue());
+    }
 }
