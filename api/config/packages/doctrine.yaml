@@ -40,7 +40,7 @@ doctrine:
             notification_id: App\Notification\Entity\Notification\NotificationIdType
             notification_status: App\Notification\Entity\Notification\StatusType
 
-            ntf_message_id: App\Notification\Entity\Message\MessageIdType
+            message_id: App\Notification\Entity\Message\MessageIdType
 
     orm:
         validate_xml_mapping: true

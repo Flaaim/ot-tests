@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\StringType;
 /** @psalm-suppress UnusedClass */
 final class MessageIdType extends StringType
 {
-    public const string NAME = 'ntf_message_id';
+    public const string NAME = 'message_id';
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {

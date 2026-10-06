@@ -7,4 +7,6 @@ namespace App\Notification\Query\Message;
 interface MessageFetcherInterface
 {
     public function getUnreadCount(string $profileId): int;
+
+    public function getLatestMessages(string $profileId, int $limit): array;
 }

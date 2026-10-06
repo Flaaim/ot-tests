@@ -28,6 +28,7 @@
                 <directory name="src/Parser/Entity" />
                 <directory name="src/Admin/Stats/Query" />
                 <directory name="src/Parser/Query" />
+                <directory name="src/Notification/Query" />
                 <directory name="src/Parser/Service" />
                 <directory name="src/Infrastructure" />
                 <directory name="src/Course/Command" />
@@ -63,6 +64,7 @@
                 <directory name="src/Parser/Query" />
                 <directory name="src/Course/Query" />
                 <directory name="src/Testing/Query" />
+                <directory name="src/Notification/Query" />
                 <directory name="src/Testing/Entity/Attempt/DTO" />
             </errorLevel>
         </PossiblyUnusedProperty>

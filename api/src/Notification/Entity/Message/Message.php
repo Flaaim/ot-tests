@@ -17,11 +17,11 @@ final class Message
 
     public function __construct(
         #[ORM\Id]
-        #[ORM\Column(type: 'ntf_message_id', unique: true)]
+        #[ORM\Column(type: 'message_id', unique: true)]
         private MessageId $messageId,
-        #[ORM\Column(type: Types::GUID)]
+        #[ORM\Column(type: 'string')]
         private string $notificationId,
-        #[ORM\Column(type: Types::GUID)]
+        #[ORM\Column(type: 'string')]
         private string $profileId
     ) {
         $this->status = Status::NOT_READ;
