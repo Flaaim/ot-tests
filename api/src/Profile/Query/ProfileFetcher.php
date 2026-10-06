@@ -122,11 +122,12 @@ final class ProfileFetcher implements ProfileFetcherInterface
     public function hasProfiles(): bool
     {
         $qb = $this->connection->createQueryBuilder();
-        $count = $qb->select('COUNT(p.id)')
+        $result = $qb->select('1')
             ->from('profiles', 'p')
+            ->setMaxResults(1)
             ->executeQuery()
             ->fetchOne();
 
-        return $count > 0;
+        return false !== $result;
     }
 }
