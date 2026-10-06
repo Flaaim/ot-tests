@@ -209,7 +209,7 @@ final class TestFetcher implements TestFetcherInterface
             ->fetchOne();
 
         $rows = $qb->select('t.id, t.name, t.cipher, t.description, t.status, t.slug, t.created_at')
-            ->orderBy('t.name', 'ASC')
+            ->orderBy('t.cipher', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->executeQuery()
