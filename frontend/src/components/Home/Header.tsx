@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, User } from "lucide-react";
 import { checkIsAuthenticated } from "@/actions/auth";
+import NotificationBell from "@/components/User/NotificationBell";
+import {fetchMessagesUnreadCount} from "@/actions/notification";
 
 export async function Header() {
   const isAuthenticated = await checkIsAuthenticated();
@@ -21,15 +23,20 @@ export async function Header() {
           >
             Каталог
           </Link>
-          <Button variant="default" size="sm">
-            {isAuthenticated ? (
-              <Link href="/user/dashboard">
-                <User />
-              </Link>
-            ) : (
+          {isAuthenticated ? (
+            <>
+              <NotificationBell  />
+              <Button variant="default" size="sm">
+                <Link href="/user/dashboard">
+                    <User />
+                  </Link>
+              </Button>
+            </>
+          ) : (
+            <Button variant="default" size="sm">
               <Link href="/join/login">Войти</Link>
-            )}
-          </Button>
+            </Button>
+          )}
         </nav>
       </div>
     </header>

@@ -129,4 +129,9 @@ export const API = {
     changeDescription: (id: string) =>
       BASE_URL + `/v1/admin/testing/categories/${id}/change-description`,
   },
+  notification: {
+    message: {
+      getUnreadCount: () => BASE_URL + `/v1/messages/unread-count`
+    }
+  }
 };
