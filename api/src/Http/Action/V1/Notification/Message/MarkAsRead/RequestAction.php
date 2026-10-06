@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Notification\MarkAllAsRead;
+namespace App\Http\Action\V1\Notification\Message\MarkAsRead;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Notification\Command\MarkAllAsRead\Command;
-use App\Notification\Command\MarkAllAsRead\Handler;
+use App\Notification\Command\MarkAsRead\Command;
+use App\Notification\Command\MarkAsRead\Handler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,8 +20,8 @@ final readonly class RequestAction
         private Security $security,
     ) {}
 
-    #[Route('/v1/messages/read-all', name: 'notifications.message.read.all', methods: ['PATCH'])]
-    public function __invoke(): Response
+    #[Route('/v1/messages/{id}', name: 'notifications.message.mark.read', methods: ['PATCH'])]
+    public function __invoke(string $id): Response
     {
         $user = $this->security->getUser();
         if (null === $user) {
@@ -29,7 +29,7 @@ final readonly class RequestAction
         }
         $profileId = $user->getUserIdentifier();
 
-        $command = new Command($profileId);
+        $command = new Command($id, $profileId);
 
         $this->validator->validate($command);
 

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\Message;
+namespace Tests\Functional\Notification\Message\GetUnreadCount;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tests\Functional\FixturesLoader;
 use Tests\Functional\Json;
-use Tests\Functional\Notification\MarkAsRead\ProfileFixture;
-use Tests\Functional\Notification\MarkAsRead\RequestFixture;
+use Tests\Functional\Notification\Message\MarkAsRead\ProfileFixture;
+use Tests\Functional\Notification\Message\MarkAsRead\RequestFixture;
 use Tests\Functional\OAuthTokenTrait;
 
 /**
@@ -23,6 +23,7 @@ final class RequestActionTest extends WebTestCase
     private KernelBrowser $client;
     private readonly ContainerInterface $container;
     private string $johnToken;
+
     protected function setUp(): void
     {
         $this->client = self::createClient();
@@ -41,7 +42,7 @@ final class RequestActionTest extends WebTestCase
 
     public function testUnauthenticatedReturn401(): void
     {
-        $this->client->jsonRequest('GET', '/v1/messages/unread/count');
+        $this->client->jsonRequest('GET', '/v1/messages/unread-count');
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
@@ -50,7 +51,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'GET',
-            '/v1/messages/unread/count',
+            '/v1/messages/unread-count',
             [],
             $this->authHeaders($this->johnToken)
         );

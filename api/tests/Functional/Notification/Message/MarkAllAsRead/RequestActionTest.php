@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\MarkAllAsRead;
+namespace Tests\Functional\Notification\Message\MarkAllAsRead;
 
 use App\Notification\Entity\Message\Message;
 use App\Notification\Entity\Message\MessageRepository;

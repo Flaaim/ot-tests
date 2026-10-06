@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\MarkAllAsRead;
+namespace Tests\Functional\Notification\Message\MarkAllAsRead;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;

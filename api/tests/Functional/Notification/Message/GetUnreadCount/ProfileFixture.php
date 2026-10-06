@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\MarkAsRead;
+namespace Tests\Functional\Notification\Message\GetUnreadCount;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;
@@ -16,8 +16,6 @@ final class ProfileFixture extends AbstractFixture
 {
     public const string JOHN_ID = '8757a5bc-6b0d-4766-8e5c-975797730ec0';
     public const string JOHN_EMAIL = 'john@mail.ru';
-    public const string ALICE_ID = '95526b64-f063-43d5-8ad8-805c1040f495';
-    public const string ALICE_EMAIL = 'alice@mail.ru';
     public const string PASSWORD = 'password';
 
     public function load(ObjectManager $manager): void
@@ -34,19 +32,6 @@ final class ProfileFixture extends AbstractFixture
             ->withProfileId(new ProfileId($john->getId()->getValue()))
             ->build();
         $manager->persist($johnProfile);
-
-        $alice = new UserBuilder()
-            ->withId(new Id(self::ALICE_ID))
-            ->withEmail(new Email(self::ALICE_EMAIL))
-            ->withPassword(self::PASSWORD)
-            ->active()
-            ->build();
-        $manager->persist($alice);
-
-        $aliceProfile = new ProfileBuilder()
-            ->withProfileId(new ProfileId($alice->getId()->getValue()))
-            ->build();
-        $manager->persist($aliceProfile);
 
         $manager->flush();
     }

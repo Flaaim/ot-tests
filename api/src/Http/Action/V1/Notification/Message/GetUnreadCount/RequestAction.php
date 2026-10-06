@@ -20,7 +20,7 @@ final readonly class RequestAction
         private Security $security,
     ) {}
 
-    #[Route('/v1/messages/unread/count', name: 'notifications.message.unread.count', methods: ['GET'])]
+    #[Route('/v1/messages/unread-count', name: 'notifications.message.unread.count', methods: ['GET'])]
     public function __invoke(): Response
     {
         $user = $this->security->getUser();

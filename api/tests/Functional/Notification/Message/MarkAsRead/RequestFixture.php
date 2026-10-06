@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\Message;
+namespace Tests\Functional\Notification\Message\MarkAsRead;
 
 use App\Notification\Entity\Message\Message;
 use App\Notification\Entity\Message\MessageId;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Tests\Functional\Notification\MarkAsRead\ProfileFixture;
 
 final class RequestFixture extends AbstractFixture implements DependentFixtureInterface
 {
