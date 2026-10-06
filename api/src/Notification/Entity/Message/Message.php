@@ -6,6 +6,7 @@ namespace App\Notification\Entity\Message;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'notification_messages')]
@@ -44,5 +45,18 @@ final class Message
     public function getStatus(): Status
     {
         return $this->status;
+    }
+
+    public function markAsRead(): void
+    {
+        if ($this->isRead()) {
+            throw new DomainException('Message is already read.');
+        }
+        $this->status = Status::READ;
+    }
+
+    public function isRead(): bool
+    {
+        return Status::READ === $this->status;
     }
 }
