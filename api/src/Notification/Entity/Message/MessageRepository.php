@@ -57,4 +57,18 @@ final class MessageRepository
         }
         return $message;
     }
+
+    public function markAllAsRead(string $profileId): void
+    {
+        $this->repo->createQueryBuilder('t')
+            ->update(Message::class, 't')
+            ->set('t.status', ':status')
+            ->where('t.profileId = :profileId')
+            ->andWhere('t.status = :isNotRead')
+            ->setParameter('profileId', $profileId)
+            ->setParameter('status', Status::READ)
+            ->setParameter('isNotRead', Status::NOT_READ)
+            ->getQuery()
+            ->execute();
+    }
 }

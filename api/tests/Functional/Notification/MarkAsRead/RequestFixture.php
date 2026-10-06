@@ -18,7 +18,7 @@ final class RequestFixture extends AbstractFixture implements DependentFixtureIn
     {
         $message = new Message(
             new MessageId(self::MESSAGE_ID),
-            'b8699212-02c8-4685-a7d5-935b5ba1bff9',
+            '0a930fe1-ff54-408c-a00c-13b9e623e11f',
             ProfileFixture::JOHN_ID
         );
         $manager->persist($message);
