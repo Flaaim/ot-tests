@@ -14,6 +14,7 @@ use DomainException;
 
 final readonly class Handler
 {
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         private QueryHandlerApi $queryHandlerApi,
         private NotificationRespository $notifications,

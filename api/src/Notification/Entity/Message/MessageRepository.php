@@ -6,6 +6,7 @@ namespace App\Notification\Entity\Message;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use DomainException;
 
 final class MessageRepository
 {
@@ -46,5 +47,14 @@ final class MessageRepository
             ->setParameter(':profileId', $profileId)
             ->getQuery()
             ->execute();
+    }
+
+    public function get(MessageId $messageId): Message
+    {
+        $message = $this->repo->find($messageId);
+        if (null === $message) {
+            throw new DomainException('Message not found.');
+        }
+        return $message;
     }
 }

@@ -11,6 +11,7 @@ use App\Notification\Entity\Notification\NotificationRespository;
 
 final readonly class Handler
 {
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         private NotificationRespository $notifications,
         private MessageRepository $messages,

@@ -63,6 +63,9 @@ final class Notification implements AggregateRoot
 
     public function markAsCompleted(): void
     {
+        if ($this->isCompleted()) {
+            return;
+        }
         $this->status = Status::completed();
     }
 
