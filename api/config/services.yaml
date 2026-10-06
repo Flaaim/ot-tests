@@ -67,6 +67,9 @@ services:
     App\Testing\Fixture\:
         resource: '../src/Testing/Fixture/'
         tags: [ 'doctrine.fixture.orm' ]
+    App\Notification\Fixture\:
+        resource: '../src/Notification/Fixture/'
+        tags: [ 'doctrine.fixture.orm' ]
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\Frontend\:
