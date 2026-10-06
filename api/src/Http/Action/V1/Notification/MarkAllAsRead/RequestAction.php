@@ -20,7 +20,7 @@ final readonly class RequestAction
         private Security $security,
     ) {}
 
-    #[Route('/v1/messages/read-all', name: 'admin.notifications.message.read.all', methods: ['PATCH'])]
+    #[Route('/v1/messages/read-all', name: 'notifications.message.read.all', methods: ['PATCH'])]
     public function __invoke(): Response
     {
         $user = $this->security->getUser();

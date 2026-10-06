@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Notification\MarkAsRead;
+namespace App\Http\Action\V1\Notification\Message\GetUnreadCount;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Notification\Command\MarkAsRead\Command;
-use App\Notification\Command\MarkAsRead\Handler;
+use App\Notification\Query\Message\GetUnreadCount\Query;
+use App\Notification\Query\Message\GetUnreadCount\QueryHandler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +15,13 @@ use Symfony\Component\Routing\Attribute\Route;
 final readonly class RequestAction
 {
     public function __construct(
-        private Handler $handler,
+        private QueryHandler $handler,
         private Validator $validator,
         private Security $security,
     ) {}
 
-    #[Route('/v1/messages/{id}', name: 'notifications.message.mark.read', methods: ['PATCH'])]
-    public function __invoke(string $id): Response
+    #[Route('/v1/messages/unread/count', name: 'notifications.message.unread.count', methods: ['GET'])]
+    public function __invoke(): Response
     {
         $user = $this->security->getUser();
         if (null === $user) {
@@ -29,12 +29,12 @@ final readonly class RequestAction
         }
         $profileId = $user->getUserIdentifier();
 
-        $command = new Command($id, $profileId);
+        $query = new Query($profileId);
 
-        $this->validator->validate($command);
+        $this->validator->validate($query);
 
-        $this->handler->handle($command);
+        $result = $this->handler->handle($query);
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return new JsonResponse(['count' => $result], Response::HTTP_OK);
     }
 }
