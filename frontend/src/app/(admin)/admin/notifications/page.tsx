@@ -1,20 +1,30 @@
-import {fetchGetNotificationsPaginatedAction, fetchNotificationsPaginatedAction} from "@/actions/notification";
+import {
+  fetchGetNotificationsPaginatedAction,
+  fetchNotificationsPaginatedAction,
+} from "@/actions/notification";
 import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
-import {AlertCircle} from "lucide-react";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {NotificationItem, PaginatedNotifications} from "@/interfaces/notification.interface";
+import { AlertCircle } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { NotificationItem, PaginatedNotifications } from "@/interfaces/notification.interface";
 import Link from "next/link";
+import RemoveNotificationDialog from "@/components/Admin/Notification/RemoveNotificationDialog";
+import AddNotificationDialog from "@/components/Admin/Notification/AddNotificationDialog";
 
 interface AdminNotificationPageProps {
-  searchParams: Promise<{ page?: string; perPage?: string; }>;
+  searchParams: Promise<{ page?: string; perPage?: string }>;
 }
-export default async function AdminNotificationPage({searchParams}: AdminNotificationPageProps) {
+export default async function AdminNotificationPage({ searchParams }: AdminNotificationPageProps) {
   const currentPage = Number((await searchParams).page) || 1;
   const perPage = Number((await searchParams).perPage) || 15;
 
   const result = await fetchNotificationsPaginatedAction(currentPage, perPage);
-
-
 
   if (!result.ok || !result.data) {
     return (
@@ -46,7 +56,7 @@ export default async function AdminNotificationPage({searchParams}: AdminNotific
       <AdminBreadcrumbs items={[{ title: "Уведомления" }]} />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Уведомления</h1>
-
+        <AddNotificationDialog />
       </div>
       <div className="rounded-md border bg-white">
         <Table>
@@ -71,14 +81,22 @@ export default async function AdminNotificationPage({searchParams}: AdminNotific
               notifications.items.map((notification: NotificationItem) => (
                 <TableRow key={notification.notificationId}>
                   <TableCell className="font-medium">
-                    <Link href={`/admin/notifications/${notification.notificationId}`} className="hover:underline">
+                    <Link
+                      href={`/admin/notifications/${notification.notificationId}`}
+                      className="hover:underline"
+                    >
                       {notification.notificationId}
                     </Link>
                   </TableCell>
                   <TableCell className="font-medium">{notification.subject}</TableCell>
                   <TableCell className="font-medium">{notification.status}</TableCell>
                   <TableCell className="font-medium">{notification.createdAt}</TableCell>
-                  <TableCell className="font-medium">{notification.countMessages}/{notification.unreadMessages}</TableCell>
+                  <TableCell className="font-medium">
+                    {notification.countMessages}/{notification.readCountMessages}
+                  </TableCell>
+                  <TableCell>
+                    <RemoveNotificationDialog id={notification.notificationId} />{" "}
+                  </TableCell>
                 </TableRow>
               ))
             )}

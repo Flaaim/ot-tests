@@ -135,10 +135,13 @@ export const API = {
         page: String(page),
         limit: String(perPage),
       });
-      return BASE_URL + `/v1/admin/notifications?${params.toString()}`
+      return BASE_URL + `/v1/admin/notifications?${params.toString()}`;
     },
+    remove: (id: string) => BASE_URL + `/v1/admin/notifications/${id}`,
+    add: () => BASE_URL + `/v1/admin/notifications`,
     message: {
       getUnreadCount: () => BASE_URL + `/v1/messages/unread-count`,
+      read: (id: string) => BASE_URL + `/v1/messages/${id}`,
     },
   },
 };

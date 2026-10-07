@@ -4,7 +4,10 @@ import { ApiResponse } from "@/interfaces/response.interface";
 import { apiFetch } from "@/lib/apiClient";
 import { API } from "@/app/api";
 import { handleApiResponse } from "@/lib/handleApiResponse";
-import {PaginatedNotifications} from "@/interfaces/notification.interface";
+import {
+  AddNotificationPayload,
+  PaginatedNotifications,
+} from "@/interfaces/notification.interface";
 
 export async function fetchMessagesUnreadCountAction(): Promise<ApiResponse<number>> {
   try {
@@ -22,8 +25,11 @@ export async function fetchMessagesUnreadCountAction(): Promise<ApiResponse<numb
   }
 }
 
-export async function fetchNotificationsPaginatedAction(page: number, perPage: number): Promise<ApiResponse<PaginatedNotifications>> {
-  try{
+export async function fetchNotificationsPaginatedAction(
+  page: number,
+  perPage: number
+): Promise<ApiResponse<PaginatedNotifications>> {
+  try {
     const response = await apiFetch(API.notification.getPaginated(page, perPage), {
       method: "GET",
       headers: {
@@ -32,8 +38,62 @@ export async function fetchNotificationsPaginatedAction(page: number, perPage: n
       },
     });
     return handleApiResponse<PaginatedNotifications>(await response);
-  }catch(error){
+  } catch (error) {
     console.error("fetchGetNotificationsPaginated Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function removeNotificationAction(id: string): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.notification.remove(id), {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return handleApiResponse<void>(await response);
+  } catch (error) {
+    console.error("fetchGetNotificationsPaginated Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function addNotificationAction(
+  payload: AddNotificationPayload
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.notification.add(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        subject: payload.subject,
+        message: payload.message,
+      }),
+    });
+    return handleApiResponse<void>(await response);
+  } catch (error) {
+    console.error("fetchGetNotificationsPaginated Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function readMessageAction(id: string): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.notification.message.read(id), {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return handleApiResponse<void>(await response);
+  } catch (error) {
+    console.error("readMessageAction Fetch error:", error);
     return { ok: false, error: "Не удалось подключиться к серверу API." };
   }
 }

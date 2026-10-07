@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
-import {fetchMessagesUnreadCountAction} from "@/actions/notification";
+import { fetchMessagesUnreadCountAction } from "@/actions/notification";
 
 export default async function NotificationBell() {
   const unreadCountMessages = await fetchMessagesUnreadCountAction();
