@@ -91,6 +91,6 @@ final class RequestActionTest extends WebTestCase
         self::assertArrayHasKey('status', $notification);
         self::assertArrayHasKey('createdAt', $notification);
         self::assertArrayHasKey('countMessages', $notification);
-        self::assertArrayHasKey('unreadMessages', $notification);
+        self::assertArrayHasKey('readCountMessages', $notification);
     }
 }

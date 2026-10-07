@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ShieldCheck, User } from "lucide-react";
 import { checkIsAuthenticated } from "@/actions/auth";
 import NotificationBell from "@/components/User/NotificationBell";
-import {fetchMessagesUnreadCount} from "@/actions/notification";
+import { fetchMessagesUnreadCount } from "@/actions/notification";
 
 export async function Header() {
   const isAuthenticated = await checkIsAuthenticated();
@@ -25,11 +25,11 @@ export async function Header() {
           </Link>
           {isAuthenticated ? (
             <>
-              <NotificationBell  />
+              <NotificationBell />
               <Button variant="default" size="sm">
                 <Link href="/user/dashboard">
-                    <User />
-                  </Link>
+                  <User />
+                </Link>
               </Button>
             </>
           ) : (

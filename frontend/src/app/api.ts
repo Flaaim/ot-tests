@@ -130,8 +130,15 @@ export const API = {
       BASE_URL + `/v1/admin/testing/categories/${id}/change-description`,
   },
   notification: {
+    getPaginated: (page: number, perPage: number) => {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(perPage),
+      });
+      return BASE_URL + `/v1/admin/notifications?${params.toString()}`
+    },
     message: {
-      getUnreadCount: () => BASE_URL + `/v1/messages/unread-count`
-    }
-  }
+      getUnreadCount: () => BASE_URL + `/v1/messages/unread-count`,
+    },
+  },
 };

@@ -28,18 +28,20 @@ final readonly class NotificationFetcher implements NotificationFetcherInterface
             ->fetchOne();
 
         $rows = $qb->select(
-        'ntf.notification_id',
-        'ntf.status',
-        'ntf.subject',
-        'ntf.created_at',
-        'COUNT(m.message_id) as count_messages',
-        "COUNT(m.message_id) FILTER (WHERE m.status = 'not_read') as unread_messages"
+            'ntf.notification_id',
+            'ntf.status',
+            'ntf.subject',
+            'ntf.created_at',
+            'COUNT(m.message_id) as count_messages',
+            "COUNT(m.message_id) FILTER (WHERE m.status = 'read') as read_count_messages"
         )
             ->leftJoin('ntf', 'notification_messages', 'm', 'ntf.notification_id = m.notification_id')
-            ->groupBy('ntf.notification_id',
+            ->groupBy(
+                'ntf.notification_id',
                 'ntf.status',
                 'ntf.subject',
-                'ntf.created_at')
+                'ntf.created_at'
+            )
             ->orderBy('ntf.created_at', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)

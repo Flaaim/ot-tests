@@ -11,7 +11,6 @@ use Doctrine\Persistence\ObjectManager;
 
 final class MessageFixture extends AbstractFixture
 {
-
     public function load(ObjectManager $manager): void
     {
         $message = new Message(
@@ -31,6 +30,4 @@ final class MessageFixture extends AbstractFixture
 
         $manager->flush();
     }
-
-
 }
