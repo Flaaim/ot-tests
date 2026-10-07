@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Action\V1\Admin\Notification\Remove;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Notification\Command\Remove\Command;
-use App\Notification\Command\Remove\Handler;
+use App\Notification\Command\Notification\Remove\Command;
+use App\Notification\Command\Notification\Remove\Handler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

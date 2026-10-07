@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Command\Remove;
+namespace App\Notification\Command\Notification\Remove;
 
 use App\Infrastructure\Doctrine\Flusher;
 use App\Notification\Entity\Message\MessageRepository;

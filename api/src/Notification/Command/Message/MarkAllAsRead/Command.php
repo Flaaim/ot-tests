@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Command\Remove;
+namespace App\Notification\Command\Message\MarkAllAsRead;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class Command
+final readonly class Command
 {
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Uuid]
-        public string $notificationId,
+        public string $profileId
     ) {}
 }

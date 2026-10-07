@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Command\Launch;
+namespace App\Notification\Command\Notification\Launch;
 
 use App\Infrastructure\Doctrine\Flusher;
 use App\Notification\Entity\Notification\Notification;

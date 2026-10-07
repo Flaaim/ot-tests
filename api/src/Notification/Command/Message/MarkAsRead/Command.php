@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Command\MarkAsRead;
+namespace App\Notification\Command\Message\MarkAsRead;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

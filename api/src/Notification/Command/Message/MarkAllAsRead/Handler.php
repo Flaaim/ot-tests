@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Command\MarkAllAsRead;
+namespace App\Notification\Command\Message\MarkAllAsRead;
 
 use App\Notification\Entity\Message\MessageRepository;
 

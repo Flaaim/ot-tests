@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Action\V1\Notification\Message\MarkAsRead;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Notification\Command\MarkAsRead\Command;
-use App\Notification\Command\MarkAsRead\Handler;
+use App\Notification\Command\Message\MarkAsRead\Command;
+use App\Notification\Command\Message\MarkAsRead\Handler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

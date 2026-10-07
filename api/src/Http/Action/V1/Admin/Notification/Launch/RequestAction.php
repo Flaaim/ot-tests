@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Action\V1\Admin\Notification\Launch;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Notification\Command\Launch\Command;
-use App\Notification\Command\Launch\Handler;
+use App\Notification\Command\Notification\Launch\Command;
+use App\Notification\Command\Notification\Launch\Handler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

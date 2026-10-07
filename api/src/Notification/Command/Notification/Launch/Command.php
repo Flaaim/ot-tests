@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Command\Launch;
+namespace App\Notification\Command\Notification\Launch;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
