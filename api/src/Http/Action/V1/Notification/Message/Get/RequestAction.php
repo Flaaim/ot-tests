@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Notification\Message\GetLatest;
+namespace App\Http\Action\V1\Notification\Message\Get;
 
 use App\Infrastructure\Http\Validator\Validator;
-use App\Notification\Query\Message\GetLatest\Query;
-use App\Notification\Query\Message\GetLatest\QueryHandler;
+use App\Notification\Query\Message\Get\Query;
+use App\Notification\Query\Message\Get\QueryHandler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,10 +29,12 @@ final readonly class RequestAction
             return new JsonResponse(null, Response::HTTP_UNAUTHORIZED);
         }
         $profileId = $user->getUserIdentifier();
+
         $queryParams = $request->query->all();
         $limit = isset($queryParams['limit']) && is_numeric($queryParams['limit']) ? (int)$queryParams['limit'] : 5;
+        $page = isset($queryParams['page']) && is_numeric($queryParams['page']) ? (int)$queryParams['page'] : 1;
 
-        $query = new Query($profileId, $limit);
+        $query = new Query($profileId, $page, $limit);
 
         $this->validator->validate($query);
 

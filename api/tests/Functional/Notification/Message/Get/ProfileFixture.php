@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\Message\GetLatest;
+namespace Tests\Functional\Notification\Message\Get;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;

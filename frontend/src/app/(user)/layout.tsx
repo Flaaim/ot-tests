@@ -6,6 +6,8 @@ import { DashboardSidebar } from "@/components/User/Dashboard/DashboardSidebar";
 import { fetchProfile } from "@/actions/profile";
 import { redirect } from "next/navigation";
 import { ProfileDTO } from "@/interfaces/user.interface";
+import NotificationBell from "@/components/User/Notification/NotificationBell";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Панель пользователя",
@@ -34,6 +36,17 @@ export default async function UserDashboardLayout({
             <SidebarTrigger className="-ml-1" />
             <div className="bg-border mx-2 my-auto h-4 w-px" />
             <span className="font-medium">Личный кабинет</span>
+            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+              <nav className="flex items-center gap-4">
+                <Link
+                  href="/catalog"
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Каталог тестов
+                </Link>
+                <NotificationBell />
+              </nav>
+            </div>
           </header>
           <main className="flex-1 p-6 max-[765px]:p-2.5">{children}</main>
           <footer className="col-start-2 col-end-4 row-start-3 mb-8 mx-3 text-sm text-muted-foreground max-[765px]:col-start-1 max-[765px]:col-end-2 max-[765px]:mb-4">

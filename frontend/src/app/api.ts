@@ -141,7 +141,15 @@ export const API = {
     add: () => BASE_URL + `/v1/admin/notifications`,
     message: {
       getUnreadCount: () => BASE_URL + `/v1/messages/unread-count`,
-      read: (id: string) => BASE_URL + `/v1/messages/${id}`,
+      markAsRead: (id: string) => BASE_URL + `/v1/messages/${id}`,
+      markAllAsRead: () => BASE_URL + `/v1/messages/read-all`,
+      get: (page: number, perPage: number) => {
+        const params = new URLSearchParams({
+          page: String(page),
+          limit: String(perPage),
+        });
+        return BASE_URL + `/v1/messages?${params.toString()}`;
+      },
     },
   },
 };

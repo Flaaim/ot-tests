@@ -2,8 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, User } from "lucide-react";
 import { checkIsAuthenticated } from "@/actions/auth";
-import NotificationBell from "@/components/User/NotificationBell";
-import { fetchMessagesUnreadCount } from "@/actions/notification";
+import NotificationBell from "@/components/User/Notification/NotificationBell";
 
 export async function Header() {
   const isAuthenticated = await checkIsAuthenticated();

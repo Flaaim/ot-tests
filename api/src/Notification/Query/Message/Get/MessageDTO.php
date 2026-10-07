@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Query\Message\GetLatest;
+namespace App\Notification\Query\Message\Get;
 
 final readonly class MessageDTO
 {

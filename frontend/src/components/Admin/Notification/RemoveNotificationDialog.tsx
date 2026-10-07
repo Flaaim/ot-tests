@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { removeCourseAction } from "@/actions/course";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -44,6 +43,7 @@ export default function RemoveNotificationDialog({ id }: RemoveNotificationDialo
       console.error("Error:", error);
     } finally {
       setLoading(false);
+      setOpen(false);
     }
   };
 

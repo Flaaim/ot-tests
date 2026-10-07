@@ -1,7 +1,4 @@
-import {
-  fetchGetNotificationsPaginatedAction,
-  fetchNotificationsPaginatedAction,
-} from "@/actions/notification";
+import { fetchNotificationsPaginatedAction } from "@/actions/notification";
 import AdminBreadcrumbs from "@/components/Admin/AdminBreadcrumbs";
 import { AlertCircle } from "lucide-react";
 import {

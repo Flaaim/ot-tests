@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\Message\GetLatest;
+namespace Tests\Functional\Notification\Message\Get;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -47,7 +47,7 @@ final class RequestActionTest extends WebTestCase
 
     public function testUnauthenticatedReturn401(): void
     {
-        $this->client->jsonRequest('GET', '/v1/messages/unread-count');
+        $this->client->jsonRequest('GET', '/v1/messages');
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
@@ -56,7 +56,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest(
             'GET',
-            '/v1/messages',
+            '/v1/messages?page=1&limit=5',
             [],
             $this->authHeaders($this->johnToken)
         );
@@ -67,31 +67,17 @@ final class RequestActionTest extends WebTestCase
 
         $data = Json::decode($body);
 
-        self::assertCount(1, $data);
+        self::assertArrayHasKey('items', $data);
+        self::assertArrayHasKey('totalCount', $data);
+        self::assertArrayHasKey('totalPages', $data);
 
-        $message = $data[0];
+        self::assertCount(1, $data['items']);
+
+        $message = $data['items'][0];
         self::assertArrayHasKey('messageId', $message);
         self::assertArrayHasKey('subject', $message);
         self::assertArrayHasKey('message', $message);
         self::assertArrayHasKey('createdAt', $message);
         self::assertArrayHasKey('status', $message);
-    }
-
-    public function testNotFound(): void
-    {
-        $this->client->jsonRequest(
-            'GET',
-            '/v1/messages',
-            [],
-            $this->authHeaders($this->aliceToken)
-        );
-
-        self::assertEquals(409, $this->client->getResponse()->getStatusCode());
-
-        self::assertJson($body = $this->client->getResponse()->getContent());
-
-        $data = Json::decode($body);
-
-        self::assertEquals(['message' => 'Сообщения отсутствуют.'], $data);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Notification\Message\GetLatest;
+namespace Tests\Functional\Notification\Message\Get;
 
 use App\Notification\Entity\Message\Message;
 use App\Notification\Entity\Message\MessageId;

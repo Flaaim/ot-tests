@@ -19,8 +19,8 @@ import { Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { addNotificationAction } from "@/actions/notification";
+import MDEditor from "@uiw/react-md-editor";
 
 const schema = z.object({
   subject: z.string().min(3),
@@ -53,7 +53,7 @@ export default function AddNotificationDialog() {
       return;
     }
 
-    toast.success("Курс успешно добавлен!");
+    toast.success("Уведомление создано!");
     form.reset();
     setOpen(false);
     router.refresh();
@@ -113,15 +113,21 @@ export default function AddNotificationDialog() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="name">Сообщение</FieldLabel>
-                  <Textarea
-                    {...field}
-                    id="normativeDocs"
-                    placeholder="Введите сообщение"
-                    aria-invalid={fieldState.invalid}
-                    className="h-[15vh] max-h-[250px]"
-                    value={field.value}
-                  />
+                  <FieldLabel htmlFor="message">Сообщение</FieldLabel>
+                  <div
+                    data-color-mode="light"
+                    className="w-full mt-1 border rounded-md overflow-hidden"
+                  >
+                    <MDEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                      height={350}
+                      preview="edit"
+                      textareaProps={{
+                        placeholder: "Введите текст уведомления. Поддерживается Markdown...",
+                      }}
+                    />
+                  </div>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}

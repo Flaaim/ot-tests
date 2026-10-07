@@ -27,24 +27,43 @@ final readonly class MessageFetcher implements MessageFetcherInterface
             ->fetchOne();
     }
 
-    public function getLatestMessages(string $profileId, int $limit): array
+    public function get(string $profileId, int $page, int $limit): array
     {
+        $page = max(1, $page);
+        $limit = min(max(1, $limit), 100);
+        $offset = ($page - 1) * $limit;
+
         $qb = $this->connection->createQueryBuilder();
 
-        $result = $qb->select(
+        $qb->from('notification_messages', 'm');
+
+        $countQb = clone $qb;
+        $totalCount = (int)$countQb->select('COUNT(m.message_id)')
+            ->leftJoin('m', 'notifications', 'ntf', 'ntf.notification_id = m.notification_id')
+            ->where('m.profile_id = :profileId')
+            ->setParameter('profileId', $profileId)
+            ->executeQuery()
+            ->fetchOne();
+
+        $rows = $qb->select(
             'm.message_id,
             ntf.subject,
             ntf.message,
             ntf.created_at,
             m.status'
         )
-            ->from('notification_messages', 'm')
             ->leftJoin('m', 'notifications', 'ntf', 'ntf.notification_id = m.notification_id')
             ->where('m.profile_id = :profileId')
             ->setParameter('profileId', $profileId)
             ->orderBy('ntf.created_at', 'DESC')
-            ->setMaxResults($limit);
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-        return $result->executeQuery()->fetchAllAssociative();
+        return [
+            'items' => $rows,
+            'totalCount' => $totalCount,
+        ];
     }
 }
