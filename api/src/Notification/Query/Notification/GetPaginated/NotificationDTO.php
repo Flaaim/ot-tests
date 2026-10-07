@@ -11,7 +11,8 @@ final readonly class NotificationDTO
         public string $subject,
         public string $status,
         public string $createdAt,
-        public int $countMessages
+        public int $countMessages,
+        public int $unreadMessages
     ) {}
 
     public static function fromArray(array $data): self
@@ -22,6 +23,7 @@ final readonly class NotificationDTO
             status: $data['status'],
             createdAt: $data['created_at'],
             countMessages: $data['count_messages'],
+            unreadMessages: $data['unread_messages']
         );
     }
 }
