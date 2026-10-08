@@ -58,6 +58,8 @@ framework:
             'App\Profile\Event\ProfileRemoved': async
 
             'App\Notification\Event\BroadcastNotificationCreated': async
+            'App\Notification\Event\PersonalNotificationCreated': async
+            'App\Notification\Command\Notification\SendPersonal\Command': async
 
 when@test:
     framework:
