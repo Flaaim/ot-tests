@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Admin\Notification\Launch;
+namespace Tests\Functional\Admin\Notification\SendBroadcast;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Role;

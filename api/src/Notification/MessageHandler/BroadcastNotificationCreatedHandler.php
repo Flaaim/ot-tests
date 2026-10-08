@@ -15,7 +15,7 @@ use App\Profile\Api\GetProfilesIds\QueryHandlerApi;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class NotificationCreatedHandler
+final readonly class BroadcastNotificationCreatedHandler
 {
     public function __construct(
         private QueryHandlerApi $profileApi,

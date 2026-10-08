@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Admin\Notification\Launch\Handler;
+namespace Tests\Functional\Admin\Notification\SendBroadcast\Handler;
 
 use App\Notification\Entity\Notification\Notification;
 use App\Notification\Entity\Notification\NotificationId;

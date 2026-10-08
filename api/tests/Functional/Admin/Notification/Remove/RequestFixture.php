@@ -12,7 +12,7 @@ use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Tests\Functional\Admin\Notification\Launch\RoleFixture;
+use Tests\Functional\Admin\Notification\SendBroadcast\RoleFixture;
 
 final class RequestFixture extends AbstractFixture implements DependentFixtureInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Admin\Notification\Launch;
+namespace Tests\Functional\Admin\Notification\SendBroadcast;
 
 use App\Profile\Entity\Profile\ProfileId;
 use App\Profile\Test\Builder\ProfileBuilder;
