@@ -12,6 +12,6 @@ final class Command
         #[Assert\Length(min: 3, max: 100)]
         public string $subject,
         #[Assert\Length(min: 3, max: 10000)]
-        public string $message,
+        public string $message
     ) {}
 }

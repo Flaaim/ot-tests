@@ -6,7 +6,7 @@ namespace Tests\Functional\Admin\Notification\Launch;
 
 use App\Notification\Entity\Notification\NotificationId;
 use App\Notification\Entity\Notification\NotificationRespository;
-use App\Notification\Event\NotificationCreated;
+use App\Notification\Event\BroadcastNotificationCreated;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -92,7 +92,7 @@ final class RequestActionTest extends WebTestCase
         self::assertCount(1, $transport->getSent());
 
         $message = $transport->getSent()[0]->getMessage();
-        self::assertInstanceOf(NotificationCreated::class, $message);
+        self::assertInstanceOf(BroadcastNotificationCreated::class, $message);
 
         self::assertNotNull($message->notificationId);
 

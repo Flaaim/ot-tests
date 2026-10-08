@@ -24,7 +24,7 @@ final class RequestFixture extends AbstractFixture
             ->build();
         $manager->persist($profile);
 
-        $notification = new Notification(
+        $notification = Notification::createBroadcast(
             new NotificationId(self::NOTIFICATION_ID),
             'subject',
             'message',

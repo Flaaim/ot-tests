@@ -20,11 +20,11 @@ final class RequestFixture extends AbstractFixture implements DependentFixtureIn
 
     public function load(ObjectManager $manager): void
     {
-        $notification = new Notification(
+        $notification = Notification::createBroadcast(
             new NotificationId(self::NOTIFICATION_ID),
             'subject',
             'message',
-            new DateTimeImmutable(),
+            new DateTimeImmutable()
         );
         $manager->persist($notification);
 

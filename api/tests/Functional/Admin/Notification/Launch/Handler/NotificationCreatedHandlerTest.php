@@ -7,7 +7,7 @@ namespace Tests\Functional\Admin\Notification\Launch\Handler;
 use App\Notification\Entity\Message\Message;
 use App\Notification\Entity\Notification\NotificationId;
 use App\Notification\Entity\Notification\NotificationRespository;
-use App\Notification\Event\NotificationCreated;
+use App\Notification\Event\BroadcastNotificationCreated;
 use App\Notification\MessageHandler\NotificationCreatedHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
@@ -39,7 +39,7 @@ final class NotificationCreatedHandlerTest extends KernelTestCase
 
     public function testSuccess(): void
     {
-        $message = new NotificationCreated(RequestFixture::NOTIFICATION_ID);
+        $message = new BroadcastNotificationCreated(RequestFixture::NOTIFICATION_ID);
         $handler = $this->container->get(NotificationCreatedHandler::class);
 
         $handler($message);

@@ -17,7 +17,7 @@ final class NotificationFixture extends AbstractFixture
 
     public function load(ObjectManager $manager): void
     {
-        $notification1 = new Notification(
+        $notification1 = Notification::createBroadcast(
             new NotificationId(self::NOTIFICATION_1_ID),
             'Subject1',
             'Message1',
@@ -25,7 +25,7 @@ final class NotificationFixture extends AbstractFixture
         );
         $manager->persist($notification1);
 
-        $notification2 = new Notification(
+        $notification2 = Notification::createBroadcast(
             new NotificationId(self::NOTIFICATION_2_ID),
             'Subject2',
             'Message2',

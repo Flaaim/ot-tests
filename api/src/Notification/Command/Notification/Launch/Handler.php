@@ -27,11 +27,11 @@ final readonly class Handler
             throw new DomainException('Profiles not found.');
         }
 
-        $notification = new Notification(
+        $notification = Notification::createBroadcast(
             NotificationId::generate(),
             $command->subject,
             $command->message,
-            new DateTimeImmutable(),
+            new DateTimeImmutable()
         );
 
         $this->notifications->add($notification);

@@ -7,6 +7,7 @@ namespace App\Notification\Test\Unit\Entity\Notification;
 use App\Notification\Entity\Notification\Notification;
 use App\Notification\Entity\Notification\NotificationId;
 use App\Notification\Entity\Notification\Status;
+use App\Notification\Entity\Notification\Type;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,7 @@ final class NotificationTest extends TestCase
 {
     public function testNotification(): void
     {
-        $test = new Notification(
+        $test = Notification::createBroadcast(
             $notificationId = NotificationId::generate(),
             $subject = 'test subject',
             $message = 'test message',
@@ -30,11 +31,12 @@ final class NotificationTest extends TestCase
         self::assertEquals($message, $test->getMessage());
         self::assertEquals($createdAt, $test->getCreatedAt());
         self::assertEquals(Status::IN_PROGRESS, $test->getStatus()->getValue());
+        self::assertEquals(Type::ADMIN->value, $test->getType()->value);
     }
 
     public function testComplete(): void
     {
-        $notification = new Notification(
+        $notification = Notification::createBroadcast(
             NotificationId::generate(),
             'test subject',
             'test message',
