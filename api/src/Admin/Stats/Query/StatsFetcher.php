@@ -60,4 +60,19 @@ final class StatsFetcher implements StatsFetcherInterface
         }
         return $result;
     }
+
+    public function getPopularTestsStats(): array
+    {
+        $sql = <<<'SQL'
+                SELECT
+                    t.name,
+                    t.cipher,
+                    COUNT (a.test_id) as total_attempts
+                FROM attempts a LEFT JOIN tests t ON a.test_id = t.id
+                GROUP BY t.id, t.name, t.cipher
+                ORDER BY total_attempts DESC LIMIT 10
+            SQL;
+
+        return $this->connection->fetchAllAssociative($sql);
+    }
 }

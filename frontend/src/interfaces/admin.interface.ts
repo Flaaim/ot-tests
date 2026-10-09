@@ -12,3 +12,9 @@ export interface AdminAttemptsStats {
   totalPassedAttempts: number;
   successRate: number;
 }
+
+export interface AdminPopularTests {
+  name: string;
+  cipher: string;
+  totalAttempts: number;
+}

@@ -1,12 +1,17 @@
 import { fetchAdminAttemptsStatsAction, fetchAdminUsersStatsAction } from "@/actions/admin";
 import UsersStatsCard from "@/components/Admin/Stats/UsersStatsCard";
 import AttemptsStatsCard from "@/components/Admin/Stats/AttemptsStatsCard";
+import { fetchAdminPopularTestsAction } from "@/actions/admin";
+import PopularTestsCard from "@/components/Admin/Stats/PopularTestsCard";
 
 export default async function AdminDashboardPage() {
-  const [usersStats, attemptsStats] = await Promise.all([
+  const [usersStats, attemptsStats, popularTests] = await Promise.all([
     fetchAdminUsersStatsAction(),
     fetchAdminAttemptsStatsAction(),
+    fetchAdminPopularTestsAction(),
   ]);
+
+  console.log(popularTests);
 
   return (
     <div className="space-y-8">
@@ -36,6 +41,16 @@ export default async function AdminDashboardPage() {
           </div>
         ) : (
           <AttemptsStatsCard stats={attemptsStats.data} />
+        )}
+      </div>
+      <div className="space-y-4">
+        <h2 className="text-lg font-medium tracking-tight">Популярные тесты</h2>
+        {!popularTests.ok || !popularTests.data ? (
+          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            Не удалось загрузить статистику тестов.
+          </div>
+        ) : (
+          <PopularTestsCard tests={popularTests.data} />
         )}
       </div>
     </div>
