@@ -41,11 +41,11 @@ final class RequestActionTest extends WebTestCase
         );
     }
 
-    public function testUnauthenticatedReturns401(): void
+    public function testAnonymousUserReturns403(): void
     {
         $this->client->jsonRequest('GET', '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID . '/result');
 
-        self::assertEquals(401, $this->client->getResponse()->getStatusCode());
+        self::assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 
     public function testSuccess(): void
@@ -73,6 +73,10 @@ final class RequestActionTest extends WebTestCase
         self::assertArrayHasKey('test', $data);
         self::assertArrayHasKey('questions', $data);
         self::assertArrayHasKey('profile', $data);
+
+        self::assertArrayHasKey('email', $data['profile']);
+        self::assertArrayHasKey('name', $data['profile']);
+        self::assertArrayHasKey('surname', $data['profile']);
     }
 
     public function testNotFound(): void

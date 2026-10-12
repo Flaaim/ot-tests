@@ -40,7 +40,7 @@ final class RequestActionTest extends WebTestCase
         );
     }
 
-    public function testUnauthenticatedReturns401(): void
+    public function testAnonymousUserReturns403(): void
     {
         $this->client->jsonRequest(
             'POST',
