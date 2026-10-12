@@ -19,6 +19,7 @@ framework:
                     max_retries: 3
                     delay: 1000
             failed: 'doctrine://default?queue_name=failed'
+            sync: 'sync://'
         buses:
             messenger.bus.default:
                 middleware:
@@ -60,6 +61,9 @@ framework:
             'App\Notification\Event\BroadcastNotificationCreated': async
             'App\Notification\Event\PersonalNotificationCreated': async
             'App\Notification\Command\Notification\SendPersonal\Command': async
+
+            'App\Testing\Command\Attempt\Launch\Command': sync
+            'App\Testing\Command\Attempt\DemoLaunch\Command': sync
 
 when@test:
     framework:

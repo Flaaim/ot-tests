@@ -46,7 +46,12 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest('POST', '/v1/testing/attempts');
 
-        self::assertEquals(401, $this->client->getResponse()->getStatusCode());
+        self::assertEquals(400, $this->client->getResponse()->getStatusCode());
+        self::assertJson($body = $this->client->getResponse()->getContent());
+
+        $data = Json::decode($body);
+
+        self::assertEquals(['message' => 'No identity provided'], $data);
     }
 
     public function testSuccess(): void
