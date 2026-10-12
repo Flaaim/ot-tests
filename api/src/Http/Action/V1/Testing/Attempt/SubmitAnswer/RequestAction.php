@@ -24,9 +24,12 @@ final class RequestAction
     #[Route('/v1/testing/attempts/{id}/submit', name: 'testing.attempt.submit', methods: ['POST'])]
     public function __invoke(Request $request, string $id): Response
     {
-        $user = $this->security->getUser();
-        if (null === $user) {
-            return new JsonResponse(null, Response::HTTP_UNAUTHORIZED);
+        $userId = $this->security->getUser()?->getUserIdentifier();
+        $guestId = $request->headers->get('X-Guest-ID');
+        $actorId = $userId ?? $guestId;
+
+        if (null === $actorId) {
+            return new JsonResponse(['error' => 'Access Denied'], Response::HTTP_FORBIDDEN);
         }
 
         $body = $request->toArray();

@@ -9,6 +9,7 @@ use App\Testing\Command\Attempt\Finish\Command;
 use App\Testing\Command\Attempt\Finish\Handler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -21,12 +22,16 @@ final class RequestAction
     ) {}
 
     #[Route('/v1/testing/attempts/{id}/finish', name: 'testing.attempt.finish', methods: ['PUT'])]
-    public function __invoke(string $id): Response
+    public function __invoke(string $id, Request $request): Response
     {
-        $user = $this->security->getUser();
-        if (null === $user) {
-            return new JsonResponse(null, Response::HTTP_UNAUTHORIZED);
+        $userId = $this->security->getUser()?->getUserIdentifier();
+        $guestId = $request->headers->get('X-Guest-ID');
+        $actorId = $userId ?? $guestId;
+
+        if (null === $actorId) {
+            return new JsonResponse(['message' => 'Access Denied'], Response::HTTP_FORBIDDEN);
         }
+
         $command = new Command($id);
 
         $this->validator->validate($command);

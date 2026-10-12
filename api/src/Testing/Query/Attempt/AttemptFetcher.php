@@ -119,7 +119,7 @@ final class AttemptFetcher implements AttemptFetcherInterface
             'profile' => [
                 'name' => $attempt['profile_name'],
                 'surname' => $attempt['profile_surname'],
-                'email' => $attempt['email'],
+                'email' => $attempt['email'] ?? 'Гость',
             ],
             'test' => [
                 'test_id' => $attempt['test_id'],
