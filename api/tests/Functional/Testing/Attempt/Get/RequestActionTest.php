@@ -44,7 +44,7 @@ final class RequestActionTest extends WebTestCase
     {
         $this->client->jsonRequest('GET', '/v1/testing/attempts/' . RequestFixture::ATTEMPT_ID);
 
-        self::assertEquals(401, $this->client->getResponse()->getStatusCode());
+        self::assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 
     public function testSuccess(): void
