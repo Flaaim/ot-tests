@@ -11,8 +11,6 @@ export default async function AdminDashboardPage() {
     fetchAdminPopularTestsAction(),
   ]);
 
-  console.log(popularTests);
-
   return (
     <div className="space-y-8">
       <div>

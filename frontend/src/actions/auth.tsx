@@ -18,7 +18,7 @@ interface TokenResponseData {
 
 export async function JoinAction(data: JoinData): Promise<ApiResponse> {
   try {
-    const response = await fetch(API.auth.joinByEmail(), {
+    const response = await apiFetch(API.auth.joinByEmail(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
