@@ -1,9 +1,9 @@
 ### Получение токена (Password Grant)
-POST https://api.ot-tests.ru/token
+POST http://localhost:8081/token
 Content-Type: application/x-www-form-urlencoded
 Accept: application/json
 
-grant_type=password&client_id=frontend&client_secret=my-super-secret-123&username=flaaim@list.ru&password=158754429
+grant_type=password&client_id=frontend&client_secret=my-super-secret-123&username=flaaim@list.ru&password=12345678
 
 
 
