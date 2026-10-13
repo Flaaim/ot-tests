@@ -35,6 +35,7 @@
                 <directory name="src/Course/Command" />
                 <directory name="src/Notification/Command" />
                 <directory name="src/Testing/Command" />
+                <directory name="src/Course/Query" />
             </errorLevel>
         </UnusedClass>
 

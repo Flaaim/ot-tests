@@ -225,4 +225,62 @@ final class CourseFetcher implements CourseFetcherInterface
 
         return $data;
     }
+
+    public function getQuestion(string $questionId): array
+    {
+        $qb = $this->connection->createQueryBuilder();
+
+        $result = $qb->select('
+        q.id,
+        q.text,
+        q.answers,
+        q.form,
+        t.id as test_id,
+        t.name as test_name,
+        t.description as test_description,
+        t.slug,
+        c.id as category_id,
+        c.name as category_name,
+        c.slug as category_slug,
+        p.id as parent_id,
+        p.name as parent_name,
+        p.slug as parent_slug
+        ')
+            ->from('questions', 'q')
+            ->join('q', 'tests', 't', 't.course_ids @> jsonb_build_array(q.course_id::text)')
+            ->join('t', 'test_categories', 'c', 't.category_id = c.id')
+            ->leftJoin('c', 'test_categories', 'p', 'c.parent_id = p.id')
+            ->where($qb->expr()->eq('q.id', ':questionId'))
+            ->setParameter('questionId', $questionId)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if (false === $result) {
+            return [];
+        }
+
+        $answers = json_decode($result['answers'], true, 512, JSON_THROW_ON_ERROR);
+
+        return [
+            'id' => $result['id'],
+            'text' => $result['text'],
+            'answers' => $answers,
+            'form' => $result['form'],
+            'test' => [
+                'id' => $result['test_id'],
+                'name' => $result['test_name'],
+                'description' => $result['test_description'],
+                'slug' => $result['slug'],
+            ],
+            'category' => [
+                'name' => $result['category_name'],
+                'slug' => $result['category_slug'],
+                'parent' => $result['parent_id'] ? [
+                    'id' => $result['parent_id'],
+                    'name' => $result['parent_name'],
+                    'slug' => $result['parent_slug'],
+                ] : null,
+            ],
+        ];
+    }
 }
