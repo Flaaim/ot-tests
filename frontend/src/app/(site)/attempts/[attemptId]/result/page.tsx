@@ -1,5 +1,5 @@
 import { fetchAttemptResultAction } from "@/actions/attempt";
-import { AttemptResultData } from "@/interfaces/attempt.interface";
+import { AttemptResultData, CategoryInfoDTO, TestInfoDTO } from "@/interfaces/attempt.interface";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResultQuestionCard } from "@/components/Testing/Attempt/ResultQuestionCard";
 import { format } from "date-fns";
@@ -7,6 +7,8 @@ import { ru } from "date-fns/locale";
 import { PrintButton } from "@/components/Testing/PrintButton";
 import PublicTicketButton from "@/components/Testing/Test/PublicTicketButton";
 import { checkIsAuthenticated } from "@/actions/auth";
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
 
 interface ResultPageProps {
   params: Promise<{ attemptId: string }>;
@@ -23,7 +25,13 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
   const attemptData: AttemptResultData = result.data;
   const isPassed = attemptData.status === "passed";
   const profile = attemptData.profile;
-  const test = attemptData.test;
+  const test: TestInfoDTO = attemptData.test;
+  const category: CategoryInfoDTO = attemptData.category;
+
+  const testUrl = category.parent
+    ? `/catalog/${category.parent.slug}/${category.slug}/${test.slug}`
+    : `/catalog/${category.slug}/${test.slug}`;
+
   const isAuthenticated = await checkIsAuthenticated();
 
   return (
@@ -90,7 +98,7 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
         </CardContent>
         <CardFooter className="flex justify-center w-full">
           <div className="flex flex-row flex-wrap items-center justify-center w-full max-w-2xl">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <PublicTicketButton
                 testId={test.id}
                 ticketNumber={attemptData.ticketNumber}
@@ -98,6 +106,10 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
                 label="Пройти еще раз"
               />
               <PrintButton />
+              <Link className="inline-flex items-center gap-2" href={testUrl}>
+                <BookOpen />
+                Все вопросы теста
+              </Link>
             </div>
           </div>
         </CardFooter>

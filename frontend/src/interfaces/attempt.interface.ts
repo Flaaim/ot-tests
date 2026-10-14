@@ -59,6 +59,13 @@ export interface TestInfoDTO {
   name: string;
   cipher: string;
   allowedMistakes: number;
+  slug: string;
+}
+
+export interface CategoryInfoDTO {
+  name: string;
+  slug: string;
+  parent: CategoryInfoDTO;
 }
 
 export interface AttemptResultData {
@@ -72,6 +79,7 @@ export interface AttemptResultData {
   test: TestInfoDTO;
   questions: ResultQuestionDTO[];
   profile: ProfileInfoDTO;
+  category: CategoryInfoDTO;
 }
 
 interface ProfileInfoDTO {
