@@ -23,7 +23,6 @@ final class RequestActionTest extends WebTestCase
     {
         parent::setUp();
         $this->client = self::createClient();
-        $this->client->disableReboot();
         $this->container = $this->client->getContainer();
 
         $fixturesLoader = new FixturesLoader($this->container);
@@ -52,13 +51,25 @@ final class RequestActionTest extends WebTestCase
         self::assertArrayHasKey('ticketNumber', $data);
         self::assertArrayHasKey('startedAt', $data);
         self::assertArrayHasKey('finishedAt', $data);
-        self::assertArrayHasKey('test', $data);
-        self::assertArrayHasKey('questions', $data);
-        self::assertArrayHasKey('profile', $data);
 
+        self::assertArrayHasKey('questions', $data);
+
+        self::assertArrayHasKey('test', $data);
+        self::assertArrayHasKey('id', $data['test']);
+        self::assertArrayHasKey('name', $data['test']);
+        self::assertArrayHasKey('cipher', $data['test']);
+        self::assertArrayHasKey('allowedMistakes', $data['test']);
+        self::assertArrayHasKey('slug', $data['test']);
+
+        self::assertArrayHasKey('profile', $data);
         self::assertArrayHasKey('email', $data['profile']);
         self::assertArrayHasKey('name', $data['profile']);
         self::assertArrayHasKey('surname', $data['profile']);
+
+        self::assertArrayHasKey('category', $data);
+        self::assertArrayHasKey('name', $data['category']);
+        self::assertArrayHasKey('slug', $data['category']);
+        self::assertArrayHasKey('parent', $data['category']);
     }
 
     public function testInvalidGuestId(): void
