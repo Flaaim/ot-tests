@@ -55,6 +55,7 @@ export interface ResultQuestionDTO {
   userResult: UserResultDTO | null;
 }
 export interface TestInfoDTO {
+  id: string;
   name: string;
   cipher: string;
   allowedMistakes: number;

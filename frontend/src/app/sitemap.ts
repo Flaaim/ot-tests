@@ -1,8 +1,8 @@
 import { MetadataRoute } from "next";
 import { fetchPublicCategoryTreeAction } from "@/actions/category";
 import { fetchPublicTestsByCategoryAction } from "@/actions/test";
-import {fetchQuestionIdsForSitemapAction} from "@/actions/question";
-import {TestItemPublic} from "@/interfaces/test.interface";
+import { fetchQuestionIdsForSitemapAction } from "@/actions/question";
+import { TestItemPublic } from "@/interfaces/test.interface";
 
 export const revalidate = 86400; // Обновляем раз в сутки
 

@@ -5,6 +5,8 @@ import { ResultQuestionCard } from "@/components/Testing/Attempt/ResultQuestionC
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { PrintButton } from "@/components/Testing/PrintButton";
+import PublicTicketButton from "@/components/Testing/Test/PublicTicketButton";
+import { checkIsAuthenticated } from "@/actions/auth";
 
 interface ResultPageProps {
   params: Promise<{ attemptId: string }>;
@@ -21,6 +23,8 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
   const attemptData: AttemptResultData = result.data;
   const isPassed = attemptData.status === "passed";
   const profile = attemptData.profile;
+  const test = attemptData.test;
+  const isAuthenticated = await checkIsAuthenticated();
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-8">
@@ -86,7 +90,13 @@ export default async function AttemptResultPage({ params }: ResultPageProps) {
         </CardContent>
         <CardFooter className="flex justify-center w-full">
           <div className="flex flex-row flex-wrap items-center justify-center w-full max-w-2xl">
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
+              <PublicTicketButton
+                testId={test.id}
+                ticketNumber={attemptData.ticketNumber}
+                isAuthenticated={isAuthenticated}
+                label="Пройти еще раз"
+              />
               <PrintButton />
             </div>
           </div>
