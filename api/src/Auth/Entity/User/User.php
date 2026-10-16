@@ -7,6 +7,7 @@ namespace App\Auth\Entity\User;
 use App\Auth\Event\ChangeEmailRequested;
 use App\Auth\Event\EmailChanged;
 use App\Auth\Event\JoinByEmailRequested;
+use App\Auth\Event\MagicLinkRequested;
 use App\Auth\Event\NetworkAttached;
 use App\Auth\Event\PasswordChanged;
 use App\Auth\Event\PasswordReset;
@@ -30,6 +31,8 @@ use DomainException;
 final class User implements AggregateRoot
 {
     use EventTrait;
+
+    private ?Token $magicLinkToken = null;
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $passwordHash = null;
     #[ORM\Embedded(class: Token::class, columnPrefix: 'join_confirm_token_')]
@@ -72,6 +75,18 @@ final class User implements AggregateRoot
         $user->joinConfirmToken = $token;
 
         $user->recordEvent(new JoinByEmailRequested($token->getValue(), $email->getValue()));
+        $user->recordEvent(new UserCreated($id->getValue(), $email->getValue(), Role::user()->getName()));
+
+        return $user;
+    }
+
+    public static function requestJoinByMagicLink(
+        Id $id,
+        DateTimeImmutable $date,
+        Email $email,
+    ): self {
+        $user = new self($id, $date, $email, Status::wait());
+
         $user->recordEvent(new UserCreated($id->getValue(), $email->getValue(), Role::user()->getName()));
 
         return $user;
@@ -306,6 +321,21 @@ final class User implements AggregateRoot
     public function getRole(): Role
     {
         return $this->role;
+    }
+
+    public function getMagicLinkToken(): ?Token
+    {
+        return $this->magicLinkToken;
+    }
+
+    public function requestMagicLink(Token $token, DateTimeImmutable $date): void
+    {
+        if (null !== $this->magicLinkToken && !$this->magicLinkToken->isExpiredTo($date)) {
+            throw new DomainException('Ссылка уже отправлена. Пожалуйста, проверьте почту.');
+        }
+        $this->magicLinkToken = $token;
+
+        $this->recordEvent(new MagicLinkRequested($this->email->getValue(), $this->magicLinkToken->getValue()));
     }
 
     #[ORM\PostLoad]

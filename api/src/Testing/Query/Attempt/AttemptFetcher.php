@@ -156,11 +156,11 @@ final class AttemptFetcher implements AttemptFetcherInterface
             'category' => [
                 'name' => $attempt['category_name'],
                 'slug' => $attempt['category_slug'],
-                'parent' => $attempt['parent_id'] ? [
+                'parent' => [
                     'id' => $attempt['parent_id'],
                     'name' => $attempt['parent_name'],
                     'slug' => $attempt['parent_slug'],
-                ] : null,
+                ],
             ],
             'questions_snapshot' => $questionsSnapshot,
         ];

@@ -28,6 +28,8 @@ final class UserBuilder
     private ?Email $newEmail = null;
     private PasswordHasher $hasher;
 
+    private ?Token $magicLinkToken = null;
+
     public function __construct()
     {
         $this->id = Id::generate();
@@ -63,6 +65,13 @@ final class UserBuilder
     {
         $clone = clone $this;
         $clone->joinConfirmToken = $token;
+        return $clone;
+    }
+
+    public function withMagicLinkToken(Token $token): self
+    {
+        $clone = clone $this;
+        $clone->magicLinkToken = $token;
         return $clone;
     }
 
@@ -133,6 +142,15 @@ final class UserBuilder
                 $this->newEmailChangeToken->getExpiresAt()->modify('+1 day'),
                 $this->newEmail
             );
+        }
+
+        if (null !== $this->magicLinkToken) {
+            $user = User::requestJoinByMagicLink(
+                $this->id,
+                $this->date,
+                $this->email,
+            );
+            $user->requestMagicLink($this->magicLinkToken, $this->magicLinkToken->getExpiresAt()->modify('+1 day'));
         }
 
         return $user;
