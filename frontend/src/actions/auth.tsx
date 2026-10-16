@@ -1,6 +1,6 @@
 "use server";
 
-import { JoinData, LoginData } from "@/interfaces/auth.interface";
+import { JoinData, LoginData, MagicLinkPayload } from "@/interfaces/auth.interface";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ApiResponse } from "@/interfaces/response.interface";
@@ -410,4 +410,74 @@ export async function checkIsAuthenticated(): Promise<boolean> {
   const refreshToken = cookieStore.get("refresh_token")?.value;
 
   return !!(accessToken || refreshToken);
+}
+
+export async function requestMagicLinkAction(
+  payload: MagicLinkPayload
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.auth.requestMagicLink(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        email: payload.email,
+      }),
+    });
+    return handleApiResponse<void>(response);
+  } catch (error) {
+    console.error("requestMagicLinkAction error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
+}
+
+export async function confirmMagicLinkAction(token: string): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch(API.auth.confirmMagicLink(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+      }),
+    });
+
+    const parsed = await handleApiResponse<TokenResponseData>(response);
+
+    if (!parsed.ok || !parsed.data) {
+      return { ok: false, error: parsed.error || "Ошибка подтверждения ссылки" };
+    }
+    const cookieStore = await cookies();
+
+    if (parsed.data.access_token) {
+      cookieStore.set({
+        name: "access_token",
+        value: String(parsed.data.access_token),
+        httpOnly: true,
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: Number(parsed.data.expires_in) || 3600,
+      });
+
+      cookieStore.set({
+        name: "refresh_token",
+        value: String(parsed.data.refresh_token),
+        httpOnly: true,
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 2592000, // 30 дней
+      });
+
+      cookieStore.delete("guest_id");
+    }
+
+    return { ok: true };
+  } catch (error) {
+    console.error("confirmMagicLinkAction error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API." };
+  }
 }

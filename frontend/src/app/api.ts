@@ -23,6 +23,8 @@ export const API = {
     confirmEmailChange: () => BASE_URL + `/v1/auth/email/change/confirm`,
     socialLogin: () => BASE_URL + `/token`,
     attachNetwork: () => BASE_URL + `/v1/auth/network/attach`,
+    requestMagicLink: () => BASE_URL + `/v1/auth/join/magic/request`,
+    confirmMagicLink: () => BASE_URL + `/v1/auth/join/magic/confirm`,
   },
   profile: {
     get: (id: string) => BASE_URL + `/v1/admin/profiles/${id}`,
