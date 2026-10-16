@@ -21,10 +21,11 @@ final class ConfirmAction
     #[Route('/v1/auth/join/confirm', name: 'auth.join.confirm', methods: ['POST'])]
     public function __invoke(Request $request): Response
     {
+        $guestId = $request->headers->get('X-Guest-ID');
         $body = $request->toArray();
         $token = (string)($body['token'] ?? '');
 
-        $command = new Command($token);
+        $command = new Command($token, $guestId);
 
         $this->validator->validate($command);
 

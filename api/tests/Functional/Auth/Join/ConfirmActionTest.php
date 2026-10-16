@@ -6,6 +6,7 @@ namespace Tests\Functional\Auth\Join;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\UserRepository;
+use App\Auth\Event\GuestJoined;
 use App\Auth\Event\UserJoinConfirmed;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
@@ -55,6 +56,32 @@ final class ConfirmActionTest extends WebTestCase
 
         self::assertInstanceOf(UserJoinConfirmed::class, $message);
         self::assertEquals($user->getEmail()->getValue(), $message->email);
+    }
+
+    public function testSuccessGuest(): void
+    {
+        $guestId = 'e92fa0c3-beb1-4fa6-bd85-fcc6a8dba182';
+        $transport = $this->client->getContainer()->get('messenger.transport.async');
+        $transport->reset();
+
+        $this->client->jsonRequest(
+            'POST',
+            '/v1/auth/join/confirm',
+            ['token' => ConfirmFixture::VALID],
+            ['HTTP_X-Guest-ID' => $guestId]
+        );
+
+        self::assertEquals(204, $this->client->getResponse()->getStatusCode());
+
+        self::assertCount(2, $transport->getSent());
+
+        $guestJoinedMessages = array_filter($transport->getSent(), static fn ($message) => $message->getMessage() instanceof GuestJoined);
+        $guestJoinedMessages = array_values($guestJoinedMessages);
+        $guestJoinedMessage = $guestJoinedMessages[0]->getMessage();
+
+        /** @var GuestJoined $guestJoinedMessage */
+        self::assertEquals($guestId, $guestJoinedMessage->guestId);
+        self::assertNotNull($guestJoinedMessage->userId);
     }
 
     public function testExpired(): void

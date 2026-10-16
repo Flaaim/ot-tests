@@ -6,7 +6,6 @@ namespace Tests\Functional\Auth\Join;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\UserRepository;
-use App\Auth\Event\GuestJoined;
 use App\Auth\Event\JoinByEmailRequested;
 use App\Auth\Event\UserCreated;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,39 +88,6 @@ final class RequestActionTest extends WebTestCase
         self::assertEquals($email, $createMessage->email);
         self::assertNotEmpty($createMessage->id);
         self::assertNotEmpty($createMessage->role);
-    }
-
-    public function testSuccessGuest(): void
-    {
-        $this->client->catchExceptions(false);
-        $email = 'new@email.com';
-        $password = 'password';
-        $guestId = 'e92fa0c3-beb1-4fa6-bd85-fcc6a8dba182';
-
-        $transport = $this->client->getContainer()->get('messenger.transport.async');
-        $transport->reset();
-
-        $this->client->jsonRequest(
-            'POST',
-            '/v1/auth/join/request',
-            [
-                'email' => $email,
-                'password' => $password,
-            ],
-            ['HTTP_X-Guest-ID' => $guestId]
-        );
-
-        self::assertEquals(201, $this->client->getResponse()->getStatusCode());
-
-        self::assertCount(3, $transport->getSent());
-
-        $guestJoinedMessages = array_filter($transport->getSent(), static fn ($message) => $message->getMessage() instanceof GuestJoined);
-        $guestJoinedMessages = array_values($guestJoinedMessages);
-        $guestJoinedMessage = $guestJoinedMessages[0]->getMessage();
-
-        /** @var GuestJoined $guestJoinedMessage */
-        self::assertEquals($guestId, $guestJoinedMessage->guestId);
-        self::assertNotNull($guestJoinedMessage->userId);
     }
 
     public function testInvalidCredentials(): void
