@@ -32,6 +32,7 @@ final class User implements AggregateRoot
 {
     use EventTrait;
 
+    #[ORM\Embedded(class: Token::class, columnPrefix: 'magic_link_token_')]
     private ?Token $magicLinkToken = null;
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $passwordHash = null;
@@ -264,6 +265,18 @@ final class User implements AggregateRoot
         $this->joinConfirmToken->validate($token, $date);
         $this->status = Status::active();
         $this->joinConfirmToken = null;
+
+        $this->recordEvent(new UserJoinConfirmed($this->email->getValue()));
+    }
+
+    public function confirmMagicLink(string $token, DateTimeImmutable $date): void
+    {
+        if (null === $this->magicLinkToken) {
+            throw new DomainException('Magic link is not required.');
+        }
+        $this->magicLinkToken->validate($token, $date);
+        $this->status = Status::active();
+        $this->magicLinkToken = null;
 
         $this->recordEvent(new UserJoinConfirmed($this->email->getValue()));
     }

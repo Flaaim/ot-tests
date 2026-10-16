@@ -42,6 +42,7 @@ final class ConfirmActionTest extends WebTestCase
 
     public function testSuccess(): void
     {
+        $this->client->catchExceptions(false);
         /** @var InMemoryTransport $transport */
         $transport = $this->client->getContainer()->get('messenger.transport.async');
         $transport->reset();

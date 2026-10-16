@@ -138,4 +138,14 @@ final class UserRepository
         /** @var User $user */
         return $user;
     }
+
+    /**
+     * @return object|User|null
+     * @psalm-return User|null
+     */
+    public function findByMagicLinkToken(string $token): ?User
+    {
+        /** @psalm-var User|null */
+        return $this->repo->findOneBy(['magicLinkToken.value' => $token]);
+    }
 }
