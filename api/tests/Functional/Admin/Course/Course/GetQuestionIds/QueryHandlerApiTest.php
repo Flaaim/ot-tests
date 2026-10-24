@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Admin\Course\Course\Api\GetQuestionIds;
+namespace Tests\Functional\Admin\Course\Course\GetQuestionIds;
 
-use App\Course\Api\Course\GetQuestionIds\QueryHandlerApi;
+use App\Course\Api\CourseApi;
 use App\Course\Query\Course\CourseFetcher;
 use App\Course\Query\Course\CourseFetcherInterface;
 use App\Course\Query\Course\GetQuestionsIds\QueryHandler;
@@ -37,7 +37,7 @@ final class QueryHandlerApiTest extends KernelTestCase
     public function testSuccess(): void
     {
         $questionIdsHandler = new QueryHandler($this->courseFetcher);
-        $courseApi = new QueryHandlerApi($questionIdsHandler);
+        $courseApi = new CourseApi($questionIdsHandler);
 
         $ids = $courseApi->getQuestionIds(RequestFixture::COURSE_ID);
         self::assertCount(2, $ids);
