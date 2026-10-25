@@ -12,6 +12,8 @@ final readonly class Command
         #[Assert\NotBlank]
         #[Assert\Uuid]
         public string $token,
+        #[Assert\Email]
+        public string $email,
         #[Assert\Uuid]
         public ?string $guestId = null,
     ) {}

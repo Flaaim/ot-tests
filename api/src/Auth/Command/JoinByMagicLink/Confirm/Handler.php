@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Auth\Command\JoinByMagicLink\Confirm;
 
+use App\Auth\Entity\User\Email;
+use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\UserRepository;
 use App\Auth\Event\GuestJoined;
 use App\Infrastructure\Doctrine\Flusher;
-use App\OAuth\Service\ManualTokenGenerator;
 use DateTimeImmutable;
 use DomainException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -18,13 +19,17 @@ final readonly class Handler
         private UserRepository $users,
         private Flusher $flusher,
         private MessageBusInterface $messageBus,
-        private ManualTokenGenerator $tokenGenerator,
     ) {}
 
-    public function handle(Command $command): array
+    public function handle(Command $command): User
     {
-        if (!$user = $this->users->findByMagicLinkToken($command->token)) {
+        $user = $this->users->findByMagicLinkToken($command->token);
+        if (null === $user) {
             throw new DomainException('Incorrect magicLinkToken.');
+        }
+
+        if (!$user->getEmail()->isEqualTo(new Email($command->email))) {
+            throw new DomainException('Incorrect magicLinkEmail.');
         }
 
         $user->confirmMagicLink($command->token, new DateTimeImmutable());
@@ -40,6 +45,6 @@ final readonly class Handler
             );
         }
 
-        return $this->tokenGenerator->generateForUser($user->getId()->getValue());
+        return $user;
     }
 }
