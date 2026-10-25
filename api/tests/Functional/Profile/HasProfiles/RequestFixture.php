@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Profile\Api\HasProfiles;
+namespace Tests\Functional\Profile\HasProfiles;
 
 use App\Auth\Entity\User\Email as UserEmail;
 use App\Auth\Entity\User\Id;

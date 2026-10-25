@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Profile\Api\HasProfiles;
+namespace Tests\Functional\Profile\HasProfiles;
 
-use App\Profile\Api\HasProfiles\QueryHandlerApi;
-use App\Profile\Query\HasProfiles\QueryHandler;
+use App\Profile\Api\ProfileApi;
+use App\Profile\Query;
 use App\Profile\Query\ProfileFetcher;
 use App\Profile\Query\ProfileFetcherInterface;
 use Doctrine\DBAL\Connection;
@@ -38,8 +38,8 @@ final class QueryHandlerApiTest extends KernelTestCase
 
     public function testSuccess(): void
     {
-        $queryHandler = new QueryHandler($this->profiles);
-        $api = new QueryHandlerApi($queryHandler);
+        $hasProfilesHandler = new Query\HasProfiles\QueryHandler($this->profiles);
+        $api = new ProfileApi($hasProfilesHandler);
 
         self::assertTrue($api->hasProfiles());
     }

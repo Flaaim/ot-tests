@@ -37,6 +37,7 @@
                 <directory name="src/Testing/Command" />
                 <directory name="src/Course/Query" />
                 <directory name="src/Course/Api" />
+                <directory name="src/Profile/Api" />
             </errorLevel>
         </UnusedClass>
 
