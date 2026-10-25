@@ -25,7 +25,7 @@ final readonly class MagicLinkSender
         $message = new SymfonyEmail()
             ->subject('Ссылка для входа на сайт.')
             ->to($email->getValue())
-            ->html($this->twig->render(self::TEMPLATE, ['token' => $token]));
+            ->html($this->twig->render(self::TEMPLATE, ['token' => $token, 'email' => $email->getValue()]));
         try {
             $this->mailer->send($message);
         } catch (TransportExceptionInterface $e) {
