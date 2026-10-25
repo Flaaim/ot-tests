@@ -11,14 +11,14 @@ use App\Notification\Entity\Message\MessageRepository;
 use App\Notification\Entity\Notification\NotificationId;
 use App\Notification\Entity\Notification\NotificationRespository;
 use App\Notification\Event\BroadcastNotificationCreated;
-use App\Profile\Api\GetProfilesIds\QueryHandlerApi;
+use App\Notification\Interfaces\ProfileInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 final readonly class BroadcastNotificationCreatedHandler
 {
     public function __construct(
-        private QueryHandlerApi $profileApi,
+        private ProfileInterface $profile,
         private MessageRepository $messages,
         private NotificationRespository $notifications,
         private Flusher $flusher,
@@ -26,7 +26,7 @@ final readonly class BroadcastNotificationCreatedHandler
 
     public function __invoke(BroadcastNotificationCreated $event): void
     {
-        $profileIds = $this->profileApi->getProfileIds();
+        $profileIds = $this->profile->getProfileIds();
 
         $batchSize = 500;
         $count = 0;

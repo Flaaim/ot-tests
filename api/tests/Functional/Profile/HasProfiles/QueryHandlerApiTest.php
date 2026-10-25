@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Functional\Profile\HasProfiles;
 
-use App\Profile\Api\ProfileApi;
-use App\Profile\Query;
+use App\Profile\Query\HasProfiles\QueryHandler;
 use App\Profile\Query\ProfileFetcher;
 use App\Profile\Query\ProfileFetcherInterface;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Tests\Functional\FixturesLoader;
-use Tests\Functional\Profile\Api\GetProfileIds\RequestFixture;
+use Tests\Functional\Profile\GetProfileIds\RequestFixture;
 
 /**
  * @internal
@@ -38,9 +37,8 @@ final class QueryHandlerApiTest extends KernelTestCase
 
     public function testSuccess(): void
     {
-        $hasProfilesHandler = new Query\HasProfiles\QueryHandler($this->profiles);
-        $api = new ProfileApi($hasProfilesHandler);
+        $queryHandler = new QueryHandler($this->profiles);
 
-        self::assertTrue($api->hasProfiles());
+        self::assertTrue($queryHandler->handle());
     }
 }

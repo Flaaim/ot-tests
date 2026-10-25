@@ -9,7 +9,6 @@ use App\Notification\Entity\Notification\Notification;
 use App\Notification\Entity\Notification\NotificationId;
 use App\Notification\Entity\Notification\NotificationRespository;
 use App\Notification\Interfaces\ProfileInterface;
-use App\Profile\Api\HasProfiles\QueryHandlerApi;
 use DateTimeImmutable;
 use DomainException;
 

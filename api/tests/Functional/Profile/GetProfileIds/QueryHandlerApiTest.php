@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\Profile\Api\GetProfileIds;
+namespace Tests\Functional\Profile\GetProfileIds;
 
-use App\Profile\Api\GetProfilesIds\QueryHandlerApi;
 use App\Profile\Query\GetProfileIds\QueryHandler;
 use App\Profile\Query\ProfileFetcher;
 use App\Profile\Query\ProfileFetcherInterface;
@@ -38,9 +37,8 @@ final class QueryHandlerApiTest extends KernelTestCase
     public function testSuccess(): void
     {
         $queryHandler = new QueryHandler($this->profiles);
-        $api = new QueryHandlerApi($queryHandler);
+        $generator =$queryHandler->handle();
 
-        $generator = $api->getProfileIds();
         $profilesIds = iterator_to_array($generator);
 
         self::assertCount(1, $profilesIds);
