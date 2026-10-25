@@ -4,98 +4,65 @@ declare(strict_types=1);
 
 namespace Tests\Functional\Auth\JoinByMagicLink;
 
+use App\Auth\Command\JoinByMagicLink\Confirm\Command;
+use App\Auth\Command\JoinByMagicLink\Confirm\Handler;
 use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\UserRepository;
 use App\Auth\Event\GuestJoined;
 use App\Auth\Event\UserJoinConfirmed;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use DomainException;
+use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Messenger\Transport\InMemory\InMemoryTransport;
 use Tests\Functional\FixturesLoader;
-use Tests\Functional\Json;
 
 /**
  * @internal
  * @coversNothing
  */
-final class ConfirmActionTest extends WebTestCase
+final class ConfirmActionTest extends KernelTestCase
 {
-    private KernelBrowser $client;
     private UserRepository $users;
+    private ContainerInterface $container;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client = self::createClient();
-        $this->client->disableReboot();
+        self::bootKernel();
+        $this->container = self::getContainer();
 
-        $container = $this->client->getContainer();
-
-        $fixturesLoader = new FixturesLoader($container);
+        $fixturesLoader = new FixturesLoader($this->container);
         $fixturesLoader->loadFixtures([ConfirmFixture::class]);
 
         /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        $em = $this->container->get(EntityManagerInterface::class);
         $this->users = new UserRepository($em);
     }
 
     public function testSuccess(): void
     {
-        $this->client->catchExceptions(false);
-        /** @var InMemoryTransport $transport */
-        $transport = $this->client->getContainer()->get('messenger.transport.async');
-        $transport->reset();
+        $handler = $this->container->get(Handler::class);
+        $command = new Command(ConfirmFixture::USER_TOKEN, ConfirmFixture::USER_EMAIL);
+        $user = $handler->handle($command);
 
-        $this->client->jsonRequest('POST', '/v1/auth/join/magic/confirm', [
-            'token' => ConfirmFixture::USER_TOKEN,
-        ]);
-
-        self::assertEquals(201, $this->client->getResponse()->getStatusCode());
-
-        self::assertJson($body = $this->client->getResponse()->getContent());
-
-        $data = Json::decode($body);
-
-        self::assertArrayHasKey('access_token', $data);
-        self::assertArrayHasKey('refresh_token', $data);
-        self::assertArrayHasKey('expires_in', $data);
-
-        $user = $this->users->get(new Id(ConfirmFixture::USER_ID));
-        self::assertTrue($user->isActive());
-        self::assertNull($user->getMagicLinkToken());
-
-        self::assertCount(1, $transport->getSent());
-
-        $message = $transport->getSent()[0]->getMessage();
-
-        self::assertInstanceOf(UserJoinConfirmed::class, $message);
+        self::assertEquals(ConfirmFixture::USER_EMAIL, $user->getEmail()->getValue());
     }
 
     public function testSuccessGuest(): void
     {
         /** @var InMemoryTransport $transport */
-        $transport = $this->client->getContainer()->get('messenger.transport.async');
+        $transport = $this->container->get('messenger.transport.async');
         $transport->reset();
 
-        $this->client->jsonRequest(
-            'POST',
-            '/v1/auth/join/magic/confirm',
-            [
-                'token' => ConfirmFixture::GUEST_TOKEN,
-            ],
-            ['HTTP_X-Guest-ID' => ConfirmFixture::GUEST_ID]
+        $handler = $this->container->get(Handler::class);
+        $command = new Command(
+            ConfirmFixture::GUEST_TOKEN,
+            ConfirmFixture::GUEST_EMAIL,
+            ConfirmFixture::GUEST_ID
         );
 
-        self::assertEquals(201, $this->client->getResponse()->getStatusCode());
-
-        self::assertJson($body = $this->client->getResponse()->getContent());
-
-        $data = Json::decode($body);
-
-        self::assertArrayHasKey('access_token', $data);
-        self::assertArrayHasKey('refresh_token', $data);
-        self::assertArrayHasKey('expires_in', $data);
+        $handler->handle($command);
 
         $user = $this->users->get(new Id(ConfirmFixture::GUEST_ID));
         self::assertTrue($user->isActive());
@@ -116,49 +83,47 @@ final class ConfirmActionTest extends WebTestCase
         self::assertEquals(ConfirmFixture::GUEST_ID, $guestJoinedMessage->userId);
     }
 
+    public function testElseEmail(): void
+    {
+        $handler = $this->container->get(Handler::class);
+        $command = new Command(
+            ConfirmFixture::GUEST_TOKEN,
+            ConfirmFixture::USER_EMAIL,
+            ConfirmFixture::GUEST_ID
+        );
+
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Incorrect magicLinkEmail.');
+
+        $handler->handle($command);
+    }
+
     public function testExpired(): void
     {
-        $this->client->jsonRequest('POST', '/v1/auth/join/magic/confirm', [
-            'token' => ConfirmFixture::EXPIRED_TOKEN,
-        ]);
+        $handler = $this->container->get(Handler::class);
+        $command = new Command(
+            ConfirmFixture::EXPIRED_TOKEN,
+            ConfirmFixture::EXPIRED_EMAIL
+        );
 
-        self::assertEquals(409, $this->client->getResponse()->getStatusCode());
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Token is expired.');
 
-        self::assertJson($body = $this->client->getResponse()->getContent());
-
-        $data = Json::decode($body);
-
-        self::assertEquals(['message' => 'Token is expired.'], $data);
+        $handler->handle($command);
     }
 
-    public function testNotFound(): void
+    public function testTokenNotFound(): void
     {
-        $this->client->jsonRequest('POST', '/v1/auth/join/magic/confirm', [
-            'token' => ConfirmFixture::NOT_FOUND_TOKEN,
-        ]);
+        $handler = $this->container->get(Handler::class);
+        $command = new Command(
+            ConfirmFixture::NOT_FOUND_TOKEN,
+            ConfirmFixture::GUEST_EMAIL,
+            ConfirmFixture::GUEST_ID
+        );
 
-        self::assertEquals(409, $this->client->getResponse()->getStatusCode());
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Incorrect magicLinkToken.');
 
-        self::assertJson($body = $this->client->getResponse()->getContent());
-
-        $data = Json::decode($body);
-
-        self::assertEquals(['message' => 'Incorrect magicLinkToken.'], $data);
-    }
-
-    public function testInvalid(): void
-    {
-        $this->client->jsonRequest('POST', '/v1/auth/join/magic/confirm', [
-            'token' => 'invalid',
-        ]);
-        self::assertEquals(422, $this->client->getResponse()->getStatusCode());
-
-        self::assertJson($body = $this->client->getResponse()->getContent());
-
-        $data = Json::decode($body);
-
-        self::assertEquals(['errors' => [
-            'token' => 'This is not a valid UUID.',
-        ]], $data);
+        $handler->handle($command);
     }
 }
