@@ -24,6 +24,9 @@ final class RequestAction
     #[Route('/v1/testing/attempts/{id}/result', name: 'testing.attempts.result', methods: ['GET'])]
     public function __invoke(string $id, Request $request): Response
     {
+        if ($request->headers->has('Authorization') && null === $this->security->getUser()) {
+            return new JsonResponse(['message' => 'Expired JWT Token'], Response::HTTP_UNAUTHORIZED);
+        }
         $userId = $this->security->getUser()?->getUserIdentifier();
         $guestId = $request->headers->get('X-Guest-ID');
         $actorId = $userId ?? $guestId;
