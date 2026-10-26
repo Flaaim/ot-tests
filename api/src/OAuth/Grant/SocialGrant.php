@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\OAuth\Grant;
 
-use App\Auth\Command\JoinByNetwork\Command;
-use App\Auth\Command\JoinByNetwork\Handler;
-use App\Auth\Entity\User\Email;
-use App\Auth\Entity\User\UserRepository;
 use App\Infrastructure\Social\Registry\ClientRegistryInterface;
+use App\OAuth\Interfaces\SocialAuthInterface;
 use DateInterval;
 use DomainException;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -26,8 +23,7 @@ final class SocialGrant extends AbstractGrant
 {
     public function __construct(
         private readonly ClientRegistryInterface $registry,
-        private readonly Handler $joinHandler,
-        private readonly UserRepository $domainUserRepository,
+        private readonly SocialAuthInterface $socialAuth,
         private readonly LoggerInterface $logger,
         RefreshTokenRepositoryInterface $refreshTokenRepository,
     ) {
@@ -71,22 +67,13 @@ final class SocialGrant extends AbstractGrant
             ]);
             throw OAuthServerException::serverError('Ошибка авторизации через соцсеть: ' . $e->getMessage());
         }
-        $this->logger->error('Social Auth Error (Provider fetch): {message}', [
-            'message' => $socialUser->email,
-        ]);
+
         try {
-            $localUser = $this->domainUserRepository->findByNetwork($socialUser->network, $socialUser->identity);
-            if (!$localUser) {
-                $existingEmailUser = $this->domainUserRepository->findByEmail(new Email($socialUser->email));
-                if ($existingEmailUser) {
-                    throw new DomainException('Пользователь с таким email уже существует. Войдите обычным способом и привяжите аккаунт в настройках профиля.');
-                }
-
-                $command = new Command($socialUser->email, $socialUser->network, $socialUser->identity);
-                $this->joinHandler->handle($command);
-
-                $localUser = $this->domainUserRepository->findByNetwork($socialUser->network, $socialUser->identity);
-            }
+            $userIdentifier = $this->socialAuth->authenticate(
+                $socialUser->network,
+                $socialUser->identity,
+                $socialUser->email
+            );
         } catch (DomainException $e) {
             throw OAuthServerException::invalidGrant($e->getMessage());
         } catch (Throwable $e) {
@@ -97,14 +84,8 @@ final class SocialGrant extends AbstractGrant
             throw OAuthServerException::serverError('Ошибка при регистрации через соцсеть: ' . $e->getMessage());
         }
 
-        if (!$localUser) {
-            throw OAuthServerException::serverError('Не удалось получить пользователя после регистрации.');
-        }
-
         try {
             $scopes = $this->validateScopes($this->getRequestParameter('scope', $request, $this->defaultScope));
-
-            $userIdentifier = $localUser->getId()->getValue();
 
             $accessToken = $this->issueAccessToken($accessTokenTTL, $client, $userIdentifier, $scopes);
 
