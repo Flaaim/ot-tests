@@ -178,7 +178,7 @@ export default async function PublicQuestionPage({ params }: PageProps) {
             </h2>
 
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
-              Удобная проверка знаний. Запустите тест прямо сейчас (доступно 2 бесплатных билета)
+              Удобная проверка знаний. Запустите тест прямо сейчас
               или откройте полный список билетов и вопросов теста.
             </p>
           </div>
