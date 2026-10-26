@@ -63,7 +63,7 @@ final class MagicLinkGrant extends AbstractGrant
         }
 
         try {
-            $user = $this->handler->confirmMagicLink($token, $email, $guestId);
+            $userIdentifier = $this->handler->confirmMagicLink($token, $email, $guestId);
         } catch (DomainException $e) {
             throw OAuthServerException::invalidGrant($e->getMessage());
         } catch (Throwable $e) {
@@ -76,8 +76,6 @@ final class MagicLinkGrant extends AbstractGrant
 
         try {
             $scopes = $this->validateScopes($this->getRequestParameter('scope', $request, $this->defaultScope));
-
-            $userIdentifier = $user->getId()->getValue();
 
             $accessToken = $this->issueAccessToken($accessTokenTTL, $client, $userIdentifier, $scopes);
 

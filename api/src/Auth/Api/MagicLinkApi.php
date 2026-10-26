@@ -6,17 +6,18 @@ namespace App\Auth\Api;
 
 use App\Auth\Command\JoinByMagicLink\Confirm\Command;
 use App\Auth\Command\JoinByMagicLink\Confirm\Handler;
-use App\Auth\Entity\User\User;
 use App\OAuth\Interfaces\ConfirmMagicLinkInterface;
 
-final class MagicLinkApi implements ConfirmMagicLinkInterface
+final readonly class MagicLinkApi implements ConfirmMagicLinkInterface
 {
     public function __construct(
         private Handler $handler,
     ) {}
 
-    public function confirmMagicLink(string $token, string $email, ?string $guestId = null): User
+    public function confirmMagicLink(string $token, string $email, ?string $guestId = null): string
     {
-        return $this->handler->handle(new Command($token, $email, $guestId));
+        $user = $this->handler->handle(new Command($token, $email, $guestId));
+
+        return $user->getId()->getValue();
     }
 }
