@@ -23,3 +23,8 @@ export interface NetworkItem {
   network: string;
   identity: string;
 }
+
+export interface MagicLinkLoginDTO {
+  email: string;
+  token: string;
+}

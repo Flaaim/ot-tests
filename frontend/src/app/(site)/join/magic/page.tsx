@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import { confirmMagicLinkAction } from "@/actions/auth";
+import { loginByMagicLink } from "@/actions/auth";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -16,14 +16,15 @@ export default function MagicLinkConfirmPage({ searchParams }: PageProps) {
   const [apiError, setApiError] = useState<string | null>(null);
 
   const params = use(searchParams);
-  const token = typeof params.token === "string" ? params.token : null;
+  const token = typeof params.token === "string" ? params.token : "";
+  const email = typeof params.email === "string" ? params.email.trim() : "";
 
   useEffect(() => {
     let isMounted = true;
 
     if (token) {
       const confirmToken = async () => {
-        const result = await confirmMagicLinkAction(token);
+        const result = await loginByMagicLink({ token, email });
 
         if (!isMounted) return;
 
@@ -40,7 +41,7 @@ export default function MagicLinkConfirmPage({ searchParams }: PageProps) {
     return () => {
       isMounted = false;
     };
-  }, [token, router]);
+  }, [token, email, router]);
 
   const displayError = !token ? "Токен не найден в ссылке." : apiError;
 

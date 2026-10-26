@@ -1,6 +1,11 @@
 "use server";
 
-import { JoinData, LoginData, MagicLinkPayload } from "@/interfaces/auth.interface";
+import {
+  JoinData,
+  LoginData,
+  MagicLinkLoginDTO,
+  MagicLinkPayload,
+} from "@/interfaces/auth.interface";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ApiResponse } from "@/interfaces/response.interface";
@@ -433,51 +438,57 @@ export async function requestMagicLinkAction(
   }
 }
 
-export async function confirmMagicLinkAction(token: string): Promise<ApiResponse<void>> {
+export async function loginByMagicLink(data: MagicLinkLoginDTO): Promise<ApiResponse> {
+  const cookieStore = await cookies();
+  const guestId = cookieStore.get("guest_id")?.value;
+
+  const searchParams = new URLSearchParams({
+    token: data.token,
+    email: data.email,
+    guestId: String(guestId),
+    grant_type: "magic",
+    client_id: String(process.env.CLIENT_ID),
+    client_secret: String(process.env.CLIENT_SECRET),
+  });
+
   try {
-    const response = await apiFetch(API.auth.confirmMagicLink(), {
+    const response = await fetch(API.auth.login(), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
-      body: JSON.stringify({
-        token: token,
-      }),
+      body: searchParams.toString(),
     });
 
     const parsed = await handleApiResponse<TokenResponseData>(response);
 
     if (!parsed.ok || !parsed.data) {
-      return { ok: false, error: parsed.error || "Ошибка подтверждения ссылки" };
+      return { ok: false, error: parsed.error };
     }
-    const cookieStore = await cookies();
 
     if (parsed.data.access_token) {
+      const cookieStore = await cookies();
       cookieStore.set({
         name: "access_token",
         value: String(parsed.data.access_token),
         httpOnly: true,
         path: "/",
         secure: process.env.NODE_ENV === "production",
-        maxAge: Number(parsed.data.expires_in) || 3600,
+        maxAge: Number(parsed.data.expires_in),
       });
-
       cookieStore.set({
         name: "refresh_token",
         value: String(parsed.data.refresh_token),
         httpOnly: true,
         path: "/",
         secure: process.env.NODE_ENV === "production",
-        maxAge: 2592000, // 30 дней
+        maxAge: 2592000,
       });
-
-      cookieStore.delete("guest_id");
     }
-
     return { ok: true };
   } catch (error) {
-    console.error("confirmMagicLinkAction error:", error);
-    return { ok: false, error: "Не удалось подключиться к серверу API." };
+    console.error("LoginAction Fetch error:", error);
+    return { ok: false, error: "Не удалось подключиться к серверу API" };
   }
 }
