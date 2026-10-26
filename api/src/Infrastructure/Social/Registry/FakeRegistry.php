@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Social\Registry;
 
 use App\Infrastructure\Social\SocialUserDTO;
-use Tests\Functional\OAuth\AuthorizeFixture;
+use Tests\Functional\OAuth\Password\AuthorizeFixture;
 
 final class FakeRegistry implements ClientRegistryInterface
 {

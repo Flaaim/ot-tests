@@ -19,6 +19,7 @@ parameters:
               - 'password'
               - 'refresh_token'
               - 'social'
+              - 'magic'
 
 
 services:

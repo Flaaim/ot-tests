@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\OAuth;
+namespace Tests\Functional\OAuth\Password;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Test\Builder\UserBuilder;

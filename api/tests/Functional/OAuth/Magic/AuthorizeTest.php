@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional\OAuth;
+namespace Tests\Functional\OAuth\Magic;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -29,20 +29,14 @@ final class AuthorizeTest extends WebTestCase
         $fixtures->loadFixtures([AuthorizeFixture::class]);
     }
 
-    public function testWithoutParams(): void
-    {
-        $this->client->request('POST', '/token');
-        self::assertEquals(400, $this->client->getResponse()->getStatusCode());
-    }
-
     public function testInvalidClient(): void
     {
         $this->client->request('POST', '/token', [
-            'grant_type' => 'password',
+            'grant_type' => 'magic',
             'client_id' => 'invalid',
             'client_secret' => 'my-super-secret-123',
-            'username' => AuthorizeFixture::ACTIVE_EMAIL,
-            'password' => AuthorizeFixture::PASSWORD,
+            'email' => AuthorizeFixture::USER_EMAIL,
+            'token' => AuthorizeFixture::USER_TOKEN,
         ]);
 
         self::assertEquals(401, $this->client->getResponse()->getStatusCode());
@@ -55,17 +49,17 @@ final class AuthorizeTest extends WebTestCase
         ], $data);
     }
 
-    public function testAuthActiveUser(): void
+    public function testSuccess(): void
     {
         $this->client->request(
             'POST',
             '/token',
             [
-                'grant_type' => 'password',
+                'grant_type' => 'magic',
                 'client_id' => 'frontend',
                 'client_secret' => 'my-super-secret-123',
-                'username' => AuthorizeFixture::ACTIVE_EMAIL,
-                'password' => AuthorizeFixture::PASSWORD,
+                'email' => AuthorizeFixture::USER_EMAIL,
+                'token' => AuthorizeFixture::USER_TOKEN,
             ]
         );
 
@@ -77,40 +71,123 @@ final class AuthorizeTest extends WebTestCase
 
         self::assertArraySubset([
             'token_type' => 'Bearer',
-            'expires_in' => 600,
+            'expires_in' => 3600,
         ], $data);
     }
 
-    public function testAuthWaitUser(): void
+    public function testSuccessGuest(): void
     {
         $this->client->request(
             'POST',
             '/token',
             [
-                'grant_type' => 'password',
+                'grant_type' => 'magic',
                 'client_id' => 'frontend',
                 'client_secret' => 'my-super-secret-123',
-                'username' => AuthorizeFixture::WAIT_EMAIL,
-                'password' => AuthorizeFixture::PASSWORD,
+                'email' => AuthorizeFixture::GUEST_EMAIL,
+                'token' => AuthorizeFixture::GUEST_TOKEN,
+                'guestId' => AuthorizeFixture::GUEST_ID,
             ]
         );
 
-        self::assertEquals(401, $this->client->getResponse()->getStatusCode());
-        self::assertNotEmpty($content = (string)$this->client->getResponse()->getContent());
-        self::assertStringContainsString('User is not confirmed.', $content);
+        self::assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        self::assertJson($content = (string)$this->client->getResponse()->getContent());
+
+        $data = Json::decode($content);
+
+        self::assertArraySubset([
+            'token_type' => 'Bearer',
+            'expires_in' => 3600,
+        ], $data);
     }
 
-    public function testAuthInvalidUser(): void
+    public function testAlreadyConfirmed(): void
     {
         $this->client->request(
             'POST',
             '/token',
             [
-                'grant_type' => 'password',
+                'grant_type' => 'magic',
                 'client_id' => 'frontend',
                 'client_secret' => 'my-super-secret-123',
-                'username' => AuthorizeFixture::ACTIVE_EMAIL,
-                'password' => '',
+                'email' => AuthorizeFixture::ALREADY_EMAIL,
+                'token' => AuthorizeFixture::ALREADY_TOKEN,
+            ]
+        );
+
+        self::assertEquals(400, $this->client->getResponse()->getStatusCode());
+
+        self::assertJson($body = (string)$this->client->getResponse()->getContent());
+        $data = Json::decode($body);
+
+        self::assertArraySubset([
+            'error' => 'invalid_grant',
+            'hint' => 'Incorrect magicLinkToken.',
+        ], $data);
+    }
+
+    public function testElseEmail(): void
+    {
+        $this->client->request(
+            'POST',
+            '/token',
+            [
+                'grant_type' => 'magic',
+                'client_id' => 'frontend',
+                'client_secret' => 'my-super-secret-123',
+                'email' => AuthorizeFixture::GUEST_EMAIL,
+                'token' => AuthorizeFixture::USER_TOKEN,
+                'guestId' => AuthorizeFixture::GUEST_ID,
+            ]
+        );
+
+        self::assertEquals(400, $this->client->getResponse()->getStatusCode());
+        self::assertJson($body = (string)$this->client->getResponse()->getContent());
+        $data = Json::decode($body);
+
+        self::assertArraySubset([
+            'error' => 'invalid_grant',
+            'hint' => 'Incorrect magicLinkEmail.',
+        ], $data);
+    }
+
+    public function testExpired(): void
+    {
+        $this->client->request(
+            'POST',
+            '/token',
+            [
+                'grant_type' => 'magic',
+                'client_id' => 'frontend',
+                'client_secret' => 'my-super-secret-123',
+                'email' => AuthorizeFixture::EXPIRED_EMAIL,
+                'token' => AuthorizeFixture::EXPIRED_TOKEN,
+            ]
+        );
+
+        self::assertEquals(400, $this->client->getResponse()->getStatusCode());
+
+        self::assertJson($body = (string)$this->client->getResponse()->getContent());
+        $data = Json::decode($body);
+
+        self::assertArraySubset([
+            'error' => 'invalid_grant',
+            'hint' => 'Token is expired.',
+        ], $data);
+    }
+
+    public function testTokenEmpty(): void
+    {
+        $this->client->request(
+            'POST',
+            '/token',
+            [
+                'grant_type' => 'magic',
+                'client_id' => 'frontend',
+                'client_secret' => 'my-super-secret-123',
+                'email' => AuthorizeFixture::USER_EMAIL,
+                'token' => '',
             ]
         );
 
@@ -121,59 +198,6 @@ final class AuthorizeTest extends WebTestCase
 
         self::assertArraySubset([
             'error' => 'invalid_request',
-        ], $data);
-    }
-
-    public function testSocialAuthSuccess(): void
-    {
-        $this->client->request(
-            'POST',
-            '/token',
-            [
-                'grant_type' => 'social',
-                'client_id' => 'frontend',
-                'client_secret' => 'my-super-secret-123',
-                'network' => 'google',
-                'code' => 'new-code-identity',
-                'redirect_uri' => 'http://localhost/callback',
-            ]
-        );
-
-        self::assertEquals(200, $this->client->getResponse()->getStatusCode());
-
-        self::assertJson($body = (string)$this->client->getResponse()->getContent());
-        $data = Json::decode($body);
-
-        self::assertArraySubset([
-            'token_type' => 'Bearer',
-            'expires_in' => 3600,
-        ], $data);
-
-        self::assertArrayHasKey('access_token', $data);
-        self::assertArrayHasKey('refresh_token', $data);
-    }
-
-    public function testSocialAuthEmailConflict(): void
-    {
-        $this->client->request(
-            'POST',
-            '/token',
-            [
-                'grant_type' => 'social',
-                'client_id' => 'frontend',
-                'client_secret' => 'my-super-secret-123',
-                'network' => 'google',
-                'code' => 'conflict',
-                'redirect_uri' => 'http://localhost/callback',
-            ]
-        );
-        self::assertEquals(400, $this->client->getResponse()->getStatusCode());
-
-        self::assertJson($body = (string)$this->client->getResponse()->getContent());
-        $data = Json::decode($body);
-
-        self::assertArraySubset([
-            'hint' => 'Пользователь с таким email уже существует. Войдите обычным способом и привяжите аккаунт в настройках профиля.',
         ], $data);
     }
 }

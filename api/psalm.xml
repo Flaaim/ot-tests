@@ -38,6 +38,7 @@
                 <directory name="src/Course/Query" />
                 <directory name="src/Course/Api" />
                 <directory name="src/Profile/Api" />
+                <directory name="src/Auth/Api" />
             </errorLevel>
         </UnusedClass>
 

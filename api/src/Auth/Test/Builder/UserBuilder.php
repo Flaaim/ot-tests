@@ -22,6 +22,7 @@ final class UserBuilder
     private Token $joinConfirmToken;
     private ?Role $role = null;
     private bool $active = false;
+    private bool $confirmedByMagicLink = false;
     private ?string $network = null;
     private ?string $identity = null;
     private ?Token $newEmailChangeToken = null;
@@ -68,6 +69,7 @@ final class UserBuilder
         return $clone;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withMagicLinkToken(Token $token): self
     {
         $clone = clone $this;
@@ -102,6 +104,13 @@ final class UserBuilder
     {
         $clone = clone $this;
         $clone->active = true;
+        return $clone;
+    }
+
+    public function confirmedByMagicLink(): self
+    {
+        $clone = clone $this;
+        $clone->confirmedByMagicLink = true;
         return $clone;
     }
 
@@ -151,6 +160,13 @@ final class UserBuilder
                 $this->email,
             );
             $user->requestMagicLink($this->magicLinkToken, $this->magicLinkToken->getExpiresAt()->modify('+1 day'));
+        }
+
+        if (true === $this->confirmedByMagicLink && null !== $this->magicLinkToken) {
+            $user->confirmMagicLink(
+                $this->magicLinkToken->getValue(),
+                $this->magicLinkToken->getExpiresAt()->modify('-1 day')
+            );
         }
 
         return $user;

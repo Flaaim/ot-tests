@@ -5,6 +5,14 @@ Accept: application/json
 
 grant_type=password&client_id=frontend&client_secret=my-super-secret-123&username=flaaim@list.ru&password=12345678
 
+### Magic link token
+
+POST http://localhost:8081/token
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=magic&client_id=frontend&client_secret=my-super-secret-123&token=a8aa2323-1e8b-4462-b374-b2e3de1cc51a&email=flaeim@gmail.com&guestId=1a759237-f5dc-4adc-b5ab-8d6d7a192d6e
+
 
 
 ### Обновление токена через JSON
